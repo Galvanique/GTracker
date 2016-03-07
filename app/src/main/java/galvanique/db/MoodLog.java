@@ -19,7 +19,7 @@ public class MoodLog {
     /** timestamp of the event */
     public long timestamp;
 
-    public Mood mood;
+    public String mood;
 
     public String belief;
     public String trigger;
@@ -29,14 +29,16 @@ public class MoodLog {
     /**
      * Constructor without id
      * @param timestamp
+     * @param mood
      * @param belief
      * @param trigger
      * @param behavior
      * @param magnitude
      */
 
-    public MoodLog(long timestamp, String belief, String trigger, String behavior, int magnitude) {
+    public MoodLog(long timestamp, String mood, String belief, String trigger, String behavior, int magnitude) {
         this.timestamp = timestamp;
+        this.mood = mood;
         this.belief = belief;
         this.trigger = trigger;
         this.behavior = behavior;
@@ -47,14 +49,16 @@ public class MoodLog {
      * Constructor with report id
      * @param id
      * @param timestamp
+     * @param mood
      * @param belief
      * @param trigger
      * @param behavior
      * @param magnitude
      */
-    public MoodLog(int id, long timestamp, String belief, String trigger, String behavior, int magnitude) {
+    public MoodLog(int id, long timestamp, String mood, String belief, String trigger, String behavior, int magnitude) {
         this.id = id;
         this.timestamp = timestamp;
+        this.mood = mood;
         this.belief = belief;
         this.trigger = trigger;
         this.behavior = behavior;
@@ -79,6 +83,8 @@ public class MoodLog {
     public long getTimestamp() {
         return timestamp;
     }
+
+    public String getMood() { return mood; }
 
     public String getBelief() { return belief; }
 
