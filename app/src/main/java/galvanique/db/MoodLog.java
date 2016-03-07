@@ -13,14 +13,9 @@ public class MoodLog {
         // TODO populate moods
     }
 
-    /** Report id */
     public int id = -1;
-
-    /** timestamp of the event */
     public long timestamp;
-
-    public String mood;
-
+    public int mood;
     public String belief;
     public String trigger;
     public String behavior;
@@ -36,9 +31,9 @@ public class MoodLog {
      * @param magnitude
      */
 
-    public MoodLog(long timestamp, String mood, String belief, String trigger, String behavior, int magnitude) {
+    public MoodLog(long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude) {
         this.timestamp = timestamp;
-        this.mood = mood;
+        this.mood = mood.ordinal();
         this.belief = belief;
         this.trigger = trigger;
         this.behavior = behavior;
@@ -55,10 +50,10 @@ public class MoodLog {
      * @param behavior
      * @param magnitude
      */
-    public MoodLog(int id, long timestamp, String mood, String belief, String trigger, String behavior, int magnitude) {
+    public MoodLog(int id, long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude) {
         this.id = id;
         this.timestamp = timestamp;
-        this.mood = mood;
+        this.mood = mood.ordinal();
         this.belief = belief;
         this.trigger = trigger;
         this.behavior = behavior;
@@ -76,15 +71,13 @@ public class MoodLog {
         return this.id == r.id;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+    public long getTimestamp() { return timestamp; }
 
-    public String getMood() { return mood; }
+    public int getMood() { return mood; }
+
+    public String getMoodString() { return Mood.values()[mood].name(); }
 
     public String getBelief() { return belief; }
 

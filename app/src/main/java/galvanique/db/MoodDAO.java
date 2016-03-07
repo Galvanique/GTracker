@@ -104,7 +104,7 @@ public class MoodDAO extends GeneralDAO {
         return cursor2moods(c);
     }
 
-    public MoodLog[] getAlMoods() {
+    public MoodLog[] getAllMoods() {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
@@ -150,7 +150,7 @@ public class MoodDAO extends GeneralDAO {
         MoodLog r = new MoodLog();
         r.id = c.getInt(CNUM_ID);
         r.timestamp = c.getLong(CNUM_TIMESTAMP);
-        r.mood = c.getString(CNUM_MOOD);
+        r.mood = c.getInt(CNUM_MOOD);
         r.belief = c.getString(CNUM_BELIEF);
         r.trigger = c.getString(CNUM_TRIGGER);
         r.behavior = c.getString(CNUM_BEHAVIOR);
@@ -165,7 +165,7 @@ public class MoodDAO extends GeneralDAO {
             MoodLog r = new MoodLog();
             r.id = c.getInt(CNUM_ID);
             r.timestamp = c.getLong(CNUM_TIMESTAMP);
-            r.mood = c.getString(CNUM_MOOD);
+            r.mood = c.getInt(CNUM_MOOD);
             r.belief = c.getString(CNUM_BELIEF);
             r.trigger = c.getString(CNUM_TRIGGER);
             r.behavior = c.getString(CNUM_BEHAVIOR);
