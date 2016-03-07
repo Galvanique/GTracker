@@ -13,8 +13,6 @@ public class MoodLog {
         // TODO populate moods
     }
 
-    // TODO the rest of the fields
-
     /** Report id */
     public int id = -1;
 
@@ -31,7 +29,10 @@ public class MoodLog {
     /**
      * Constructor without id
      * @param timestamp
-     * // TODO the rest of the fields
+     * @param belief
+     * @param trigger
+     * @param behavior
+     * @param magnitude
      */
 
     public MoodLog(long timestamp, String belief, String trigger, String behavior, int magnitude) {
@@ -46,7 +47,10 @@ public class MoodLog {
      * Constructor with report id
      * @param id
      * @param timestamp
-     * // TODO the rest of the fields
+     * @param belief
+     * @param trigger
+     * @param behavior
+     * @param magnitude
      */
     public MoodLog(int id, long timestamp, String belief, String trigger, String behavior, int magnitude) {
         this.id = id;
@@ -68,8 +72,6 @@ public class MoodLog {
         return this.id == r.id;
     }
 
-    // TODO the rest of the fields
-
     public int getId() {
         return id;
     }
@@ -77,6 +79,14 @@ public class MoodLog {
     public long getTimestamp() {
         return timestamp;
     }
+
+    public String getBelief() { return belief; }
+
+    public String getTrigger() { return trigger; }
+
+    public String getBehavior() { return behavior; }
+
+    public int getMagnitude() { return magnitude; }
 
     /*Comparator for sorting the list by timestamp*/
     public static Comparator<MoodLog> timeComparator = new Comparator<MoodLog>() {
