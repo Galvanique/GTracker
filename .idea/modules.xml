@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MoodTracker.iml" filepath="$PROJECT_DIR$/MoodTracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GTracker.iml" filepath="$PROJECT_DIR$/GTracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

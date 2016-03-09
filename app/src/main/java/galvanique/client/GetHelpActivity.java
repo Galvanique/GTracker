@@ -3,12 +3,27 @@ package galvanique.client;
 import android.app.Activity;
 import android.os.Bundle;
 
+import android.widget.Button;
+import android.widget.TextView;
+
 public class GetHelpActivity extends Activity {
+
+    /**
+     * Various UI components
+     */
+    private Button getSTHelpButton;
+    private Button getLTHelpButton;
+    private TextView copingStratStr;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_help);
+
+        // Give starting values
+        getSTHelpButton= (Button) findViewById(R.id.GetSTHelpButton);
+        getLTHelpButton= (Button) findViewById(R.id.GetLTHelpButton);
+        copingStratStr= (TextView) findViewById(R.id.CopingStratStr);
     }
 
     public String getRandomCopingStrategy (boolean longTerm) {
