@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_log_mood"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Log Moods" />
+        <item
+            android:id="@+id/nav_find_patterns"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Find Patterns" />
+        <item
+            android:id="@+id/nav_get_help"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Get Help" />
+        <item
+            android:id="@+id/nav_track_progress"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Track Progress" />
+        <item
+            android:id="@+id/nav_app_prefs"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="App Preferences" />
+    </group>
+
+</menu>
