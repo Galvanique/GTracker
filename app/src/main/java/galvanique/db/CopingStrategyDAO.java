@@ -1,63 +1,55 @@
 package galvanique.db;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+
 /**
  * Data access object for reports
  */
-public class MoodDAO extends GeneralDAO {
+public class CopingStrategyDAO extends GeneralDAO {
 
     // --------------------------------------------
     // SCHEMA
     // --------------------------------------------
 
-    public static String TABLE_NAME = "mood";
+    public static String TABLE_NAME = "copingStrategies";
 
-    public static final String TAG = "MoodDAO";
+    public static final String TAG = "CopingStrategyDAO";
 
     public static final String CNAME_ID = "_id";
     public static final String CNAME_TIMESTAMP = "timestamp";
-    public static final String CNAME_MOOD = "mood";
-    public static final String CNAME_BELIEF = "belief";
-    public static final String CNAME_TRIGGER = "trigger";
-    public static final String CNAME_BEHAVIOR = "behavior";
-    public static final String CNAME_MAGNITUDE = "magnitude";
+    public static final String CNAME_COPINGSTRATEGY = "copingStrategy";
+    public static final String CNAME_LONGTERM = "longTerm";
+    public static final String CNAME_EFFECTIVENESS = "effectiveness";
 
 
     public static final String[] PROJECTION = {
             CNAME_ID,
             CNAME_TIMESTAMP,
-            CNAME_MOOD,
-            CNAME_BELIEF,
-            CNAME_TRIGGER,
-            CNAME_BEHAVIOR,
-            CNAME_MAGNITUDE
+            CNAME_COPINGSTRATEGY,
+            CNAME_LONGTERM,
+            CNAME_EFFECTIVENESS
     };
 
     public final static int CNUM_ID = 0;
     public final static int CNUM_TIMESTAMP = 1;
-    public final static int CNUM_MOOD = 2;
-    public final static int CNUM_BELIEF = 3;
-    public final static int CNUM_TRIGGER = 4;
-    public final static int CNUM_BEHAVIOR = 5;
-    public final static int CNUM_MAGNITUDE = 6;
+    public final static int CNUM_COPINGSTRATEGY = 2;
+    public final static int CNUM_LONGTERM = 3;
+    public final static int CNUM_EFFECTIVENESS = 4;
 
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
             CNAME_ID + " INTEGER PRIMARY KEY, " +
             CNAME_TIMESTAMP + " LONG, " +
-            CNAME_MOOD + " INTEGER, " +
-            CNAME_BELIEF + " TEXT, " +
-            CNAME_TRIGGER + " TEXT, " +
-            CNAME_BEHAVIOR + " TEXT, " +
-            CNAME_MAGNITUDE + " INTEGER" +
+            CNAME_COPINGSTRATEGY + " TEXT, " +
+            CNAME_LONGTERM + " INTEGER, " +
+            CNAME_EFFECTIVENESS + " INTEGER " +
             ");";
 
     // --------------------------------------------
@@ -71,7 +63,7 @@ public class MoodDAO extends GeneralDAO {
     // LIVECYCLE
     // --------------------------------------------
 
-    public MoodDAO(Context context) {
+    public CopingStrategyDAO(Context context) {
         super(context);
     }
 
@@ -79,7 +71,7 @@ public class MoodDAO extends GeneralDAO {
     // QUERY IMPLEMENTATIONS
     // --------------------------------------------
 
-    public MoodLog getMoodById(int id) {
+    public CopingStrategyLog getCopingStrategyById(int id) {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
@@ -88,10 +80,10 @@ public class MoodDAO extends GeneralDAO {
                 null,
                 null,
                 null);
-        return cursor2mood(c);
+        return cursor2copingStrategy(c);
     }
 
-    public MoodLog[] getMoodByTimeRange(long startTime, long endTime) {
+    public CopingStrategyLog[] getCopingStrategyByTimeRange(long startTime, long endTime) {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
@@ -100,10 +92,10 @@ public class MoodDAO extends GeneralDAO {
                 null,
                 null,
                 null);
-        return cursor2moods(c);
+        return cursor2copingStrategies(c);
     }
 
-    public MoodLog[] getAllMoods() {
+    public CopingStrategyLog[] getAllCopingStrategies() {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
@@ -112,7 +104,7 @@ public class MoodDAO extends GeneralDAO {
                 null,
                 null,
                 CNAME_TIMESTAMP+" DESC");
-        return cursor2moods(c);
+        return cursor2copingStrategies(c);
     }
 
     // --------------------------------------------
@@ -120,18 +112,18 @@ public class MoodDAO extends GeneralDAO {
     // --------------------------------------------
 
 
-    public void insert(MoodLog r) {
-        ContentValues cv = mood2ContentValues(r);
+    public void insert(CopingStrategyLog r) {
+        ContentValues cv = copingStrategy2ContentValues(r);
         db.insert(TABLE_NAME, null, cv);
     }
 
-    public void update(MoodLog r) {
-        ContentValues values = mood2ContentValues(r);
+    public void update(CopingStrategyLog r) {
+        ContentValues values = copingStrategy2ContentValues(r);
         db.update(TABLE_NAME, values , WHERE_ID, new String[]{r.id+""});
     }
 
-    public void delete(MoodLog r) {
-        Log.d(TAG,"delete report " + r.id);
+    public void delete(CopingStrategyLog r) {
+        Log.d(TAG, "delete report " + r.id);
         db.delete(TABLE_NAME, WHERE_ID, new String[]{r.id+""});
     }
 
@@ -141,48 +133,42 @@ public class MoodDAO extends GeneralDAO {
     }
 
     // --------------------------------------------
-    // MOOD-CURSOR TRANSFORMATION UTILITIES
+    // COPINGSTRATEGY-CURSOR TRANSFORMATION UTILITIES
     // --------------------------------------------
 
-    private static MoodLog cursor2mood(Cursor c) {
+    private static CopingStrategyLog cursor2copingStrategy(Cursor c) {
         c.moveToFirst();
-        MoodLog r = new MoodLog();
+        CopingStrategyLog r = new CopingStrategyLog();
         r.id = c.getInt(CNUM_ID);
         r.timestamp = c.getLong(CNUM_TIMESTAMP);
-        r.mood = c.getInt(CNUM_MOOD);
-        r.belief = c.getString(CNUM_BELIEF);
-        r.trigger = c.getString(CNUM_TRIGGER);
-        r.behavior = c.getString(CNUM_BEHAVIOR);
-        r.magnitude = c.getInt(CNUM_MAGNITUDE);
+        r.copingStrategy = c.getString(CNUM_COPINGSTRATEGY);
+        r.longTerm = c.getInt(CNUM_LONGTERM);
+        r.effectiveness = c.getInt(CNUM_EFFECTIVENESS);
         return r;
     }
 
-    public static MoodLog[] cursor2moods(Cursor c) {
+    public static CopingStrategyLog[] cursor2copingStrategies(Cursor c) {
         c.moveToFirst();
-        LinkedList<MoodLog> moods = new LinkedList<MoodLog>();
+        LinkedList<CopingStrategyLog> copingStrategies = new LinkedList<CopingStrategyLog>();
         while(!c.isAfterLast()){
-            MoodLog r = new MoodLog();
+            CopingStrategyLog r = new CopingStrategyLog();
             r.id = c.getInt(CNUM_ID);
             r.timestamp = c.getLong(CNUM_TIMESTAMP);
-            r.mood = c.getInt(CNUM_MOOD);
-            r.belief = c.getString(CNUM_BELIEF);
-            r.trigger = c.getString(CNUM_TRIGGER);
-            r.behavior = c.getString(CNUM_BEHAVIOR);
-            r.magnitude = c.getInt(CNUM_MAGNITUDE);
-            moods.add(r);
+            r.copingStrategy = c.getString(CNUM_COPINGSTRATEGY);
+            r.longTerm = c.getInt(CNUM_LONGTERM);
+            r.effectiveness = c.getInt(CNUM_EFFECTIVENESS);
+            copingStrategies.add(r);
             c.moveToNext();
         }
-        return moods.toArray(new MoodLog[0]);
+        return copingStrategies.toArray(new CopingStrategyLog[0]);
     }
 
-    private static ContentValues mood2ContentValues(MoodLog r) {
+    private static ContentValues copingStrategy2ContentValues(CopingStrategyLog r) {
         ContentValues cv = new ContentValues();
         cv.put(CNAME_TIMESTAMP, r.timestamp);
-        cv.put(CNAME_MOOD, r.mood);
-        cv.put(CNAME_BELIEF, r.belief);
-        cv.put(CNAME_TRIGGER, r.trigger);
-        cv.put(CNAME_BEHAVIOR, r.behavior);
-        cv.put(CNAME_MAGNITUDE, r.magnitude);
+        cv.put(CNAME_COPINGSTRATEGY, r.copingStrategy);
+        cv.put(CNAME_LONGTERM, r.longTerm);
+        cv.put(CNAME_EFFECTIVENESS, r.effectiveness);
         return cv;
     }
 
@@ -203,6 +189,5 @@ public class MoodDAO extends GeneralDAO {
         String s = gc.get(Calendar.YEAR)+"-"+ms+"-"+ds+" "+hs+":"+mins+" "+AM;
         return s;
     }
-
 
 }
