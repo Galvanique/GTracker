@@ -40,4 +40,8 @@ public class GetHelpActivity extends Activity {
     // 3. Mark the time, send a push notification asking the user to rate the strategy's effectiveness
         // once enough time has passed. Update the database with the rating.
 
+    // see CopingStrategyDAO.getRandomCopingStrategy() -- it won't work if you try to test it because
+    // the database doesn't exist yet / it's initialized to be empty anyway, but it's the method you
+    // would use
+
 }
