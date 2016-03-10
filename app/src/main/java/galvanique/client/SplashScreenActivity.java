@@ -1,5 +1,6 @@
 package galvanique.client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -81,15 +82,15 @@ public class SplashScreenActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_log_mood) {
-            // Handle the log mood action (switch to log mood activity)
+            startActivity(new Intent(SplashScreenActivity.this, LogMoodActivity.class));
         } else if (id == R.id.nav_find_patterns) {
-
+            startActivity(new Intent(SplashScreenActivity.this, FindPatternsActivity.class));
         } else if (id == R.id.nav_get_help) {
-
+            startActivity(new Intent(SplashScreenActivity.this, GetHelpActivity.class));
         } else if (id == R.id.nav_track_progress) {
-
+            startActivity(new Intent(SplashScreenActivity.this, TrackProgressActivity.class));
         } else if (id == R.id.nav_app_prefs) {
-
+            startActivity(new Intent(SplashScreenActivity.this, PreferencesActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
