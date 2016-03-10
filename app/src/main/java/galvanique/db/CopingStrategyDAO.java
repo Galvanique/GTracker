@@ -58,6 +58,7 @@ public class CopingStrategyDAO extends GeneralDAO {
 
     private final static String WHERE_ID = CNAME_ID + "=?";
     private final static String WHERE_TIME_RANGE = CNAME_TIMESTAMP + ">=?"+" AND "+CNAME_TIMESTAMP + "<=?";
+    private final static String WHERE_LONGTERM = CNAME_LONGTERM + "=?";
 
     // --------------------------------------------
     // LIVECYCLE
@@ -107,12 +108,12 @@ public class CopingStrategyDAO extends GeneralDAO {
         return cursor2copingStrategies(c);
     }
 
-    public CopingStrategyLog getRandomCopingStrategy() {
+    public CopingStrategyLog getRandomCopingStrategy(int longTerm) {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
-                null,
-                null,
+                WHERE_LONGTERM,
+                new String[]{longTerm+""},
                 null,
                 null,
                 "RANDOM()",

@@ -8,10 +8,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!-- TODO CHANGE THIS BACK TO SPLASH SCREEN WHEN WE'RE DONE DEVELOPING THIS ACTIVITY -->
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".GetHelpActivity"
             android:label="@string/title_activity_splash_screen"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

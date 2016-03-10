@@ -3,8 +3,11 @@ package galvanique.client;
 import android.app.Activity;
 import android.os.Bundle;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import galvanique.db.CopingStrategyDAO;
 
 public class GetHelpActivity extends Activity {
 
@@ -21,14 +24,31 @@ public class GetHelpActivity extends Activity {
         setContentView(R.layout.activity_get_help);
 
         // Give starting values
-        getSTHelpButton= (Button) findViewById(R.id.GetSTHelpButton);
-        getLTHelpButton= (Button) findViewById(R.id.GetLTHelpButton);
-        copingStratStr= (TextView) findViewById(R.id.CopingStratStr);
+        getSTHelpButton = (Button) findViewById(R.id.GetSTHelpButton);
+        getSTHelpButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(View v) {
+                CopingStrategyDAO dao = new CopingStrategyDAO(getApplicationContext());
+                dao.openRead();
+                // TODO query db, display strategy
+                dao.close();
+            }
+        });
+        getLTHelpButton = (Button) findViewById(R.id.GetLTHelpButton);
+        getLTHelpButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(View v) {
+                CopingStrategyDAO dao = new CopingStrategyDAO(getApplicationContext());
+                dao.openRead();
+                // TODO query db, display strategy
+                dao.close();
+            }
+        });
+        copingStratStr = (TextView) findViewById(R.id.CopingStratStr);
     }
 
-    public String getRandomCopingStrategy (boolean longTerm) {
-        return "";
-    }
     // TODO create a simple layout for get help per the UI diagram
     // 1. A button for regulate distress
         // Pressing this button (onClick) fires a method that pulls a random coping strategy from our

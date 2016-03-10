@@ -31,9 +31,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(MoodDAO.TABLE_CREATE);
-        Log.d(TAG,"table " + MoodDAO.TABLE_NAME + " was created");
-
-
+        Log.d(TAG, "table " + MoodDAO.TABLE_NAME + " was created");
+        db.execSQL(CopingStrategyDAO.TABLE_CREATE);
+        Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was created");
+        //db.execSQL(CopingStrategyDAO.PRELOAD_STRATEGIES);
+        //Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was initialized");
     }
 
     @Override
