@@ -9,8 +9,8 @@ import java.util.Comparator;
  */
 public class MoodLog {
 
-    private enum Mood {
-        // TODO populate moods
+    public enum Mood { // TODO real moods
+        moodOne, moodTwo, moodThree
     }
 
     public int id = -1;
