@@ -4,19 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_log_mood"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_send"
             android:title="Log Moods" />
         <item
             android:id="@+id/nav_find_patterns"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_send"
             android:title="Find Patterns" />
         <item
             android:id="@+id/nav_get_help"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_send"
             android:title="Get Help" />
         <item
             android:id="@+id/nav_track_progress"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_send"
             android:title="Track Progress" />
         <item
             android:id="@+id/nav_app_prefs"
