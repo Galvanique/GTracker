@@ -35,7 +35,27 @@ public class MyDBHelper extends SQLiteOpenHelper {
         db.execSQL(CopingStrategyDAO.TABLE_CREATE);
         Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was created");
         //db.execSQL(CopingStrategyDAO.PRELOAD_STRATEGIES);
-        //Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was initialized");
+        String ROW1 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
+                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('0', '11111', 'testLongOne', '1', '9')";
+        db.execSQL(ROW1);
+        String ROW2 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
+                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('1', '22222', 'testLongTwo', '1', '5')";
+        db.execSQL(ROW2);
+        String ROW3 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
+                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('2', '33333', 'testShortOne', '0', '10')";
+        db.execSQL(ROW3);
+        String ROW4 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
+                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('3', '44444', 'testShortTwo', '0', '3')";
+        db.execSQL(ROW4);
+        Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was initialized");
     }
 
     @Override

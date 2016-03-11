@@ -3,11 +3,13 @@ package galvanique.client;
 import android.app.Activity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import galvanique.db.CopingStrategyDAO;
+import galvanique.db.CopingStrategyLog;
 
 public class GetHelpActivity extends Activity {
 
@@ -32,7 +34,9 @@ public class GetHelpActivity extends Activity {
                 CopingStrategyDAO dao = new CopingStrategyDAO(getApplicationContext());
                 dao.openRead();
                 // TODO query db, display strategy
+                CopingStrategyLog cs = dao.getRandomCopingStrategy(0); // 0 for short term -- sqlite doesn't have booleans
                 dao.close();
+                copingStratStr.setText(cs.getCopingStrategy());
             }
         });
         getLTHelpButton = (Button) findViewById(R.id.GetLTHelpButton);
@@ -43,7 +47,10 @@ public class GetHelpActivity extends Activity {
                 CopingStrategyDAO dao = new CopingStrategyDAO(getApplicationContext());
                 dao.openRead();
                 // TODO query db, display strategy
+                CopingStrategyLog cs = dao.getRandomCopingStrategy(1); // 1 for long term
+                Log.d("random cs is", cs.getCopingStrategy());
                 dao.close();
+                copingStratStr.setText(cs.getCopingStrategy());
             }
         });
         copingStratStr = (TextView) findViewById(R.id.CopingStratStr);
