@@ -31,4 +31,14 @@
         android:text="Stop Sending Notifications"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/txtViewGSR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
 </LinearLayout>

@@ -36,6 +36,7 @@ public abstract class GeneralDAO {
 
     public GeneralDAO openWrite() {
         db = dbHelper.getWritableDatabase();
+        Log.d(TAG, "db opened4write :-)");
         return this;
     }
 

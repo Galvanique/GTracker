@@ -83,6 +83,7 @@ public class LogMoodActivity extends Activity {
 
         // Hide elements for other states
         slider.setVisibility(View.INVISIBLE);
+        // TODO set slider index range to 10
         editTextTrigger.setVisibility(View.GONE);
         editTextBelief.setVisibility(View.GONE);
         editTextBehavior.setVisibility(View.GONE);
@@ -139,7 +140,11 @@ public class LogMoodActivity extends Activity {
                 behavior = editTextBehavior.getText().toString();
                 // Set up MOOD UI elements
                 editTextBehavior.setVisibility(View.GONE);
+                dropdown.setSelection(0);
                 dropdown.setVisibility(View.VISIBLE);
+                editTextTrigger.setText("");
+                editTextBelief.setText("");
+                editTextBehavior.setText("");
                 // TODO Display confirmation of successful logging (toast notification)?
                 MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), belief, trigger, behavior, magnitude);
                 MoodDAO db = new MoodDAO(getApplicationContext());

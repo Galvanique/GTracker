@@ -30,11 +30,15 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // Mood
         db.execSQL(MoodDAO.TABLE_CREATE);
         Log.d(TAG, "table " + MoodDAO.TABLE_NAME + " was created");
+        // GSR
+        db.execSQL(GsrDAO.TABLE_CREATE);
+        Log.d(TAG, "table " + GsrDAO.TABLE_NAME + " was created");
+        // Coping strategies
         db.execSQL(CopingStrategyDAO.TABLE_CREATE);
         Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was created");
-        //db.execSQL(CopingStrategyDAO.PRELOAD_STRATEGIES);
         String ROW1 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
                 + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
                 + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
