@@ -28,4 +28,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.github.channguyen:rsv:1.0.1'
     compile files('libs/microsoft-band-1.3.10929.1.jar')
+    compile "com.androidplot:androidplot-core:0.9.6"
 }

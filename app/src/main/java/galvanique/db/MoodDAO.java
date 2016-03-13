@@ -66,6 +66,7 @@ public class MoodDAO extends GeneralDAO {
 
     private final static String WHERE_ID = CNAME_ID + "=?";
     private final static String WHERE_TIME_RANGE = CNAME_TIMESTAMP + ">=?"+" AND "+CNAME_TIMESTAMP + "<=?";
+    private final static String WHERE_TYPE = CNAME_MOOD + "=?";
 
     // --------------------------------------------
     // LIVECYCLE
@@ -112,6 +113,18 @@ public class MoodDAO extends GeneralDAO {
                 null,
                 null,
                 CNAME_TIMESTAMP+" DESC");
+        return cursor2moods(c);
+    }
+
+    public MoodLog[] getMoodByType(int type) {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                WHERE_TYPE,
+                new String[]{type+""},
+                null,
+                null,
+                null);
         return cursor2moods(c);
     }
 

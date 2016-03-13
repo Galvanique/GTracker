@@ -95,6 +95,7 @@ public class PreferencesActivity extends Activity {
         setContentView(R.layout.activity_preferences);
 
         /* Background */
+        // TODO http://developer.android.com/training/basics/data-storage/shared-preferences.html
         buttonBackground = (Button) findViewById(R.id.buttonBackground);
         buttonBackground.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
@@ -121,13 +122,14 @@ public class PreferencesActivity extends Activity {
                 }
                 else {
                     gsrStarted = !gsrStarted;
-                    buttonGSR.setText("Start GSR Collection");
+                    buttonGSR.setText("Begin GSR Collection");
                     txtViewGSR.setText("");
                 }
             }
         });
 
         /* Notifications */
+        // TODO http://developer.android.com/training/basics/data-storage/shared-preferences.html
         buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
         buttonNotifications.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
