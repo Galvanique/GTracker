@@ -65,10 +65,6 @@
             android:id="@+id/spRenderStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <Spinner
-            android:id="@+id/spSeriesSize"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
@@ -102,21 +98,5 @@
                 android:progress="1"
                 android:id="@+id/sbVariable"/>
         </RelativeLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-        <CheckBox android:id="@+id/s1CheckBox"
-            android:text="Series 1"
-            android:checked="true"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"/>
-        <CheckBox android:id="@+id/s2CheckBox"
-            android:text="Series 2"
-            android:checked="true"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"/>
     </LinearLayout>
 </LinearLayout>

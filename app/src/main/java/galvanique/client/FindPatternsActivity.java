@@ -18,8 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
@@ -32,6 +30,8 @@ import com.androidplot.xy.*;
 import galvanique.db.MoodDAO;
 import galvanique.db.MoodLog;
 
+// TODO http://androidplot.com/
+
 public class FindPatternsActivity extends Activity {
 
     private MoodDAO db;
@@ -39,24 +39,15 @@ public class FindPatternsActivity extends Activity {
     private static final String NO_SELECTION_TXT = "Touch bar to select.";
     private XYPlot plot;
 
-    private CheckBox series1CheckBox;
     private Spinner spRenderStyle, spWidthStyle, spSeriesSize;
     private SeekBar sbFixedWidth, sbVariableWidth;
 
-    private XYSeries series1;
-    private enum SeriesSize {
-        TEN,
-        TWENTY,
-        SIXTY
-    }
+    private XYSeries series1, series2, series3;
 
     // Create a couple arrays of y-values to plot:
-    Number[] series1Numbers10;
-    Number[] series1Numbers20 = {2, null, 5, 2, 7, 4, 3, 7, 4, 5, 7, 4, 5, 8, 5, 3, 6, 3, 9, 3};
-    Number[] series1Numbers60 = {2, null, 5, 2, 7, 4, 3, 7, 4, 5, 7, 4, 5, 8, 5, 3, 6, 3, 9, 3, 2, null, 5, 2, 7, 4, 3, 7, 4, 5, 7, 4, 5, 8, 5, 3, 6, 3, 9, 3, 2, null, 5, 2, 7, 4, 3, 7, 4, 5, 7, 4, 5, 8, 5, 3, 6, 3, 9, 3};
-    Number[] series1Numbers;
+    Number[] series1Numbers, series2Numbers, series3Numbers;
 
-    private MyBarFormatter formatter1;
+    private MyBarFormatter formatter1, formatter2;
 
     private MyBarFormatter selectionFormatter;
 
@@ -68,13 +59,17 @@ public class FindPatternsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState)
     {
 
-        // TODO Get mood values
+        // TODO Update this with the real moods
         db = new MoodDAO(getApplicationContext());
         db.openRead();
-        MoodLog[] logs0 = db.getMoodByType(0);
-        series1Numbers10 = new Number[]{logs0.length};
+        // moodOne
+        series1Numbers = new Number[]{db.getMoodByType(0).length};
+        // moodTwo
+        series2Numbers = new Number[]{db.getMoodByType(1).length};
+        // moodThree
+        series3Numbers = new Number[]{db.getMoodByType(2).length};
         db.close();
-        series1Numbers = series1Numbers10;
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_patterns);
@@ -83,6 +78,8 @@ public class FindPatternsActivity extends Activity {
         plot = (XYPlot) findViewById(R.id.plot);
 
         formatter1 = new MyBarFormatter(Color.argb(200, 100, 150, 100), Color.LTGRAY);
+        // TODO you can use this to define new colors for different moods
+        formatter2 = new MyBarFormatter(Color.argb(200, 100, 100, 150), Color.LTGRAY);
         selectionFormatter = new MyBarFormatter(Color.YELLOW, Color.WHITE);
 
         selectionWidget = new TextLabelWidget(plot.getLayoutManager(), NO_SELECTION_TXT,
@@ -112,20 +109,10 @@ public class FindPatternsActivity extends Activity {
 
         plot.setTicksPerDomainLabel(2);
 
-
-        // setup checkbox listers:
-        series1CheckBox = (CheckBox) findViewById(R.id.s1CheckBox);
-        series1CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                onS1CheckBoxClicked(b);
-            }
-        });
-
         plot.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     onPlotClicked(new PointF(motionEvent.getX(), motionEvent.getY()));
                 }
                 return true;
@@ -166,34 +153,6 @@ public class FindPatternsActivity extends Activity {
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
-
-        spSeriesSize = (Spinner) findViewById(R.id.spSeriesSize);
-        ArrayAdapter <SeriesSize> adapter11 = new ArrayAdapter <SeriesSize> (this, android.R.layout.simple_spinner_item, SeriesSize.values() );
-        adapter11.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spSeriesSize.setAdapter(adapter11);
-        spSeriesSize.setSelection(SeriesSize.TEN.ordinal());
-        spSeriesSize.setOnItemSelectedListener(new OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                switch ((SeriesSize)arg0.getSelectedItem()) {
-                    case TEN:
-                        series1Numbers = series1Numbers10;
-                        break;
-                    case TWENTY:
-                        series1Numbers = series1Numbers20;
-                        break;
-                    case SIXTY:
-                        series1Numbers = series1Numbers60;
-                        break;
-                    default:
-                        break;
-                }
-                updatePlot();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
-
 
         sbFixedWidth = (SeekBar) findViewById(R.id.sbFixed);
         sbFixedWidth.setProgress(50);
@@ -248,10 +207,14 @@ public class FindPatternsActivity extends Activity {
         plot.clear();
 
         // Setup our Series with the selected number of elements
-        series1 = new SimpleXYSeries(Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Moods");
+        series1 = new SimpleXYSeries(Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "moodOne");
+        series2 = new SimpleXYSeries(Arrays.asList(series2Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "moodTwo");
+        series3 = new SimpleXYSeries(Arrays.asList(series3Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "moodThree");
 
         // add a new series' to the xyplot:
-        if (series1CheckBox.isChecked()) plot.addSeries(series1, formatter1);
+        plot.addSeries(series1, formatter1);
+        plot.addSeries(series2, formatter1);
+        plot.addSeries(series3, formatter1);
 
         // Setup the BarRenderer with our selected options
         MyBarRenderer renderer = ((MyBarRenderer)plot.getRenderer(MyBarRenderer.class));
@@ -328,15 +291,6 @@ public class FindPatternsActivity extends Activity {
         plot.redraw();
     }
 
-    private void onS1CheckBoxClicked(boolean checked) {
-        if (checked) {
-            plot.addSeries(series1, formatter1);
-        } else {
-            plot.removeSeries(series1);
-        }
-        plot.redraw();
-    }
-
     class MyBarFormatter extends BarFormatter {
         public MyBarFormatter(int fillColor, int borderColor) {
             super(fillColor, borderColor);
@@ -377,7 +331,5 @@ public class FindPatternsActivity extends Activity {
             }
         }
     }
-
-    // TODO http://androidplot.com/docs/quickstart/
 
 }
