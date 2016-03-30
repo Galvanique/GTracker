@@ -2,6 +2,8 @@ package galvanique.db.entities;
 
 import java.util.Comparator;
 
+//TODO add comments field
+
 public class MoodLog {
 
     public enum Mood { // TODO real moods
