@@ -18,7 +18,7 @@ import galvanique.db.entities.MoodLog;
 public class LogMoodActivity extends Activity {
 
     private enum State {
-        MOOD, MAGNITUDE, TRIGGER, BELIEF, BEHAVIOR
+        MOOD, MAGNITUDE, TRIGGER, BELIEF, BEHAVIOR, COMMENTS
     }
 
     private State state;
@@ -31,7 +31,7 @@ public class LogMoodActivity extends Activity {
     private String trigger; // text input
     private String belief; // text input
     private String behavior; // text input
-
+    private String comments; //text input
     /**
      * UI
      */
@@ -54,7 +54,10 @@ public class LogMoodActivity extends Activity {
 
         // Dropdown
         dropdown = (Spinner) findViewById(R.id.spinner);
-        String[] items = new String[]{"", "moodOne", "moodTwo", "moodThree"}; // TODO same as moods in galvanique.db.entities.MoodLog.Mood
+        String[] items = new String[]{"", "Happy", "Sad", "Anxious", "Angry", "Guilt", "Shame",
+                "Depressed", "Bored", "Tired", "Lonely", "Proud", "Hopeful",
+                "Frustrated", "Disgust", "Numb", "PhysicalPain", "IntrusiveThoughts", "Stressed",
+                "Irritable", "Motivated", "Excited", "Grateful", "Joy", "Loved"}; // TODO same as moods in galvanique.db.entities.MoodLog.Mood
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -143,8 +146,17 @@ public class LogMoodActivity extends Activity {
                 editTextTrigger.setText("");
                 editTextBelief.setText("");
                 editTextBehavior.setText("");
+                state = State.COMMENTS;
+                break;
+            case COMMENTS:
+                // Grab comments text
+                trigger = editTextTrigger.getText().toString();
+                // Set up COMMENTS UI elements
+                editTextTrigger.setVisibility(View.GONE);
+                editTextBelief.setVisibility(View.VISIBLE);
+                state = State.BELIEF;
                 // TODO Display confirmation of successful logging (toast notification)?
-                MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), belief, trigger, behavior, magnitude);
+                MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), belief, trigger, behavior, magnitude, comments);
                 MoodLogDAO db = new MoodLogDAO(getApplicationContext());
                 db.openWrite();
                 db.insert(insertion);

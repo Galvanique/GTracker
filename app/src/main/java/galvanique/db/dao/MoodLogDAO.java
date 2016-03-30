@@ -28,6 +28,7 @@ public class MoodLogDAO extends GeneralDAO {
     public static final String CNAME_TRIGGER = "trigger";
     public static final String CNAME_BEHAVIOR = "behavior";
     public static final String CNAME_MAGNITUDE = "magnitude";
+    public static final String CNAME_COMMENTS = "comments";
 
 
     public static final String[] PROJECTION = {
@@ -37,7 +38,8 @@ public class MoodLogDAO extends GeneralDAO {
             CNAME_BELIEF,
             CNAME_TRIGGER,
             CNAME_BEHAVIOR,
-            CNAME_MAGNITUDE
+            CNAME_MAGNITUDE,
+            CNAME_COMMENTS
     };
 
     public final static int CNUM_ID = 0;
@@ -47,6 +49,7 @@ public class MoodLogDAO extends GeneralDAO {
     public final static int CNUM_TRIGGER = 4;
     public final static int CNUM_BEHAVIOR = 5;
     public final static int CNUM_MAGNITUDE = 6;
+    public final static int CNUM_COMMENTS = 7;
 
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -56,7 +59,8 @@ public class MoodLogDAO extends GeneralDAO {
             CNAME_BELIEF + " TEXT, " +
             CNAME_TRIGGER + " TEXT, " +
             CNAME_BEHAVIOR + " TEXT, " +
-            CNAME_MAGNITUDE + " INTEGER" +
+            CNAME_MAGNITUDE + " INTEGER, " +
+            CNAME_COMMENTS + " TEXT" +
             ");";
 
     // --------------------------------------------
@@ -166,6 +170,7 @@ public class MoodLogDAO extends GeneralDAO {
         r.trigger = c.getString(CNUM_TRIGGER);
         r.behavior = c.getString(CNUM_BEHAVIOR);
         r.magnitude = c.getInt(CNUM_MAGNITUDE);
+        r.comments = c.getString(CNUM_COMMENTS);
         return r;
     }
 
@@ -181,6 +186,7 @@ public class MoodLogDAO extends GeneralDAO {
             r.trigger = c.getString(CNUM_TRIGGER);
             r.behavior = c.getString(CNUM_BEHAVIOR);
             r.magnitude = c.getInt(CNUM_MAGNITUDE);
+            r.comments = c.getString(CNUM_COMMENTS);
             moods.add(r);
             c.moveToNext();
         }
@@ -195,6 +201,7 @@ public class MoodLogDAO extends GeneralDAO {
         cv.put(CNAME_TRIGGER, r.trigger);
         cv.put(CNAME_BEHAVIOR, r.behavior);
         cv.put(CNAME_MAGNITUDE, r.magnitude);
+        cv.put(CNAME_COMMENTS, r.comments);
         return cv;
     }
 

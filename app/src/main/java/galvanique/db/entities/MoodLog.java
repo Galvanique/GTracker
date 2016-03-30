@@ -7,7 +7,9 @@ import java.util.Comparator;
 public class MoodLog {
 
     public enum Mood { // TODO real moods
-        moodOne, moodTwo, moodThree
+        Happy, Sad, Anxious, Angry, Guilt, Shame, Depressed, Bored, Tired, Lonely, Proud, Hopeful,
+        Frustrated, Disgust, Numb, PhysicalPain, IntrusiveThoughts, Stressed,
+        Irritable, Motivated, Excited, Grateful, Joy, Loved
     }
 
     public int id = -1;
@@ -17,6 +19,7 @@ public class MoodLog {
     public String trigger;
     public String behavior;
     public int magnitude;
+    public String comments;
 
     /**
      * Constructor without id
@@ -27,15 +30,17 @@ public class MoodLog {
      * @param trigger
      * @param behavior
      * @param magnitude
+     * @param comments
      */
 
-    public MoodLog(long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude) {
+    public MoodLog(long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude, String comments) {
         this.timestamp = timestamp;
         this.mood = mood.ordinal();
         this.belief = belief;
         this.trigger = trigger;
         this.behavior = behavior;
         this.magnitude = magnitude;
+        this.comments = comments;
     }
 
     /**
@@ -48,8 +53,9 @@ public class MoodLog {
      * @param trigger
      * @param behavior
      * @param magnitude
+     * @param comments
      */
-    public MoodLog(int id, long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude) {
+    public MoodLog(int id, long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude, String comments) {
         this.id = id;
         this.timestamp = timestamp;
         this.mood = mood.ordinal();
@@ -57,6 +63,7 @@ public class MoodLog {
         this.trigger = trigger;
         this.behavior = behavior;
         this.magnitude = magnitude;
+        this.comments = comments;
     }
 
     /**
@@ -101,6 +108,8 @@ public class MoodLog {
     public int getMagnitude() {
         return magnitude;
     }
+
+    public String getComments() { return comments; }
 
     /*Comparator for sorting the list by timestamp*/
     public static Comparator<MoodLog> timeComparator = new Comparator<MoodLog>() {
