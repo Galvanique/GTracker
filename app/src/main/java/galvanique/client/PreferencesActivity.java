@@ -15,8 +15,8 @@ import com.microsoft.band.ConnectionState;
 import com.microsoft.band.sensors.BandGsrEvent;
 import com.microsoft.band.sensors.BandGsrEventListener;
 
-import galvanique.db.GsrDAO;
-import galvanique.db.GsrLog;
+import galvanique.db.dao.GsrDAO;
+import galvanique.db.entities.GsrLog;
 
 public class PreferencesActivity extends Activity {
 

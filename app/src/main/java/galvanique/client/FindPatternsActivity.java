@@ -27,14 +27,13 @@ import com.androidplot.ui.widget.TextLabelWidget;
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.*;
 
-import galvanique.db.MoodDAO;
-import galvanique.db.MoodLog;
+import galvanique.db.dao.MoodLogDAO;
 
 // TODO http://androidplot.com/
 
 public class FindPatternsActivity extends Activity {
 
-    private MoodDAO db;
+    private MoodLogDAO db;
 
     private static final String NO_SELECTION_TXT = "Touch bar to select.";
     private XYPlot plot;
@@ -60,7 +59,7 @@ public class FindPatternsActivity extends Activity {
     {
 
         // TODO Update this with the real moods
-        db = new MoodDAO(getApplicationContext());
+        db = new MoodLogDAO(getApplicationContext());
         db.openRead();
         // moodOne
         series1Numbers = new Number[]{db.getMoodByType(0).length};

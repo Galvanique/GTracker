@@ -1,8 +1,10 @@
-package galvanique.db;
+package galvanique.db.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import galvanique.db.MyDBHelper;
 
 /**
  * This component is a general data access object handling the live cycle of the

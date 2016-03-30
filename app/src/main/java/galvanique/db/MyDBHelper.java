@@ -6,7 +6,10 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import galvanique.db.MoodDAO;
+import galvanique.db.dao.CopingStrategyLogDAO;
+import galvanique.db.dao.GeneralDAO;
+import galvanique.db.dao.GsrDAO;
+import galvanique.db.dao.MoodLogDAO;
 
 /**
  * This is the basic component to create and manage the database. 
@@ -31,35 +34,35 @@ public class MyDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Mood
-        db.execSQL(MoodDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + MoodDAO.TABLE_NAME + " was created");
+        db.execSQL(MoodLogDAO.TABLE_CREATE);
+        Log.d(TAG, "table " + MoodLogDAO.TABLE_NAME + " was created");
         // GSR
         db.execSQL(GsrDAO.TABLE_CREATE);
         Log.d(TAG, "table " + GsrDAO.TABLE_NAME + " was created");
         // Coping strategies
-        db.execSQL(CopingStrategyDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was created");
-        String ROW1 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
-                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('0', '11111', 'testLongOne', '1', '9')";
+        db.execSQL(CopingStrategyLogDAO.TABLE_CREATE);
+        Log.d(TAG, "table " + CopingStrategyLogDAO.TABLE_NAME + " was created");
+        String ROW1 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
+                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('0', '11111', 'testLongOne', '1', '9')";
         db.execSQL(ROW1);
-        String ROW2 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
-                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('1', '22222', 'testLongTwo', '1', '5')";
+        String ROW2 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
+                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('1', '22222', 'testLongTwo', '1', '5')";
         db.execSQL(ROW2);
-        String ROW3 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
-                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('2', '33333', 'testShortOne', '0', '10')";
+        String ROW3 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
+                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('2', '33333', 'testShortOne', '0', '10')";
         db.execSQL(ROW3);
-        String ROW4 = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
-                + CopingStrategyDAO.CNAME_ID + ", " + CopingStrategyDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyDAO.CNAME_EFFECTIVENESS + ") Values ('3', '44444', 'testShortTwo', '0', '3')";
+        String ROW4 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
+                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
+                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
+                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('3', '44444', 'testShortTwo', '0', '3')";
         db.execSQL(ROW4);
-        Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was initialized");
+        Log.d(TAG, "table " + CopingStrategyLogDAO.TABLE_NAME + " was initialized");
     }
 
     @Override

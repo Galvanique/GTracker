@@ -1,4 +1,4 @@
-package galvanique.db;
+package galvanique.db.dao;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -9,9 +9,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-/**
- * Data access object for reports
- */
+import galvanique.db.entities.GsrLog;
+
 public class GsrDAO extends GeneralDAO {
 
     // --------------------------------------------
@@ -40,8 +39,8 @@ public class GsrDAO extends GeneralDAO {
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
             CNAME_ID + " INTEGER PRIMARY KEY, " +
-            CNAME_TIMESTAMP + " LONG, " +
-            CNAME_CONDUCTIVITY + " LONG " +
+            CNAME_TIMESTAMP + " INTEGER, " +
+            CNAME_CONDUCTIVITY + " INTEGER " +
             ");";
 
     // --------------------------------------------

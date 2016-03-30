@@ -1,4 +1,4 @@
-package galvanique.db;
+package galvanique.db.entities;
 
 import java.util.Comparator;
 

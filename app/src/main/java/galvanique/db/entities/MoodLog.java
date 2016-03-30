@@ -1,12 +1,7 @@
-package galvanique.db;
-
-import android.util.Log;
+package galvanique.db.entities;
 
 import java.util.Comparator;
 
-/**
- * This class represents an event report
- */
 public class MoodLog {
 
     public enum Mood { // TODO real moods

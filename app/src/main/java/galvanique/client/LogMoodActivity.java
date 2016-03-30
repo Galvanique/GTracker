@@ -2,20 +2,17 @@ package galvanique.client;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.channguyen.rsv.RangeSliderView;
 
-import galvanique.db.MoodDAO;
-import galvanique.db.MoodLog;
+import galvanique.db.dao.MoodLogDAO;
+import galvanique.db.entities.MoodLog;
 
 // TODO back button
 public class LogMoodActivity extends Activity {
@@ -57,7 +54,7 @@ public class LogMoodActivity extends Activity {
 
         // Dropdown
         dropdown = (Spinner) findViewById(R.id.spinner);
-        String[] items = new String[]{"", "moodOne", "moodTwo", "moodThree"}; // TODO same as moods in galvanique.db.MoodLog.Mood
+        String[] items = new String[]{"", "moodOne", "moodTwo", "moodThree"}; // TODO same as moods in galvanique.db.entities.MoodLog.Mood
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -147,7 +144,7 @@ public class LogMoodActivity extends Activity {
                 editTextBehavior.setText("");
                 // TODO Display confirmation of successful logging (toast notification)?
                 MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), belief, trigger, behavior, magnitude);
-                MoodDAO db = new MoodDAO(getApplicationContext());
+                MoodLogDAO db = new MoodLogDAO(getApplicationContext());
                 db.openWrite();
                 db.insert(insertion);
                 db.close();

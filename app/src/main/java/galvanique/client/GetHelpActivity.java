@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import galvanique.db.CopingStrategyDAO;
-import galvanique.db.CopingStrategyLog;
+import galvanique.db.dao.CopingStrategyLogDAO;
+import galvanique.db.entities.CopingStrategyLog;
 
 public class GetHelpActivity extends Activity {
 
@@ -21,7 +21,7 @@ public class GetHelpActivity extends Activity {
     private TextView copingStratStr;
 
     /**
-     * @see galvanique.db.CopingStrategyDAO#getRandomCopingStrategy(int longTerm)
+     * @see CopingStrategyLogDAO#getRandomCopingStrategy(int longTerm)
      */
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class GetHelpActivity extends Activity {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                CopingStrategyDAO dao = new CopingStrategyDAO(getApplicationContext());
+                CopingStrategyLogDAO dao = new CopingStrategyLogDAO(getApplicationContext());
                 dao.openRead();
                 CopingStrategyLog cs = dao.getRandomCopingStrategy(0); // 0 for short term -- sqlite doesn't have booleans
                 dao.close();
@@ -46,7 +46,7 @@ public class GetHelpActivity extends Activity {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                CopingStrategyDAO dao = new CopingStrategyDAO(getApplicationContext());
+                CopingStrategyLogDAO dao = new CopingStrategyLogDAO(getApplicationContext());
                 dao.openRead();
                 CopingStrategyLog cs = dao.getRandomCopingStrategy(1); // 1 for long term
                 Log.d("random cs is", cs.getCopingStrategy());

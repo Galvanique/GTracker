@@ -1,4 +1,4 @@
-package galvanique.db;
+package galvanique.db.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,10 +9,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
-/**
- * Data access object for reports
- */
-public class CopingStrategyDAO extends GeneralDAO {
+import galvanique.db.entities.CopingStrategyLog;
+
+public class CopingStrategyLogDAO extends GeneralDAO {
 
     // --------------------------------------------
     // SCHEMA
@@ -20,7 +19,7 @@ public class CopingStrategyDAO extends GeneralDAO {
 
     public static String TABLE_NAME = "copingStrategies";
 
-    public static final String TAG = "CopingStrategyDAO";
+    public static final String TAG = "CopingStrategyLogDAO";
 
     public static final String CNAME_ID = "_id";
     public static final String CNAME_TIMESTAMP = "timestamp";
@@ -64,7 +63,7 @@ public class CopingStrategyDAO extends GeneralDAO {
     // LIVECYCLE
     // --------------------------------------------
 
-    public CopingStrategyDAO(Context context) {
+    public CopingStrategyLogDAO(Context context) {
         super(context);
     }
 

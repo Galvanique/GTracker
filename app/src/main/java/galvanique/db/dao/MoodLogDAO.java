@@ -1,4 +1,4 @@
-package galvanique.db;
+package galvanique.db.dao;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -9,10 +9,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-/**
- * Data access object for reports
- */
-public class MoodDAO extends GeneralDAO {
+import galvanique.db.entities.MoodLog;
+
+public class MoodLogDAO extends GeneralDAO {
 
     // --------------------------------------------
     // SCHEMA
@@ -20,7 +19,7 @@ public class MoodDAO extends GeneralDAO {
 
     public static String TABLE_NAME = "mood";
 
-    public static final String TAG = "MoodDAO";
+    public static final String TAG = "MoodLogDAO";
 
     public static final String CNAME_ID = "_id";
     public static final String CNAME_TIMESTAMP = "timestamp";
@@ -72,7 +71,7 @@ public class MoodDAO extends GeneralDAO {
     // LIVECYCLE
     // --------------------------------------------
 
-    public MoodDAO(Context context) {
+    public MoodLogDAO(Context context) {
         super(context);
     }
 

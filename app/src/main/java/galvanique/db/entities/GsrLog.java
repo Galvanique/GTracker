@@ -1,10 +1,7 @@
-package galvanique.db;
+package galvanique.db.entities;
 
 import java.util.Comparator;
 
-/**
- * This class represents an event report
- */
 public class GsrLog {
 
     public int id = -1;
