@@ -18,6 +18,7 @@ public class MoodLog {
 
     /**
      * Constructor without id
+     *
      * @param timestamp
      * @param mood
      * @param belief
@@ -37,6 +38,7 @@ public class MoodLog {
 
     /**
      * Constructor with report id
+     *
      * @param id
      * @param timestamp
      * @param mood
@@ -62,25 +64,41 @@ public class MoodLog {
 
     }
 
-    public boolean equals(MoodLog r){
+    public boolean equals(MoodLog r) {
         return this.id == r.id;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public long getTimestamp() { return timestamp; }
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-    public int getMood() { return mood; }
+    public int getMood() {
+        return mood;
+    }
 
-    public String getMoodString() { return Mood.values()[mood].name(); }
+    public String getMoodString() {
+        return Mood.values()[mood].name();
+    }
 
-    public String getBelief() { return belief; }
+    public String getBelief() {
+        return belief;
+    }
 
-    public String getTrigger() { return trigger; }
+    public String getTrigger() {
+        return trigger;
+    }
 
-    public String getBehavior() { return behavior; }
+    public String getBehavior() {
+        return behavior;
+    }
 
-    public int getMagnitude() { return magnitude; }
+    public int getMagnitude() {
+        return magnitude;
+    }
 
     /*Comparator for sorting the list by timestamp*/
     public static Comparator<MoodLog> timeComparator = new Comparator<MoodLog>() {

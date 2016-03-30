@@ -1,12 +1,6 @@
 package galvanique.client;
 
 
-import java.text.DateFormatSymbols;
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.util.Arrays;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -22,10 +16,29 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.androidplot.LineRegion;
-import com.androidplot.ui.*;
+import com.androidplot.ui.AnchorPosition;
+import com.androidplot.ui.SeriesAndFormatter;
+import com.androidplot.ui.SeriesRenderer;
+import com.androidplot.ui.Size;
+import com.androidplot.ui.SizeLayoutType;
+import com.androidplot.ui.TextOrientationType;
+import com.androidplot.ui.XLayoutStyle;
+import com.androidplot.ui.YLayoutStyle;
 import com.androidplot.ui.widget.TextLabelWidget;
 import com.androidplot.util.PixelUtils;
-import com.androidplot.xy.*;
+import com.androidplot.xy.BarFormatter;
+import com.androidplot.xy.BarRenderer;
+import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.SimpleXYSeries;
+import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
+import com.androidplot.xy.XYSeriesFormatter;
+
+import java.text.DateFormatSymbols;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import java.util.Arrays;
 
 import galvanique.db.dao.MoodLogDAO;
 
@@ -55,8 +68,7 @@ public class FindPatternsActivity extends Activity {
     private Pair<Integer, XYSeries> selection;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
 
         // TODO Update this with the real moods
         db = new MoodLogDAO(getApplicationContext());
@@ -119,26 +131,27 @@ public class FindPatternsActivity extends Activity {
         });
 
         spRenderStyle = (Spinner) findViewById(R.id.spRenderStyle);
-        ArrayAdapter <BarRenderer.BarRenderStyle> adapter = new ArrayAdapter <BarRenderer.BarRenderStyle> (this, android.R.layout.simple_spinner_item, BarRenderer.BarRenderStyle.values() );
+        ArrayAdapter<BarRenderer.BarRenderStyle> adapter = new ArrayAdapter<BarRenderer.BarRenderStyle>(this, android.R.layout.simple_spinner_item, BarRenderer.BarRenderStyle.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spRenderStyle.setAdapter(adapter);
         spRenderStyle.setSelection(BarRenderer.BarRenderStyle.OVERLAID.ordinal());
         spRenderStyle.setOnItemSelectedListener(new OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 updatePlot();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
 
         spWidthStyle = (Spinner) findViewById(R.id.spWidthStyle);
-        ArrayAdapter <BarRenderer.BarWidthStyle> adapter1 = new ArrayAdapter <BarRenderer.BarWidthStyle> (this, android.R.layout.simple_spinner_item, BarRenderer.BarWidthStyle.values() );
+        ArrayAdapter<BarRenderer.BarWidthStyle> adapter1 = new ArrayAdapter<BarRenderer.BarWidthStyle>(this, android.R.layout.simple_spinner_item, BarRenderer.BarWidthStyle.values());
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spWidthStyle.setAdapter(adapter1);
         spWidthStyle.setSelection(BarRenderer.BarWidthStyle.FIXED_WIDTH.ordinal());
         spWidthStyle.setOnItemSelectedListener(new OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 if (BarRenderer.BarWidthStyle.FIXED_WIDTH.equals(spWidthStyle.getSelectedItem())) {
                     sbFixedWidth.setVisibility(View.VISIBLE);
                     sbVariableWidth.setVisibility(View.INVISIBLE);
@@ -148,6 +161,7 @@ public class FindPatternsActivity extends Activity {
                 }
                 updatePlot();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
@@ -157,12 +171,17 @@ public class FindPatternsActivity extends Activity {
         sbFixedWidth.setProgress(50);
         sbFixedWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {updatePlot();}
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                updatePlot();
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
 
@@ -171,11 +190,17 @@ public class FindPatternsActivity extends Activity {
         sbVariableWidth.setVisibility(View.INVISIBLE);
         sbVariableWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {updatePlot();}
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                updatePlot();
+            }
+
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         plot.setDomainValueFormat(new NumberFormat() {
@@ -216,9 +241,9 @@ public class FindPatternsActivity extends Activity {
         plot.addSeries(series3, formatter1);
 
         // Setup the BarRenderer with our selected options
-        MyBarRenderer renderer = ((MyBarRenderer)plot.getRenderer(MyBarRenderer.class));
-        renderer.setBarRenderStyle((BarRenderer.BarRenderStyle)spRenderStyle.getSelectedItem());
-        renderer.setBarWidthStyle((BarRenderer.BarWidthStyle)spWidthStyle.getSelectedItem());
+        MyBarRenderer renderer = ((MyBarRenderer) plot.getRenderer(MyBarRenderer.class));
+        renderer.setBarRenderStyle((BarRenderer.BarRenderStyle) spRenderStyle.getSelectedItem());
+        renderer.setBarWidthStyle((BarRenderer.BarWidthStyle) spWidthStyle.getSelectedItem());
         renderer.setBarWidth(sbFixedWidth.getProgress());
         renderer.setBarGap(sbVariableWidth.getProgress());
 
@@ -281,7 +306,7 @@ public class FindPatternsActivity extends Activity {
             selection = null;
         }
 
-        if(selection == null) {
+        if (selection == null) {
             selectionWidget.setText(NO_SELECTION_TXT);
         } else {
             selectionWidget.setText("Selected: " + selection.second.getTitle() +
@@ -315,13 +340,14 @@ public class FindPatternsActivity extends Activity {
         /**
          * Implementing this method to allow us to inject our
          * special selection getFormatter.
-         * @param index index of the point being rendered.
+         *
+         * @param index  index of the point being rendered.
          * @param series XYSeries to which the point being rendered belongs.
          * @return
          */
         @Override
         public MyBarFormatter getFormatter(int index, XYSeries series) {
-            if(selection != null &&
+            if (selection != null &&
                     selection.second == series &&
                     selection.first == index) {
                 return selectionFormatter;

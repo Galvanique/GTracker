@@ -10,6 +10,7 @@ public class GsrLog {
 
     /**
      * Constructor without id
+     *
      * @param timestamp
      * @param conductivity
      */
@@ -21,6 +22,7 @@ public class GsrLog {
 
     /**
      * Constructor with report id
+     *
      * @param id
      * @param timestamp
      * @param conductivity
@@ -38,15 +40,21 @@ public class GsrLog {
 
     }
 
-    public boolean equals(GsrLog r){
+    public boolean equals(GsrLog r) {
         return this.id == r.id;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public long getTimestamp() { return timestamp; }
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-    public long getConductivity() { return conductivity; }
+    public long getConductivity() {
+        return conductivity;
+    }
 
     /*Comparator for sorting the list by timestamp*/
     public static Comparator<MoodLog> timeComparator = new Comparator<MoodLog>() {

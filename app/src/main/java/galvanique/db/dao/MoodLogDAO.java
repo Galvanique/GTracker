@@ -1,13 +1,13 @@
 package galvanique.db.dao;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
 
 import galvanique.db.entities.MoodLog;
 
@@ -64,7 +64,7 @@ public class MoodLogDAO extends GeneralDAO {
     // --------------------------------------------
 
     private final static String WHERE_ID = CNAME_ID + "=?";
-    private final static String WHERE_TIME_RANGE = CNAME_TIMESTAMP + ">=?"+" AND "+CNAME_TIMESTAMP + "<=?";
+    private final static String WHERE_TIME_RANGE = CNAME_TIMESTAMP + ">=?" + " AND " + CNAME_TIMESTAMP + "<=?";
     private final static String WHERE_TYPE = CNAME_MOOD + "=?";
 
     // --------------------------------------------
@@ -84,7 +84,7 @@ public class MoodLogDAO extends GeneralDAO {
                 TABLE_NAME,
                 PROJECTION,
                 WHERE_ID,
-                new String[]{id+""},
+                new String[]{id + ""},
                 null,
                 null,
                 null);
@@ -96,7 +96,7 @@ public class MoodLogDAO extends GeneralDAO {
                 TABLE_NAME,
                 PROJECTION,
                 WHERE_TIME_RANGE,
-                new String[]{startTime+"",endTime+""},
+                new String[]{startTime + "", endTime + ""},
                 null,
                 null,
                 null);
@@ -111,7 +111,7 @@ public class MoodLogDAO extends GeneralDAO {
                 null,
                 null,
                 null,
-                CNAME_TIMESTAMP+" DESC");
+                CNAME_TIMESTAMP + " DESC");
         return cursor2moods(c);
     }
 
@@ -120,7 +120,7 @@ public class MoodLogDAO extends GeneralDAO {
                 TABLE_NAME,
                 PROJECTION,
                 WHERE_TYPE,
-                new String[]{type+""},
+                new String[]{type + ""},
                 null,
                 null,
                 null);
@@ -139,16 +139,16 @@ public class MoodLogDAO extends GeneralDAO {
 
     public void update(MoodLog r) {
         ContentValues values = mood2ContentValues(r);
-        db.update(TABLE_NAME, values , WHERE_ID, new String[]{r.id+""});
+        db.update(TABLE_NAME, values, WHERE_ID, new String[]{r.id + ""});
     }
 
     public void delete(MoodLog r) {
-        Log.d(TAG,"delete report " + r.id);
-        db.delete(TABLE_NAME, WHERE_ID, new String[]{r.id+""});
+        Log.d(TAG, "delete report " + r.id);
+        db.delete(TABLE_NAME, WHERE_ID, new String[]{r.id + ""});
     }
 
     public void deleteAll() {
-        Log.d(TAG,"delete all from " + TABLE_NAME);
+        Log.d(TAG, "delete all from " + TABLE_NAME);
         db.delete(TABLE_NAME, null, null);
     }
 
@@ -172,7 +172,7 @@ public class MoodLogDAO extends GeneralDAO {
     public static MoodLog[] cursor2moods(Cursor c) {
         c.moveToFirst();
         LinkedList<MoodLog> moods = new LinkedList<MoodLog>();
-        while(!c.isAfterLast()){
+        while (!c.isAfterLast()) {
             MoodLog r = new MoodLog();
             r.id = c.getInt(CNUM_ID);
             r.timestamp = c.getLong(CNUM_TIMESTAMP);
@@ -203,16 +203,19 @@ public class MoodLogDAO extends GeneralDAO {
         gc.setTimeInMillis(time);
         String AM = "AM";
         int day = gc.get(Calendar.DAY_OF_MONTH);
-        String ds = (day<10?"0":"")+day;
-        int month = (gc.get(Calendar.MONTH)+1);
-        String ms = (month<10?"0":"")+month;
+        String ds = (day < 10 ? "0" : "") + day;
+        int month = (gc.get(Calendar.MONTH) + 1);
+        String ms = (month < 10 ? "0" : "") + month;
         int hour = gc.get(Calendar.HOUR_OF_DAY);
         String hs = "";
-        if(hour>=12){ AM = "PM"; if(hour>12) hour = hour-12;}
-        hs = (hour<10?"0":"")+hour;
+        if (hour >= 12) {
+            AM = "PM";
+            if (hour > 12) hour = hour - 12;
+        }
+        hs = (hour < 10 ? "0" : "") + hour;
         int min = gc.get(Calendar.MINUTE);
-        String mins = (min<10?"0":"")+min;
-        String s = gc.get(Calendar.YEAR)+"-"+ms+"-"+ds+" "+hs+":"+mins+" "+AM;
+        String mins = (min < 10 ? "0" : "") + min;
+        String s = gc.get(Calendar.YEAR) + "-" + ms + "-" + ds + " " + hs + ":" + mins + " " + AM;
         return s;
     }
 

@@ -18,7 +18,7 @@ public abstract class GeneralDAO {
     private MyDBHelper dbHelper;
     protected SQLiteDatabase db;
 
-    private static final String TAG ="GeneralDAO";
+    private static final String TAG = "GeneralDAO";
 
     public GeneralDAO(Context context) {
         this.context = context;
@@ -31,7 +31,7 @@ public abstract class GeneralDAO {
     }
 
     public GeneralDAO openIfNotAlready() {
-        if(db==null|| !db.isOpen())
+        if (db == null || !db.isOpen())
             db = dbHelper.getWritableDatabase();
         return this;
     }

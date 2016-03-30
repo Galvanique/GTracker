@@ -69,7 +69,7 @@ public class PreferencesActivity extends Activity {
                     appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
                 }
             } catch (BandException e) {
-                String exceptionMessage="";
+                String exceptionMessage = "";
                 switch (e.getErrorType()) {
                     case UNSUPPORTED_SDK_VERSION_ERROR:
                         exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
@@ -90,7 +90,7 @@ public class PreferencesActivity extends Activity {
     }
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
 
@@ -119,8 +119,7 @@ public class PreferencesActivity extends Activity {
                     buttonGSR.setText("Stop GSR Collection");
                     txtViewGSR.setText("");
                     new GsrSubscriptionTask().execute();
-                }
-                else {
+                } else {
                     gsrStarted = !gsrStarted;
                     buttonGSR.setText("Begin GSR Collection");
                     txtViewGSR.setText("");

@@ -41,7 +41,7 @@ public class LogMoodActivity extends Activity {
     EditText editTextTrigger, editTextBelief, editTextBehavior;
 
     @Override
-    protected void onCreate (Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_mood);
 
@@ -98,11 +98,12 @@ public class LogMoodActivity extends Activity {
 
     /**
      * Alters visibility of UI elements according to what part of the logging process the user is on
+     *
      * @param s
      */
     public void setUpLayout(State s) {
         // TODO check for invalid inputs
-        switch(state) {
+        switch (state) {
             case MOOD: // currently
                 // Set up MAGNITUDE UI elements
                 dropdown.setVisibility(View.GONE);

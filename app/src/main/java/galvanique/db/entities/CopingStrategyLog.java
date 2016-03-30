@@ -12,6 +12,7 @@ public class CopingStrategyLog {
 
     /**
      * Constructor without id
+     *
      * @param timestamp
      * @param copingStrategy
      * @param longTerm
@@ -27,6 +28,7 @@ public class CopingStrategyLog {
 
     /**
      * Constructor with report id
+     *
      * @param id
      * @param timestamp
      * @param copingStrategy
@@ -48,19 +50,29 @@ public class CopingStrategyLog {
 
     }
 
-    public boolean equals(CopingStrategyLog r){
+    public boolean equals(CopingStrategyLog r) {
         return this.id == r.id;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public long getTimestamp() { return timestamp; }
+    public long getTimestamp() {
+        return timestamp;
+    }
 
-    public String getCopingStrategy() { return copingStrategy; }
+    public String getCopingStrategy() {
+        return copingStrategy;
+    }
 
-    public int getLongTerm() { return longTerm; }
+    public int getLongTerm() {
+        return longTerm;
+    }
 
-    public int getEffectiveness() { return effectiveness; }
+    public int getEffectiveness() {
+        return effectiveness;
+    }
 
     /*Comparator for sorting the list by timestamp*/
     public static Comparator<CopingStrategyLog> timeComparator = new Comparator<CopingStrategyLog>() {

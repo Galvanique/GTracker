@@ -12,9 +12,8 @@ import galvanique.db.dao.GsrDAO;
 import galvanique.db.dao.MoodLogDAO;
 
 /**
- * This is the basic component to create and manage the database. 
+ * This is the basic component to create and manage the database.
  * This class should only be used in the {@link GeneralDAO}.
- *
  */
 public class MyDBHelper extends SQLiteOpenHelper {
 
@@ -28,7 +27,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     public MyDBHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
-        Log.d(TAG,"database initialized");
+        Log.d(TAG, "database initialized");
     }
 
     @Override
