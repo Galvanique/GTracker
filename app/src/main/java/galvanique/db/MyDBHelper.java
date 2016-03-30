@@ -33,6 +33,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // TODO prepopulate any values we want already in the tables, set up remaining tables
         // Mood
         db.execSQL(MoodLogDAO.TABLE_CREATE);
         Log.d(TAG, "table " + MoodLogDAO.TABLE_NAME + " was created");
