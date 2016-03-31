@@ -42,27 +42,6 @@ public class MyDBHelper extends SQLiteOpenHelper {
         // Coping strategies
         db.execSQL(CopingStrategyLogDAO.TABLE_CREATE);
         Log.d(TAG, "table " + CopingStrategyLogDAO.TABLE_NAME + " was created");
-        String ROW1 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
-                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('0', '11111', 'testLongOne', '1', '9')";
-        db.execSQL(ROW1);
-        String ROW2 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
-                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('1', '22222', 'testLongTwo', '1', '5')";
-        db.execSQL(ROW2);
-        String ROW3 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
-                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('2', '33333', 'testShortOne', '0', '10')";
-        db.execSQL(ROW3);
-        String ROW4 = "INSERT INTO " + CopingStrategyLogDAO.TABLE_NAME + " ("
-                + CopingStrategyLogDAO.CNAME_ID + ", " + CopingStrategyLogDAO.CNAME_TIMESTAMP + ", "
-                + CopingStrategyLogDAO.CNAME_COPINGSTRATEGY + ", " + CopingStrategyLogDAO.CNAME_LONGTERM + ", "
-                + CopingStrategyLogDAO.CNAME_EFFECTIVENESS + ") Values ('3', '44444', 'testShortTwo', '0', '3')";
-        db.execSQL(ROW4);
-        Log.d(TAG, "table " + CopingStrategyLogDAO.TABLE_NAME + " was initialized");
     }
 
     @Override
