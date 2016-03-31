@@ -17,7 +17,7 @@ public class MoodLogDAO extends GeneralDAO {
     // SCHEMA
     // --------------------------------------------
 
-    public static String TABLE_NAME = "mood";
+    public static String TABLE_NAME = "moodLog";
 
     public static final String TAG = "MoodLogDAO";
 

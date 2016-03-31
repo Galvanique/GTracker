@@ -5,22 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textViewStateMood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewStateMagnitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewStateTrigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewStateBelief"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewStateBehavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown" />
-
-    <com.github.channguyen.rsv.RangeSliderView
-        android:id="@+id/rsv_small"
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        rsv:filledColor="#FF6600"
-        />
 
     <EditText
         android:id="@+id/editTextTrigger"
@@ -40,10 +85,24 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress" />
 
+    <com.github.channguyen.rsv.RangeSliderView
+        android:id="@+id/rsv_large"
+        android:layout_marginTop="50dp"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        rsv:filledColor="#FF6600"
+        rsv:rangeCount="10" />
+
     <Button
         android:id="@+id/buttonNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next" />
+
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back" />
 
 </LinearLayout>
