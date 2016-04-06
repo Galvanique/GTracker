@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import galvanique.db.dao.CopingStrategyDAO;
+import galvanique.db.dao.CopingStrategyLogDAO;
+import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
 
 public class GetHelpActivity extends Activity {
@@ -18,7 +21,7 @@ public class GetHelpActivity extends Activity {
     private TextView copingStratStr;
 
     /**
-     * @see CopingStrategyLogDAO#getRandomCopingStrategy(int longTerm)
+     * @see CopingStrategyDAO#getRandomCopingStrategy(int longTerm)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +34,12 @@ public class GetHelpActivity extends Activity {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                CopingStrategyLogDAO dao = new CopingStrategyLogDAO(getApplicationContext());
+                CopingStrategyDAO dao = new CopingStrategyDAO(getApplicationContext());
                 dao.openRead();
-                CopingStrategyLog cs = dao.getRandomCopingStrategy(1); // 1 for long term
-                Log.d("random cs is", cs.getCopingStrategy());
+                CopingStrategy cs = dao.getRandomCopingStrategy();
+                Log.d("random cs is", cs.name);
                 dao.close();
-                copingStratStr.setText(cs.getCopingStrategy());
+                copingStratStr.setText(cs.name);
             }
         });
         copingStratStr = (TextView) findViewById(R.id.CopingStratStr);

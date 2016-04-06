@@ -203,7 +203,10 @@ public class LogMoodActivity extends AppCompatActivity {
                 buttonBack.setText("No");
                 editTextBehavior.setVisibility(View.GONE);
                 if (readyToWrite) {
-                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), 0, 0, 0, magnitude, ""); // TODO empty comment? also how to translate trigger, behavior, belief strings to ints
+                    // TODO-tyler query trigger, belief, behavior tables to see if input strings exist already
+                    // TODO-tyler if strings exist, use their ids. if not, add and use new id
+                    // TODO-tyler insert mood log using these three ids (replace the three zeros)
+                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), 0, 0, 0, magnitude, "");
                     MoodLogDAO db = new MoodLogDAO(getApplicationContext());
                     db.openWrite();
                     db.insert(insertion);

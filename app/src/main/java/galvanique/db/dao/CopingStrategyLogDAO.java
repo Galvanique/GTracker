@@ -100,19 +100,6 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         return cursor2copingStrategies(c);
     }
 
-    public CopingStrategyLog getRandomCopingStrategy() { //changed this to parameterless
-        Cursor c = db.query(
-                TABLE_NAME,
-                PROJECTION,
-                null,
-                null,
-                null,
-                null,
-                "RANDOM()",
-                "1");
-        return cursor2copingStrategy(c);
-    }
-
     // --------------------------------------------
     // UPDATES
     // --------------------------------------------
