@@ -166,9 +166,9 @@ public class MoodLogDAO extends GeneralDAO {
         r.id = c.getInt(CNUM_ID);
         r.timestamp = c.getLong(CNUM_TIMESTAMP);
         r.mood = c.getInt(CNUM_MOOD);
-        r.belief = c.getString(CNUM_BELIEF);
-        r.trigger = c.getString(CNUM_TRIGGER);
-        r.behavior = c.getString(CNUM_BEHAVIOR);
+        r.belief = c.getInt(CNUM_BELIEF);
+        r.trigger = c.getInt(CNUM_TRIGGER);
+        r.behavior = c.getInt(CNUM_BEHAVIOR);
         r.magnitude = c.getInt(CNUM_MAGNITUDE);
         r.comments = c.getString(CNUM_COMMENTS);
         return r;
@@ -182,9 +182,9 @@ public class MoodLogDAO extends GeneralDAO {
             r.id = c.getInt(CNUM_ID);
             r.timestamp = c.getLong(CNUM_TIMESTAMP);
             r.mood = c.getInt(CNUM_MOOD);
-            r.belief = c.getString(CNUM_BELIEF);
-            r.trigger = c.getString(CNUM_TRIGGER);
-            r.behavior = c.getString(CNUM_BEHAVIOR);
+            r.belief = c.getInt(CNUM_BELIEF);
+            r.trigger = c.getInt(CNUM_TRIGGER);
+            r.behavior = c.getInt(CNUM_BEHAVIOR);
             r.magnitude = c.getInt(CNUM_MAGNITUDE);
             r.comments = c.getString(CNUM_COMMENTS);
             moods.add(r);
