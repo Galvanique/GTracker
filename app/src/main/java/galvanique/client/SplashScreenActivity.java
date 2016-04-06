@@ -91,6 +91,8 @@ public class SplashScreenActivity extends AppCompatActivity
             startActivity(new Intent(SplashScreenActivity.this, TrackProgressActivity.class));
         } else if (id == R.id.nav_app_prefs) {
             startActivity(new Intent(SplashScreenActivity.this, PreferencesActivity.class));
+        } else if (id == R.id.nav_view_update_history) {
+            startActivity(new Intent(SplashScreenActivity.this, ViewUpdateHistoryActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
