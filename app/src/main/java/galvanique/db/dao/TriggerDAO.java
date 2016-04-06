@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 import galvanique.db.entities.Trigger;
 
-public class TriggerDAO extends GeneralDAO{
+public class TriggerDAO extends GeneralDAO {
 
     // --------------------------------------------
     // SCHEMA
@@ -39,6 +39,8 @@ public class TriggerDAO extends GeneralDAO{
     // --------------------------------------------
     // QUERIES
     // --------------------------------------------
+
+
 
 
 
