@@ -165,10 +165,10 @@ public class MoodLogDAO extends GeneralDAO {
         MoodLog r = new MoodLog();
         r.id = c.getInt(CNUM_ID);
         r.timestamp = c.getLong(CNUM_TIMESTAMP);
-        r.mood = c.getInt(CNUM_MOOD);
-        r.belief = c.getInt(CNUM_BELIEF);
-        r.trigger = c.getInt(CNUM_TRIGGER);
-        r.behavior = c.getInt(CNUM_BEHAVIOR);
+        r.moodID = c.getInt(CNUM_MOOD);
+        r.beliefID = c.getInt(CNUM_BELIEF);
+        r.triggerID = c.getInt(CNUM_TRIGGER);
+        r.behaviorID = c.getInt(CNUM_BEHAVIOR);
         r.magnitude = c.getInt(CNUM_MAGNITUDE);
         r.comments = c.getString(CNUM_COMMENTS);
         return r;
@@ -181,10 +181,10 @@ public class MoodLogDAO extends GeneralDAO {
             MoodLog r = new MoodLog();
             r.id = c.getInt(CNUM_ID);
             r.timestamp = c.getLong(CNUM_TIMESTAMP);
-            r.mood = c.getInt(CNUM_MOOD);
-            r.belief = c.getInt(CNUM_BELIEF);
-            r.trigger = c.getInt(CNUM_TRIGGER);
-            r.behavior = c.getInt(CNUM_BEHAVIOR);
+            r.moodID = c.getInt(CNUM_MOOD);
+            r.beliefID = c.getInt(CNUM_BELIEF);
+            r.triggerID = c.getInt(CNUM_TRIGGER);
+            r.behaviorID = c.getInt(CNUM_BEHAVIOR);
             r.magnitude = c.getInt(CNUM_MAGNITUDE);
             r.comments = c.getString(CNUM_COMMENTS);
             moods.add(r);
@@ -196,10 +196,10 @@ public class MoodLogDAO extends GeneralDAO {
     private static ContentValues mood2ContentValues(MoodLog r) {
         ContentValues cv = new ContentValues();
         cv.put(CNAME_TIMESTAMP, r.timestamp);
-        cv.put(CNAME_MOOD, r.mood);
-        cv.put(CNAME_BELIEF, r.belief);
-        cv.put(CNAME_TRIGGER, r.trigger);
-        cv.put(CNAME_BEHAVIOR, r.behavior);
+        cv.put(CNAME_MOOD, r.moodID);
+        cv.put(CNAME_BELIEF, r.beliefID);
+        cv.put(CNAME_TRIGGER, r.triggerID);
+        cv.put(CNAME_BEHAVIOR, r.behaviorID);
         cv.put(CNAME_MAGNITUDE, r.magnitude);
         cv.put(CNAME_COMMENTS, r.comments);
         return cv;

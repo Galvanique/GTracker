@@ -22,29 +22,7 @@ public class MoodLog {
     public String comments;
 
     /**
-     * Constructor without id
-     *
-     * @param timestamp
-     * @param mood
-     * @param belief
-     * @param trigger
-     * @param behavior
-     * @param magnitude
-     * @param comments
-     */
-
-    public MoodLog(long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude, String comments) {
-        this.timestamp = timestamp;
-        this.moodID = mood.ordinal();
-        this.belief = belief;
-        this.trigger = trigger;
-        this.behavior = behavior;
-        this.magnitude = magnitude;
-        this.comments = comments;
-    }
-
-    /**
-     * Constructor with report id
+     * Constructor with id
      *
      * @param id
      * @param timestamp
@@ -55,13 +33,35 @@ public class MoodLog {
      * @param magnitude
      * @param comments
      */
-    public MoodLog(int id, long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude, String comments) {
+
+    public MoodLog(int id, long timestamp, Mood mood, int belief, int trigger, int behavior, int magnitude, String comments) {
         this.id = id;
         this.timestamp = timestamp;
         this.moodID = mood.ordinal();
-        this.belief = belief;
-        this.trigger = trigger;
-        this.behavior = behavior;
+        this.beliefID = belief;
+        this.triggerID = trigger;
+        this.behaviorID = behavior;
+        this.magnitude = magnitude;
+        this.comments = comments;
+    }
+
+    /**
+     * Constructor with report id
+     *
+     * @param timestamp
+     * @param mood
+     * @param belief
+     * @param trigger
+     * @param behavior
+     * @param magnitude
+     * @param comments
+     */
+    public MoodLog(long timestamp, Mood mood, int belief, int trigger, int behavior, int magnitude, String comments) {
+        this.timestamp = timestamp;
+        this.moodID = mood.ordinal();
+        this.beliefID = belief;
+        this.triggerID = trigger;
+        this.behaviorID = behavior;
         this.magnitude = magnitude;
         this.comments = comments;
     }
@@ -85,24 +85,24 @@ public class MoodLog {
         return timestamp;
     }
 
-    public int getMood() {
-        return mood;
+    public int getMoodID() {
+        return moodID;
     }
 
     public String getMoodString() {
-        return Mood.values()[mood].name();
+        return Mood.values()[moodID].name();
     }
 
-    public String getBelief() {
-        return belief;
+    public int getBelief() {
+        return beliefID;
     }
 
-    public String getTrigger() {
-        return trigger;
+    public int getTrigger() {
+        return triggerID;
     }
 
-    public String getBehavior() {
-        return behavior;
+    public int getBehavior() {
+        return behaviorID;
     }
 
     public int getMagnitude() {

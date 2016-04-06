@@ -19,7 +19,7 @@ import galvanique.db.entities.MoodLog;
 public class LogMoodActivity extends AppCompatActivity {
 
     private enum State {
-        MOOD, MAGNITUDE, TRIGGER, BELIEF, BEHAVIOR;
+        MOOD, MAGNITUDE, TRIGGER, BELIEF, BEHAVIOR, STRATEGY;
         private static State[] vals = values();
 
         public State next() {
@@ -52,7 +52,7 @@ public class LogMoodActivity extends AppCompatActivity {
     Button buttonNext, buttonBack;
     RangeSliderView slider;
     EditText editTextTrigger, editTextBelief, editTextBehavior;
-    TextView textViewStateMood, textViewStateMagnitude, textViewStateTrigger, textViewStateBelief, textViewStateBehavior;
+    TextView textViewInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +62,9 @@ public class LogMoodActivity extends AppCompatActivity {
         state = State.MOOD;
 
         // Text views
-        textViewStateMood = (TextView) findViewById(R.id.textViewStateMood);
-        textViewStateMagnitude = (TextView) findViewById(R.id.textViewStateMagnitude);
-        textViewStateTrigger = (TextView) findViewById(R.id.textViewStateTrigger);
-        textViewStateBelief = (TextView) findViewById(R.id.textViewStateBelief);
-        textViewStateBehavior = (TextView) findViewById(R.id.textViewStateBehavior);
-        textViewStateMood.setText("Please select a mood.");
-        textViewStateMagnitude.setText("How intense was this feeling?");
-        textViewStateTrigger.setText("What triggered this mood? (Optional)");
-        textViewStateBelief.setText("What did feeling this way make you think or believe? (Optional)");
-        textViewStateBehavior.setText("How did feeling this way make you behave? (Optional)");
-        textViewStateMood.setVisibility(View.VISIBLE);
-        textViewStateMagnitude.setVisibility(View.GONE);
-        textViewStateTrigger.setVisibility(View.GONE);
-        textViewStateBelief.setVisibility(View.GONE);
-        textViewStateBehavior.setVisibility(View.GONE);
+        textViewInstructions = (TextView) findViewById(R.id.textViewInstructions);
+        textViewInstructions.setText("Please select a mood.");
+        textViewInstructions.setVisibility(View.VISIBLE);
 
         // Edit texts
         editTextTrigger = (EditText) findViewById(R.id.editTextTrigger);
@@ -133,12 +121,13 @@ public class LogMoodActivity extends AppCompatActivity {
                             "Mood not logged: Please select required mood value.",
                             Toast.LENGTH_LONG
                     ).show();
+                    state = State.MOOD;
                 }
                 // If we click "Submit" after filling out at least mood field
                 if (state == State.BEHAVIOR && !(mood == null || mood.equals(""))) {
                     readyToWrite = true;
+                    state = state.next();
                 }
-                state = state.next();
                 setUpLayout(state);
             }
         });
@@ -166,16 +155,55 @@ public class LogMoodActivity extends AppCompatActivity {
         switch (s) {
             case MOOD:
                 // Set up MOOD UI elements
-                textViewStateMood.setVisibility(View.VISIBLE);
-                textViewStateMagnitude.setVisibility(View.GONE);
-                textViewStateBehavior.setVisibility(View.GONE);
+                textViewInstructions.setVisibility(View.VISIBLE);
+                textViewInstructions.setText("Please select a mood.");
                 editTextBehavior.setVisibility(View.GONE);
                 slider.setVisibility(View.GONE);
                 dropdown.setVisibility(View.VISIBLE);
                 buttonNext.setText("Next");
                 buttonBack.setVisibility(View.GONE);
-q                if (readyToWrite) {
-                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), belief, trigger, behavior, magnitude, ""); // empty comment for now
+                break;
+            case MAGNITUDE:
+                textViewInstructions.setText("How intense was this feeling?");
+                dropdown.setVisibility(View.GONE);
+                editTextTrigger.setVisibility(View.GONE);
+                slider.setVisibility(View.VISIBLE);
+                buttonNext.setText("Next");
+                buttonBack.setVisibility(View.VISIBLE);
+                break;
+            case TRIGGER:
+                textViewInstructions.setText("What triggered this mood? (Optional)");
+                slider.setVisibility(View.GONE);
+                editTextBelief.setVisibility(View.GONE);
+                editTextTrigger.setVisibility(View.VISIBLE);
+                // Grab trigger text
+                trigger = editTextTrigger.getText().toString();
+                buttonNext.setText("Next");
+                break;
+            case BELIEF:
+                textViewInstructions.setText("What did feeling this way make you think or believe? (Optional)");
+                editTextTrigger.setVisibility(View.GONE);
+                editTextBehavior.setVisibility(View.GONE);
+                editTextBelief.setVisibility(View.VISIBLE);
+                // Grab belief text
+                belief = editTextBelief.getText().toString();
+                buttonNext.setText("Next");
+                break;
+            case BEHAVIOR:
+                textViewInstructions.setText("How did feeling this way make you behave? (Optional)");
+                editTextBelief.setVisibility(View.GONE);
+                editTextBehavior.setVisibility(View.VISIBLE);
+                // Grab behavior text
+                behavior = editTextBehavior.getText().toString();
+                buttonNext.setText("Submit");
+                break;
+            case STRATEGY:
+                textViewInstructions.setText("Would you like a coping strategy suggestion?");
+                buttonNext.setText("Yes");
+                buttonBack.setText("No");
+                editTextBehavior.setVisibility(View.GONE);
+                if (readyToWrite) {
+                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), 0, 0, 0, magnitude, ""); // TODO empty comment? also how to translate trigger, behavior, belief strings to ints
                     MoodLogDAO db = new MoodLogDAO(getApplicationContext());
                     db.openWrite();
                     db.insert(insertion);
@@ -198,48 +226,6 @@ q                if (readyToWrite) {
                     magnitude = 0;
                 }
                 readyToWrite = false;
-                break;
-            case MAGNITUDE:
-                textViewStateMood.setVisibility(View.GONE);
-                textViewStateMagnitude.setVisibility(View.VISIBLE);
-                textViewStateTrigger.setVisibility(View.GONE);
-                dropdown.setVisibility(View.GONE);
-                editTextTrigger.setVisibility(View.GONE);
-                slider.setVisibility(View.VISIBLE);
-                buttonNext.setText("Next");
-                buttonBack.setVisibility(View.VISIBLE);
-                break;
-            case TRIGGER:
-                textViewStateMagnitude.setVisibility(View.GONE);
-                textViewStateTrigger.setVisibility(View.VISIBLE);
-                textViewStateBelief.setVisibility(View.GONE);
-                slider.setVisibility(View.GONE);
-                editTextBelief.setVisibility(View.GONE);
-                editTextTrigger.setVisibility(View.VISIBLE);
-                // Grab trigger text
-                trigger = editTextTrigger.getText().toString();
-                buttonNext.setText("Next");
-                break;
-            case BELIEF:
-                textViewStateTrigger.setVisibility(View.GONE);
-                textViewStateBelief.setVisibility(View.VISIBLE);
-                textViewStateBehavior.setVisibility(View.GONE);
-                editTextTrigger.setVisibility(View.GONE);
-                editTextBehavior.setVisibility(View.GONE);
-                editTextBelief.setVisibility(View.VISIBLE);
-                // Grab belief text
-                belief = editTextBelief.getText().toString();
-                // Set up BEHAVIOR UI elements
-                buttonNext.setText("Next");
-                break;
-            case BEHAVIOR:
-                textViewStateBelief.setVisibility(View.GONE);
-                textViewStateBehavior.setVisibility(View.VISIBLE);
-                editTextBelief.setVisibility(View.GONE);
-                editTextBehavior.setVisibility(View.VISIBLE);
-                buttonNext.setText("Submit");
-                // Grab behavior text
-                behavior = editTextBehavior.getText().toString();
                 break;
             default:
                 throw new RuntimeException("Invalid mood entry state");
