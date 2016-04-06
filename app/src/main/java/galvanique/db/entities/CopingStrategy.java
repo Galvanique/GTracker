@@ -2,46 +2,14 @@ package galvanique.db.entities;
 
 public class CopingStrategy {
 
-    public int id = -1;
+    public int id;
     public String name;
+    public String description;
+    public long duration;
 
-    /**
-     * Constructor without id
-     *
-     * @param name
-     */
-
-    public CopingStrategy(String name) {
-        this.name= name;
-    }
-
-    /**
-     * Constructor with report id
-     *
-     * @param id
-     * @param name
-     */
-
-    public CopingStrategy(int id, String name) {
-        this.id = id;
+    public CopingStrategy(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
-    /**
-     * Empty Constructor
-     */
-
-    public CopingStrategy() { }
-
-    public boolean equals(Mood r) {
-        return this.id == r.id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

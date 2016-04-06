@@ -1,54 +1,55 @@
 package galvanique.db.entities;
 
-/**
- * Created by K on 4/6/16.
- */
-
 import java.util.Comparator;
 
-public class CopingStrategyLog {
-
-
+public class CopingStrategyLogOld {
 
     public int id = -1;
+    //public long timestamp;
     public int moodLogID;
-    public int copingStrategyID;
+    public String copingStrategy;
+    //public int longTerm;
     public int effectiveness;
-    public long timestamp;
 
     /**
      * Constructor without id
      *
-     * @param moodLogID
-     * @param copingStrategyID
+     * //@param timestamp
+     * @param copingStrategy
+     * @param longTerm
      * @param effectiveness
-     * @param timestamp
      */
 
-    public CopingStrategyLog(int moodLogID, int copingStrategyID, int effectiveness, long timestamp) {
-        this.moodLogID = moodLogID;
-        this.copingStrategyID = copingStrategyID;
+    public CopingStrategyLogOld(/*long timestamp, */String copingStrategy, /*int longTerm, */int effectiveness) {
+        //this.timestamp = timestamp;
+        this.copingStrategy = copingStrategy;
+        //this.longTerm = longTerm;
         this.effectiveness = effectiveness;
-        this.timestamp = timestamp;
     }
 
     /**
      * Constructor with report id
      *
      * @param id
-     * @param moodLogID
-     * @param copingStrategyID
-     * @param effectiveness
      * @param timestamp
+     * @param copingStrategy
+     * @param longTerm
+     * @param effectiveness
      */
-    public CopingStrategyLog(int id, int moodLogID, int copingStrategyID, int effectiveness, long timestamp) {
+    public CopingStrategyLogOld(int id, long timestamp, String copingStrategy, int longTerm, int effectiveness) {
         this.id = id;
-        this.moodLogID = moodLogID;
-        this.copingStrategyID = copingStrategyID;
-        this.effectiveness = effectiveness;
         this.timestamp = timestamp;
+        this.copingStrategy = copingStrategy;
+        this.longTerm = longTerm;
+        this.effectiveness = effectiveness;
     }
 
+    /**
+     * Empty Constructor
+     */
+    public CopingStrategyLogOld() {
+
+    }
 
     public boolean equals(CopingStrategyLog r) {
         return this.id == r.id;
@@ -58,20 +59,20 @@ public class CopingStrategyLog {
         return id;
     }
 
-    public int getCopingStrategyID() {
-        return copingStrategyID;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public int getMoodLogID() {
-        return moodLogID;
+    public String getCopingStrategy() {
+        return copingStrategy;
+    }
+
+    public int getLongTerm() {
+        return longTerm;
     }
 
     public int getEffectiveness() {
         return effectiveness;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
     }
 
     /*Comparator for sorting the list by timestamp*/

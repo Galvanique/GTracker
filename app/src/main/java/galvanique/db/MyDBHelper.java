@@ -6,16 +6,9 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import galvanique.db.dao.BehaviorDAO;
-import galvanique.db.dao.BeliefDAO;
-import galvanique.db.dao.CopingStrategyDAO;
-import galvanique.db.dao.CopingStrategyLogDAO;
-import galvanique.db.dao.CopingStrategyLogDefaultDAO;
 import galvanique.db.dao.GeneralDAO;
 import galvanique.db.dao.GsrDAO;
-import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
-import galvanique.db.dao.TriggerDAO;
 
 /**
  * This is the basic component to create and manage the database.
@@ -38,36 +31,16 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO prepopulate any values we want already in the tables
-        /*
-        // Behavior
-        db.execSQL(BehaviorDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + BehaviorDAO.TABLE_NAME + " was created");
-        // Belief
-        db.execSQL(BeliefDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + BeliefDAO.TABLE_NAME + " was created");
-        // CopingStrategy
-        db.execSQL(CopingStrategyDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was created");
-        // CopingStrategyLog
-        db.execSQL(CopingStrategyLogDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + CopingStrategyLogDAO.TABLE_NAME + " was created");
-        // CopingStrategyLogDefault
-        db.execSQL(CopingStrategyLogDefaultDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + CopingStrategyLogDefaultDAO.TABLE_NAME + " was created");
-        // Gsr
-        db.execSQL(GsrDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + GsrDAO.TABLE_NAME + " was created");
+        // TODO prepopulate any values we want already in the tables, set up remaining tables
         // Mood
-        db.execSQL(MoodDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + MoodDAO.TABLE_NAME + " was created");
-        // MoodLog
         db.execSQL(MoodLogDAO.TABLE_CREATE);
         Log.d(TAG, "table " + MoodLogDAO.TABLE_NAME + " was created");
-        // Trigger
-        db.execSQL(TriggerDAO.TABLE_CREATE);
-        Log.d(TAG, "table " + TriggerDAO.TABLE_NAME + " was created");
-        */
+        // GSR
+        db.execSQL(GsrDAO.TABLE_CREATE);
+        Log.d(TAG, "table " + GsrDAO.TABLE_NAME + " was created");
+        // Coping strategies
+        db.execSQL(CopingStrategyLogDAO.TABLE_CREATE);
+        Log.d(TAG, "table " + CopingStrategyLogDAO.TABLE_NAME + " was created");
     }
 
     @Override
