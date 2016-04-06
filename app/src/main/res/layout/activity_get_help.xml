@@ -20,15 +20,10 @@
         android:layout_alignParentBottom="true"
         android:paddingBottom="300dip">
         <Button
-            android:id="@+id/GetSTHelpButton"
+            android:id="@+id/GetHelpButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get Short-Term Help" />
-        <Button
-            android:id="@+id/GetLTHelpButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get Long-Term Help" />
+            android:text="Get Help" />
     </LinearLayout>
 
 </RelativeLayout>

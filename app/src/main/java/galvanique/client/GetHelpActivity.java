@@ -15,8 +15,7 @@ public class GetHelpActivity extends Activity {
     /**
      * Various UI components
      */
-    private Button getSTHelpButton;
-    private Button getLTHelpButton;
+    private Button getHelpButton;
     private TextView copingStratStr;
 
     /**
@@ -28,20 +27,8 @@ public class GetHelpActivity extends Activity {
         setContentView(R.layout.activity_get_help);
 
         // Give starting values
-        getSTHelpButton = (Button) findViewById(R.id.GetSTHelpButton);
-        getSTHelpButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onClick(View v) {
-                CopingStrategyLogDAO dao = new CopingStrategyLogDAO(getApplicationContext());
-                dao.openRead();
-                CopingStrategyLog cs = dao.getRandomCopingStrategy(0); // 0 for short term -- sqlite doesn't have booleans
-                dao.close();
-                copingStratStr.setText(cs.getCopingStrategy());
-            }
-        });
-        getLTHelpButton = (Button) findViewById(R.id.GetLTHelpButton);
-        getLTHelpButton.setOnClickListener(new View.OnClickListener() {
+        getHelpButton = (Button) findViewById(R.id.GetHelpButton);
+        getHelpButton.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
