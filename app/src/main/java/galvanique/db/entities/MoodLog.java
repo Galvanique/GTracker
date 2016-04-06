@@ -15,9 +15,9 @@ public class MoodLog {
     public int id = -1;
     public long timestamp;
     public int mood;
-    public String belief;
-    public String trigger;
-    public String behavior;
+    public int belief;
+    public int trigger;
+    public int behavior;
     public int magnitude;
     public String comments;
 
@@ -33,7 +33,7 @@ public class MoodLog {
      * @param comments
      */
 
-    public MoodLog(long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude, String comments) {
+    public MoodLog(long timestamp, Mood mood, int belief, int trigger, int behavior, int magnitude, String comments) {
         this.timestamp = timestamp;
         this.mood = mood.ordinal();
         this.belief = belief;
@@ -55,7 +55,7 @@ public class MoodLog {
      * @param magnitude
      * @param comments
      */
-    public MoodLog(int id, long timestamp, Mood mood, String belief, String trigger, String behavior, int magnitude, String comments) {
+    public MoodLog(int id, long timestamp, Mood mood, int belief, int trigger, int behavior, int magnitude, String comments) {
         this.id = id;
         this.timestamp = timestamp;
         this.mood = mood.ordinal();
@@ -93,15 +93,15 @@ public class MoodLog {
         return Mood.values()[mood].name();
     }
 
-    public String getBelief() {
+    public int getBelief() {
         return belief;
     }
 
-    public String getTrigger() {
+    public int getTrigger() {
         return trigger;
     }
 
-    public String getBehavior() {
+    public int getBehavior() {
         return behavior;
     }
 
