@@ -17,9 +17,9 @@ public class MoodDAO extends GeneralDAO {
     // SCHEMA
     // --------------------------------------------
 
-    public static String TABLE_NAME = "moodLog";
+    public static String TABLE_NAME = "mood";
 
-    public static final String TAG = "MoodLogDAO";
+    public static final String TAG = "MoodDAO";
 
     public static final String CNAME_ID = "_id";
     public static final String CNAME_NAME = "name";
