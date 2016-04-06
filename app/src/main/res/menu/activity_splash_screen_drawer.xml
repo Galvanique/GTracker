@@ -19,6 +19,10 @@
             android:icon="@drawable/ic_menu_send"
             android:title="Track Progress" />
         <item
+            android:id="@+id/nav_view_update_history"
+            android:icon="@drawable/ic_menu_send"
+            android:title="View/Update History" />
+        <item
             android:id="@+id/nav_app_prefs"
             android:icon="@drawable/ic_menu_manage"
             android:title="App Preferences" />
