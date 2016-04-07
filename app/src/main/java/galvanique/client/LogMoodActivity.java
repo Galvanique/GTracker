@@ -124,10 +124,16 @@ public class LogMoodActivity extends AppCompatActivity {
                     state = State.MOOD;
                 }
                 // If we click "Submit" after filling out at least mood field
-                if (state == State.BEHAVIOR && !(mood == null || mood.equals(""))) {
+                else if (state == State.BEHAVIOR && !(mood == null || mood.equals(""))) {
                     readyToWrite = true;
                     state = state.next();
                 }
+                // If state is STRATEGY, buttonNext has text "Yes" to accept a suggestion
+                else if (state == State.STRATEGY) {
+                    // TODO get a coping strategy suggestion
+                }
+                // Normal behavior
+                else state = state.next();
                 setUpLayout(state);
             }
         });
@@ -138,7 +144,12 @@ public class LogMoodActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                state = state.previous();
+                // If state is STRATEGY, buttonBack has text "No," should just return user to MOOD state
+                if (state == State.STRATEGY) {
+                    state = State.MOOD;
+                }
+                // Normal behavior
+                else state = state.previous();
                 setUpLayout(state);
             }
         });
@@ -161,6 +172,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 slider.setVisibility(View.GONE);
                 dropdown.setVisibility(View.VISIBLE);
                 buttonNext.setText("Next");
+                buttonBack.setText("Back");
                 buttonBack.setVisibility(View.GONE);
                 break;
             case MAGNITUDE:
@@ -169,6 +181,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 editTextTrigger.setVisibility(View.GONE);
                 slider.setVisibility(View.VISIBLE);
                 buttonNext.setText("Next");
+                buttonBack.setText("Back");
                 buttonBack.setVisibility(View.VISIBLE);
                 break;
             case TRIGGER:
@@ -179,6 +192,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 // Grab trigger text
                 trigger = editTextTrigger.getText().toString();
                 buttonNext.setText("Next");
+                buttonBack.setText("Back");
                 break;
             case BELIEF:
                 textViewInstructions.setText("What did feeling this way make you think or believe? (Optional)");
@@ -188,6 +202,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 // Grab belief text
                 belief = editTextBelief.getText().toString();
                 buttonNext.setText("Next");
+                buttonBack.setText("Back");
                 break;
             case BEHAVIOR:
                 textViewInstructions.setText("How did feeling this way make you behave? (Optional)");
@@ -196,6 +211,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 // Grab behavior text
                 behavior = editTextBehavior.getText().toString();
                 buttonNext.setText("Submit");
+                buttonBack.setText("Back");
                 break;
             case STRATEGY:
                 textViewInstructions.setText("Would you like a coping strategy suggestion?");
