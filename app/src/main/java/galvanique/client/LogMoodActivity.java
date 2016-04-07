@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.github.channguyen.rsv.RangeSliderView;
 
+import galvanique.db.dao.CopingStrategyLogDAO;
+import galvanique.db.dao.CopingStrategyLogDefaultDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.entities.MoodLog;
 
@@ -36,6 +38,8 @@ public class LogMoodActivity extends AppCompatActivity {
 
     private State state;
     private boolean readyToWrite = false;
+    // TODO when is the table full enough to use user data?
+    private final int THRESHOLD = 10;
 
     /**
      * MoodLog attributes
@@ -73,10 +77,11 @@ public class LogMoodActivity extends AppCompatActivity {
 
         // Dropdown
         dropdown = (Spinner) findViewById(R.id.spinner);
+        // same as moods in galvanique.db.entities.MoodLog.Mood
         String[] items = new String[]{"", "Happy", "Sad", "Anxious", "Angry", "Guilt", "Shame",
                 "Depressed", "Bored", "Tired", "Lonely", "Proud", "Hopeful",
                 "Frustrated", "Disgust", "Numb", "Physical Pain", "Intrusive Thoughts", "Stressed",
-                "Irritable", "Motivated", "Excited", "Grateful", "Joy", "Loved"}; // same as moods in galvanique.db.entities.MoodLog.Mood
+                "Irritable", "Motivated", "Excited", "Grateful", "Joy", "Loved"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -130,7 +135,13 @@ public class LogMoodActivity extends AppCompatActivity {
                 }
                 // If state is STRATEGY, buttonNext has text "Yes" to accept a suggestion
                 else if (state == State.STRATEGY) {
-                    // TODO get a coping strategy suggestion
+                    CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
+                    if (logDB.getCountCopingStrategyLogs() > THRESHOLD) {
+                        // TODO-tyler get suggestion from CopingStrategyLog table
+                    } else {
+                        // TODO-tyler get suggestion from CopingStrategyLogDefault table
+                        CopingStrategyLogDefaultDAO defaultDB = new CopingStrategyLogDefaultDAO(getApplicationContext());
+                    }
                 }
                 // Normal behavior
                 else state = state.next();
@@ -162,7 +173,7 @@ public class LogMoodActivity extends AppCompatActivity {
      * @param s desired UI state
      */
     public void setUpLayout(State s) {
-        // TODO check for invalid inputs to edit text fields?
+        // TODO-tyler check for invalid inputs to edit text fields?
         switch (s) {
             case MOOD:
                 // Set up MOOD UI elements

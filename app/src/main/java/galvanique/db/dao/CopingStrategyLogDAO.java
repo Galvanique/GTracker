@@ -1,12 +1,9 @@
 package galvanique.db.dao;
 
-/**
- * Created by K on 4/6/16.
- */
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -98,6 +95,10 @@ public class CopingStrategyLogDAO extends GeneralDAO {
                 null,
                 CNAME_ID + " DESC");
         return cursor2copingStrategies(c);
+    }
+
+    public long getCountCopingStrategyLogs() {
+        return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
     }
 
     // --------------------------------------------
