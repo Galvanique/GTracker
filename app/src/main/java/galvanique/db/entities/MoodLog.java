@@ -109,7 +109,9 @@ public class MoodLog {
         return magnitude;
     }
 
-    public String getComments() { return comments; }
+    public String getComments() {
+        return comments;
+    }
 
     /*Comparator for sorting the list by timestamp*/
     public static Comparator<MoodLog> timeComparator = new Comparator<MoodLog>() {

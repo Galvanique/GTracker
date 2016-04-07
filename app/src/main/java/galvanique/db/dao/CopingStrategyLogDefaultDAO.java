@@ -44,7 +44,7 @@ public class CopingStrategyLogDefaultDAO extends GeneralDAO {
 
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
-            CNAME_ID + " INTEGER PRIMARY KEY, " +
+            CNAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CNAME_MOODID + " INTEGER, " +
             CNAME_COPINGSTRATEGYID + " INTEGER, " +
             CNAME_EFFECTIVENESS + " INTEGER " +

@@ -9,7 +9,6 @@ import java.util.Comparator;
 public class CopingStrategyLog {
 
 
-
     public int id = -1;
     public int moodLogID;
     public int copingStrategyID;

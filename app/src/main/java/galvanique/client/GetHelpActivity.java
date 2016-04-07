@@ -8,9 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import galvanique.db.dao.CopingStrategyDAO;
-import galvanique.db.dao.CopingStrategyLogDAO;
 import galvanique.db.entities.CopingStrategy;
-import galvanique.db.entities.CopingStrategyLog;
 
 public class GetHelpActivity extends Activity {
 

@@ -1,16 +1,9 @@
 package galvanique.db.dao;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
 
 import galvanique.db.entities.CopingStrategy;
-import galvanique.db.entities.CopingStrategyLog;
 
 public class CopingStrategyDAO extends GeneralDAO {
 
@@ -35,12 +28,12 @@ public class CopingStrategyDAO extends GeneralDAO {
     };
 
     public final static int CNUM_ID = 0;
-    public final static int CNUM_NAME= 1;
+    public final static int CNUM_NAME = 1;
     public final static int CNUM_DESCRIPTION = 2;
     public final static int CNUM_DURATION = 3;
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
-            CNAME_ID + " INTEGER PRIMARY KEY, " +
+            CNAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CNAME_NAME + " TEXT," +
             CNAME_DESCRIPTION + " TEXT," +
             CNAME_DURATION + " INTEGER" +
