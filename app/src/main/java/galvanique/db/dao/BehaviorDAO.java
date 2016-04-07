@@ -36,6 +36,14 @@ public class BehaviorDAO extends GeneralDAO {
         ");";
 
     // --------------------------------------------
+    // LIVECYCLE
+    // --------------------------------------------
+
+    public BehaviorDAO(Context context) {
+        super(context);
+    }
+
+    // --------------------------------------------
     // QUERIES
     // --------------------------------------------
 }
