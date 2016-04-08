@@ -2,11 +2,9 @@ package galvanique.db.entities;
 
 import java.util.Comparator;
 
-//TODO add comments field
-
 public class MoodLog {
 
-    public enum Mood { // TODO real moods
+    public enum Mood {
         Happy, Sad, Anxious, Angry, Guilt, Shame, Depressed, Bored, Tired, Lonely, Proud, Hopeful,
         Frustrated, Disgust, Numb, PhysicalPain, IntrusiveThoughts, Stressed,
         Irritable, Motivated, Excited, Grateful, Joy, Loved

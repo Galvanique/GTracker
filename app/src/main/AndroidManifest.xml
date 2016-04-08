@@ -32,6 +32,9 @@
             android:name=".TrackProgressActivity"
             android:label="@string/app_name"></activity>
         <activity
+            android:name=".ViewUpdateHistoryActivity"
+            android:label="@string/app_name"></activity>
+        <activity
             android:name=".PreferencesActivity"
             android:label="@string/app_name"></activity>
         <activity

@@ -136,12 +136,14 @@ public class LogMoodActivity extends AppCompatActivity {
                 // If state is STRATEGY, buttonNext has text "Yes" to accept a suggestion
                 else if (state == State.STRATEGY) {
                     CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
+                    logDB.openRead();
                     if (logDB.getCountCopingStrategyLogs() > THRESHOLD) {
                         // TODO-tyler get suggestion from CopingStrategyLog table
                     } else {
                         // TODO-tyler get suggestion from CopingStrategyLogDefault table
                         CopingStrategyLogDefaultDAO defaultDB = new CopingStrategyLogDefaultDAO(getApplicationContext());
                     }
+                    logDB.close();
                 }
                 // Normal behavior
                 else state = state.next();

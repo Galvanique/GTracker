@@ -11,7 +11,7 @@ public class CopingStrategyDAO extends GeneralDAO {
     // SCHEMA
     // --------------------------------------------
 
-    public static String TABLE_NAME = "copingStrategyLog";
+    public static String TABLE_NAME = "copingStrategy";
 
     public static final String TAG = "CopingStrategyDAO";
 

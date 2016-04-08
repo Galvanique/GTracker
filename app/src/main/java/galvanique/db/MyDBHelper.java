@@ -70,7 +70,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         }
         for (String mood : moodStrings) {
             String ROW = "INSERT INTO " + MoodDAO.TABLE_NAME + " ("
-                    + MoodDAO.CNAME_NAME + ") Values (" + mood + ")";
+                    + MoodDAO.CNAME_NAME + ") Values ('" + mood + "')";
             db.execSQL(ROW);
         }
         // MoodLog
