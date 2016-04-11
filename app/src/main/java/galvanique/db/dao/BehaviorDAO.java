@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 import galvanique.db.entities.Behavior;
+import galvanique.db.entities.Belief;
 
 public class BehaviorDAO extends GeneralDAO {
     // --------------------------------------------
@@ -60,6 +61,13 @@ public class BehaviorDAO extends GeneralDAO {
     // QUERY IMPLEMENTATIONS
     // --------------------------------------------
 
+    // Returns id of inserted row
+    public long insert(Behavior r) {
+        ContentValues cv = behavior2ContentValues(r);
+        long rowid = db.insert(TABLE_NAME, null, cv);
+        return rowid;
+    }
+
     public Behavior getBehaviorById(int id) {
         Cursor c = db.query(
                 TABLE_NAME,
@@ -71,7 +79,8 @@ public class BehaviorDAO extends GeneralDAO {
                 null);
         return cursor2behavior(c);
     }
-    public Behavior getBehaviorByString(String s) {
+
+    public Behavior[] getBehaviorByString(String s) {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
@@ -80,9 +89,8 @@ public class BehaviorDAO extends GeneralDAO {
                 null,
                 null,
                 null);
-        return cursor2behavior_2(c);
+        return cursor2behaviors(c);
     }
-
 
     // --------------------------------------------
     // MOOD-CURSOR TRANSFORMATION UTILITIES
@@ -100,8 +108,26 @@ public class BehaviorDAO extends GeneralDAO {
         Behavior r = new Behavior();
         r.id = c.getInt(CNUM_ID);
         r.name = c.getString(CNUM_NAME);
-        r.string = c.getString(CNUM_STRING);
         return r;
+    }
+
+    public static Behavior[] cursor2behaviors(Cursor c) {
+        c.moveToFirst();
+        LinkedList<Behavior> behaviors = new LinkedList<Behavior>();
+        while (!c.isAfterLast()) {
+            Behavior r = new Behavior();
+            r.id = c.getInt(CNUM_ID);
+            r.name = c.getString(CNUM_NAME);
+            behaviors.add(r);
+            c.moveToNext();
+        }
+        return behaviors.toArray(new Behavior[0]);
+    }
+
+    private static ContentValues behavior2ContentValues(Behavior r) {
+        ContentValues cv = new ContentValues();
+        cv.put(CNAME_NAME, r.name);
+        return cv;
     }
 
 }

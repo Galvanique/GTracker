@@ -59,6 +59,13 @@ public class BeliefDAO extends GeneralDAO {
     // QUERY IMPLEMENTATIONS
     // --------------------------------------------
 
+    // Returns id of inserted row
+    public long insert(Belief r) {
+        ContentValues cv = belief2ContentValues(r);
+        long rowid = db.insert(TABLE_NAME, null, cv);
+        return rowid;
+    }
+
     public Belief getBeliefById(int id) {
         Cursor c = db.query(
                 TABLE_NAME,
@@ -71,7 +78,7 @@ public class BeliefDAO extends GeneralDAO {
         return cursor2belief(c);
     }
 
-    public Belief getBeliefByString(String s) {
+    public Belief[] getBeliefByString(String s) {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
@@ -80,7 +87,7 @@ public class BeliefDAO extends GeneralDAO {
                 null,
                 null,
                 null);
-        return cursor2belief_2(c);
+        return cursor2beliefs(c);
     }
 
     // --------------------------------------------
@@ -99,8 +106,26 @@ public class BeliefDAO extends GeneralDAO {
         Belief r = new Belief();
         r.id = c.getInt(CNUM_ID);
         r.name = c.getString(CNUM_NAME);
-        r.string = c.getString(CNUM_STRING);
         return r;
+    }
+
+    public static Belief[] cursor2beliefs(Cursor c) {
+        c.moveToFirst();
+        LinkedList<Belief> beliefs = new LinkedList<Belief>();
+        while (!c.isAfterLast()) {
+            Belief r = new Belief();
+            r.id = c.getInt(CNUM_ID);
+            r.name = c.getString(CNUM_NAME);
+            beliefs.add(r);
+            c.moveToNext();
+        }
+        return beliefs.toArray(new Belief[0]);
+    }
+
+    private static ContentValues belief2ContentValues(Belief r) {
+        ContentValues cv = new ContentValues();
+        cv.put(CNAME_NAME, r.name);
+        return cv;
     }
 
 }

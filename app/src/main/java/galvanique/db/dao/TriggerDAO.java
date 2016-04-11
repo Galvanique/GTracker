@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
+import galvanique.db.entities.MoodLog;
 import galvanique.db.entities.Trigger;
 
 public class TriggerDAO extends GeneralDAO {
@@ -58,6 +59,13 @@ public class TriggerDAO extends GeneralDAO {
     // QUERY IMPLEMENTATIONS
     // --------------------------------------------
 
+    // Returns id of inserted row
+    public long insert(Trigger r) {
+        ContentValues cv = trigger2ContentValues(r);
+        long rowid = db.insert(TABLE_NAME, null, cv);
+        return rowid;
+    }
+
     public Trigger getTriggerById(int id) {
         Cursor c = db.query(
                 TABLE_NAME,
@@ -70,8 +78,7 @@ public class TriggerDAO extends GeneralDAO {
         return cursor2trigger(c);
     }
 
-
-    public Trigger getTriggerByString(String s) {
+    public Trigger[] getTriggerByString(String s) {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,
@@ -80,12 +87,11 @@ public class TriggerDAO extends GeneralDAO {
                 null,
                 null,
                 null);
-        return cursor2trigger_2(c);
+        return cursor2triggers(c);
     }
 
-
     // --------------------------------------------
-    // MOOD-CURSOR TRANSFORMATION UTILITIES
+    // TRIGGER-CURSOR TRANSFORMATION UTILITIES
     // --------------------------------------------
 
     private static Trigger cursor2trigger(Cursor c) {
@@ -95,13 +101,32 @@ public class TriggerDAO extends GeneralDAO {
         r.name = c.getString(CNUM_NAME);
         return r;
     }
+
     private static Trigger cursor2trigger_2(Cursor c) {
         c.moveToFirst();
         Trigger r = new Trigger();
         r.id = c.getInt(CNUM_ID);
         r.name = c.getString(CNUM_NAME);
-        r.string = c.getString(CNUM_STRING);
         return r;
+    }
+
+    public static Trigger[] cursor2triggers(Cursor c) {
+        c.moveToFirst();
+        LinkedList<Trigger> triggers = new LinkedList<Trigger>();
+        while (!c.isAfterLast()) {
+            Trigger r = new Trigger();
+            r.id = c.getInt(CNUM_ID);
+            r.name = c.getString(CNUM_NAME);
+            triggers.add(r);
+            c.moveToNext();
+        }
+        return triggers.toArray(new Trigger[0]);
+    }
+
+    private static ContentValues trigger2ContentValues(Trigger r) {
+        ContentValues cv = new ContentValues();
+        cv.put(CNAME_NAME, r.name);
+        return cv;
     }
 
 }

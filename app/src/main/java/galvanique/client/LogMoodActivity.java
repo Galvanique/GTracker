@@ -13,10 +13,16 @@ import android.widget.Toast;
 
 import com.github.channguyen.rsv.RangeSliderView;
 
+import galvanique.db.dao.BehaviorDAO;
+import galvanique.db.dao.BeliefDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
 import galvanique.db.dao.CopingStrategyLogDefaultDAO;
 import galvanique.db.dao.MoodLogDAO;
+import galvanique.db.dao.TriggerDAO;
+import galvanique.db.entities.Behavior;
+import galvanique.db.entities.Belief;
 import galvanique.db.entities.MoodLog;
+import galvanique.db.entities.Trigger;
 
 public class LogMoodActivity extends AppCompatActivity {
 
@@ -38,7 +44,7 @@ public class LogMoodActivity extends AppCompatActivity {
 
     private State state;
     private boolean readyToWrite = false;
-    // TODO when is the table full enough to use user data?
+    // TODO-someone when is the table full enough to use user data?
     private final int THRESHOLD = 10;
 
     /**
@@ -232,12 +238,11 @@ public class LogMoodActivity extends AppCompatActivity {
                 buttonBack.setText("No");
                 editTextBehavior.setVisibility(View.GONE);
                 if (readyToWrite) {
-                    // TODO-tyler query trigger, belief, behavior tables to see if input strings exist already
-                    // TODO-tyler if strings exist, use their ids. if not, add and use new id
-                    // TODO-tyler insert mood log using these three ids (replace the three zeros)
-                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), 0, 0, 0, magnitude, "");
+                    int[] ids = getIds(trigger, belief, behavior);
+                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), ids[0], ids[1], ids[2], magnitude, "");
                     MoodLogDAO db = new MoodLogDAO(getApplicationContext());
                     db.openWrite();
+                    // Insert MoodLog using these trigger, belief, behavior IDs
                     db.insert(insertion);
                     db.close();
                     Toast.makeText(
@@ -245,7 +250,7 @@ public class LogMoodActivity extends AppCompatActivity {
                             "Mood \"" + mood + "\" successfully logged.",
                             Toast.LENGTH_LONG
                     ).show();
-                    // Reset
+                    // Reset UI and inputs
                     dropdown.setSelection(0);
                     slider.setInitialIndex(0);
                     editTextTrigger.setText("");
@@ -262,6 +267,55 @@ public class LogMoodActivity extends AppCompatActivity {
             default:
                 throw new RuntimeException("Invalid mood entry state");
         }
+    }
+
+    // Queries trigger, belief, behavior tables and gets ids of rows containing the String parameters.
+    // If those rows don't exist, a new row is inserted and its id is returned.
+    public int[] getIds (String trigger, String belief, String behavior) {
+        // ids of trigger, belief, behavior in tables
+        int triggerID;
+        int beliefID;
+        int behaviorID;
+        // Query trigger, belief, behavior tables to see if input strings exist in tables already
+        TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
+        dbTrigger.openRead();
+        Trigger[] triggerResult = dbTrigger.getTriggerByString(trigger);
+        dbTrigger.close();
+        BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
+        dbBelief.openRead();
+        Belief[] beliefResult = dbBelief.getBeliefByString(belief);
+        dbBelief.close();
+        BehaviorDAO dbBehavior = new BehaviorDAO(getApplicationContext());
+        dbBehavior.openRead();
+        Behavior[] behaviorResult = dbBehavior.getBehaviorByString(behavior);
+        dbBehavior.close();
+        // If strings exist, use their ids. If not, add and use new id
+        if (triggerResult.length > 0) {
+            triggerID = triggerResult[0].id;
+        } else {
+            Trigger insertion = new Trigger(trigger);
+            dbTrigger.openWrite();
+            triggerID = (int) dbTrigger.insert(insertion);
+            dbTrigger.close();
+        }
+        if (beliefResult.length > 0) {
+            beliefID = beliefResult[0].id;
+        } else {
+            Belief insertion = new Belief(belief);
+            dbBelief.openWrite();
+            beliefID = (int) dbBelief.insert(insertion);
+            dbBelief.close();
+        }
+        if (behaviorResult.length > 0) {
+            behaviorID = behaviorResult[0].id;
+        } else {
+            Behavior insertion = new Behavior(behavior);
+            dbBehavior.openWrite();
+            behaviorID = (int) dbBehavior.insert(insertion);
+            dbBehavior.close();
+        }
+        int[] ids = {beliefID, triggerID, behaviorID};
+        return ids;
     }
 
 }

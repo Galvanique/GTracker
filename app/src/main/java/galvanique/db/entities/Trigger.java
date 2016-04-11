@@ -1,7 +1,14 @@
 package galvanique.db.entities;
 
 public class Trigger {
-	public int id;
+	public int id = -1;
 	public String name;
-	public String string;
+
+    public Trigger() {
+
+    }
+
+	public Trigger(String name) {
+        this.name = name;
+    }
 }
