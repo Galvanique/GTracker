@@ -21,25 +21,32 @@ public class BehaviorDAO extends GeneralDAO {
 
     public static final String CNAME_ID = "_id";
     public static final String CNAME_NAME = "name";
+    public static final String CNAME_STRING = "string"; //need to check real name
 
     public static final String[] PROJECTION = {
     	CNAME_ID,
-    	CNAME_NAME
+    	CNAME_NAME,
+        CNAME_STRING
     };
 
     public final static int CNUM_ID = 0;
     public final static int CNUM_NAME = 1;
+    public final static int CNUM_STRING = 2;
+
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
         CNAME_ID + " INTEGER PRIMARY KEY, " +
         CNAME_NAME + " TEXT" +
+        CNAME_STRING + " TEXT" +
         ");//";
 
     // --------------------------------------------
     // QUERIES
     // --------------------------------------------
 
-   private final static String WHERE_ID = CNAME_ID + "=?";
+    private final static String WHERE_ID = CNAME_ID + "=?";
+    private final static String WHERE_STRING = CNAME_STRING + "=?";
+
 
     // --------------------------------------------
     // LIVECYCLE
@@ -64,6 +71,18 @@ public class BehaviorDAO extends GeneralDAO {
                 null);
         return cursor2behavior(c);
     }
+    public Behavior getBehaviorByString(String s) {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                WHERE_STRING,
+                new String[]{s + ""},
+                null,
+                null,
+                null);
+        return cursor2behavior_2(c);
+    }
+
 
     // --------------------------------------------
     // MOOD-CURSOR TRANSFORMATION UTILITIES
@@ -76,4 +95,13 @@ public class BehaviorDAO extends GeneralDAO {
         r.name = c.getString(CNUM_NAME);
         return r;
     }
+    private static Behavior cursor2behavior_2(Cursor c) {
+        c.moveToFirst();
+        Behavior r = new Behavior();
+        r.id = c.getInt(CNUM_ID);
+        r.name = c.getString(CNUM_NAME);
+        r.string = c.getString(CNAME_STRING);
+        return r;
+    }
+
 }

@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import galvanique.db.entities.Trigger;
 
 public class TriggerDAO extends GeneralDAO {
-
     // --------------------------------------------
     // SCHEMA
     // --------------------------------------------
@@ -45,7 +44,7 @@ public class TriggerDAO extends GeneralDAO {
     // --------------------------------------------
 
     private final static String WHERE_ID = CNAME_ID + "=?";
-    private final static String WHERE_STRING = CNAME_STRING + "=?"
+    private final static String WHERE_STRING = CNAME_STRING + "=?";
 
     // --------------------------------------------
     // LIVECYCLE
