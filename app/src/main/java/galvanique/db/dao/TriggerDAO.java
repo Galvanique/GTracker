@@ -21,7 +21,7 @@ public class TriggerDAO extends GeneralDAO {
 
     public static final String CNAME_ID = "_id";
     public static final String CNAME_NAME = "name";
-    public static final String CNAME_STRING = "string"; //need to check real name
+    public static final String CNAME_STRING = "string"; 
 
     public static final String[] PROJECTION = {
     	CNAME_ID,
@@ -37,7 +37,7 @@ public class TriggerDAO extends GeneralDAO {
         CNAME_ID + " INTEGER PRIMARY KEY, " +
         CNAME_NAME + " TEXT" +
         CNAME_STRING + " TEXT" +
-        ");//";
+        ");";
 
     // --------------------------------------------
     // QUERIES
@@ -100,7 +100,7 @@ public class TriggerDAO extends GeneralDAO {
         Trigger r = new Trigger();
         r.id = c.getInt(CNUM_ID);
         r.name = c.getString(CNUM_NAME);
-        r.string = c.getString(CNAME_STRING);
+        r.string = c.getString(CNUM_STRING);
         return r;
     }
 

@@ -21,7 +21,7 @@ public class BeliefDAO extends GeneralDAO {
 
     public static final String CNAME_ID = "_id";
     public static final String CNAME_NAME = "name";
-    public static final String CNAME_STRING = "string"; //need to check real name
+    public static final String CNAME_STRING = "string"; 
 
     public static final String[] PROJECTION = {
     	CNAME_ID,
@@ -99,7 +99,7 @@ public class BeliefDAO extends GeneralDAO {
         Belief r = new Belief();
         r.id = c.getInt(CNUM_ID);
         r.name = c.getString(CNUM_NAME);
-        r.string = c.getString(CNAME_STRING);
+        r.string = c.getString(CNUM_STRING);
         return r;
     }
 
