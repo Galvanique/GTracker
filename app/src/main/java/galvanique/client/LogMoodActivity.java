@@ -2,6 +2,7 @@ package galvanique.client;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,6 +43,11 @@ public class LogMoodActivity extends AppCompatActivity {
         }
     }
 
+    // DB
+    TriggerDAO dbTrigger;
+    BeliefDAO dbBelief;
+    BehaviorDAO dbBehavior;
+
     private State state;
     private boolean readyToWrite = false;
     // TODO-someone when is the table full enough to use user data?
@@ -52,9 +58,8 @@ public class LogMoodActivity extends AppCompatActivity {
      */
     private String mood; // select from list
     private int magnitude; // slider
-    private String trigger; // text input
-    private String belief; // text input
-    private String behavior; // text input
+    private String trigger, belief, behavior; // text input
+
     /**
      * UI
      */
@@ -70,6 +75,10 @@ public class LogMoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_mood);
 
         state = State.MOOD;
+
+        dbTrigger = new TriggerDAO(getApplicationContext());
+        dbBelief = new BeliefDAO(getApplicationContext());
+        dbBehavior = new BehaviorDAO(getApplicationContext());
 
         // Text views
         textViewInstructions = (TextView) findViewById(R.id.textViewInstructions);
@@ -208,8 +217,6 @@ public class LogMoodActivity extends AppCompatActivity {
                 slider.setVisibility(View.GONE);
                 editTextBelief.setVisibility(View.GONE);
                 editTextTrigger.setVisibility(View.VISIBLE);
-                // Grab trigger text
-                trigger = editTextTrigger.getText().toString();
                 buttonNext.setText("Next");
                 buttonBack.setText("Back");
                 break;
@@ -218,8 +225,8 @@ public class LogMoodActivity extends AppCompatActivity {
                 editTextTrigger.setVisibility(View.GONE);
                 editTextBehavior.setVisibility(View.GONE);
                 editTextBelief.setVisibility(View.VISIBLE);
-                // Grab belief text
-                belief = editTextBelief.getText().toString();
+                // Grab trigger text
+                trigger = editTextTrigger.getText().toString();
                 buttonNext.setText("Next");
                 buttonBack.setText("Back");
                 break;
@@ -227,8 +234,8 @@ public class LogMoodActivity extends AppCompatActivity {
                 textViewInstructions.setText("How did feeling this way make you behave? (Optional)");
                 editTextBelief.setVisibility(View.GONE);
                 editTextBehavior.setVisibility(View.VISIBLE);
-                // Grab behavior text
-                behavior = editTextBehavior.getText().toString();
+                // Grab belief text
+                belief = editTextBelief.getText().toString();
                 buttonNext.setText("Submit");
                 buttonBack.setText("Back");
                 break;
@@ -237,6 +244,8 @@ public class LogMoodActivity extends AppCompatActivity {
                 buttonNext.setText("Yes");
                 buttonBack.setText("No");
                 editTextBehavior.setVisibility(View.GONE);
+                // Grab behavior text
+                behavior = editTextBehavior.getText().toString();
                 if (readyToWrite) {
                     int[] ids = getIds(trigger, belief, behavior);
                     MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), ids[0], ids[1], ids[2], magnitude, "");
@@ -271,47 +280,48 @@ public class LogMoodActivity extends AppCompatActivity {
 
     // Queries trigger, belief, behavior tables and gets ids of rows containing the String parameters.
     // If those rows don't exist, a new row is inserted and its id is returned.
-    public int[] getIds (String trigger, String belief, String behavior) {
+    public int[] getIds(String trigger, String belief, String behavior) {
         // ids of trigger, belief, behavior in tables
-        int triggerID;
-        int beliefID;
-        int behaviorID;
+        int triggerID, beliefID, behaviorID;
         // Query trigger, belief, behavior tables to see if input strings exist in tables already
-        TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
         dbTrigger.openRead();
         Trigger[] triggerResult = dbTrigger.getTriggerByString(trigger);
         dbTrigger.close();
-        BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
         dbBelief.openRead();
         Belief[] beliefResult = dbBelief.getBeliefByString(belief);
         dbBelief.close();
-        BehaviorDAO dbBehavior = new BehaviorDAO(getApplicationContext());
         dbBehavior.openRead();
         Behavior[] behaviorResult = dbBehavior.getBehaviorByString(behavior);
         dbBehavior.close();
         // If strings exist, use their ids. If not, add and use new id
         if (triggerResult.length > 0) {
             triggerID = triggerResult[0].id;
+            Log.d("trigger existing id", Integer.toString(triggerID));
         } else {
             Trigger insertion = new Trigger(trigger);
             dbTrigger.openWrite();
             triggerID = (int) dbTrigger.insert(insertion);
+            Log.d("trigger new id", Integer.toString(triggerID));
             dbTrigger.close();
         }
         if (beliefResult.length > 0) {
             beliefID = beliefResult[0].id;
+            Log.d("belief existing id", Integer.toString(beliefID));
         } else {
             Belief insertion = new Belief(belief);
             dbBelief.openWrite();
             beliefID = (int) dbBelief.insert(insertion);
+            Log.d("belief new id", Integer.toString(beliefID));
             dbBelief.close();
         }
         if (behaviorResult.length > 0) {
             behaviorID = behaviorResult[0].id;
+            Log.d("behavior existing id", Integer.toString(behaviorID));
         } else {
             Behavior insertion = new Behavior(behavior);
             dbBehavior.openWrite();
             behaviorID = (int) dbBehavior.insert(insertion);
+            Log.d("behavior new id", Integer.toString(behaviorID));
             dbBehavior.close();
         }
         int[] ids = {beliefID, triggerID, behaviorID};
