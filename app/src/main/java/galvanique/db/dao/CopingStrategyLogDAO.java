@@ -121,19 +121,23 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         Cursor c;
         if (this.getCountCopingStrategyLogs() > THRESHOLD) {
             // Get average rating for each coping strategy by mood from this table
-            final String QUERY = "SELECT n.name, c.name, AVG(l.effectiveness)\n" +
-                    "FROM copingStrategy c, copingStrategyLog l, moodLog m, mood n\n" +
-                    "WHERE m.mood = n._id AND l.moodLogID = m._id\n" +
-                    "GROUP BY n.name\n" +
-                    "ORDER BY AVG(l.effectiveness) DESC;\n";
+            final String QUERY = "SELECT mood.name, strat.name, AVG(clog.effectiveness) " +
+                    "FROM copingStrategy strat " +
+                    "JOIN copingStrategyLog clog ON clog.copingStrategyID=strat._id " +
+                    "JOIN moodLog mlog ON clog.moodLogID=mlog._id " +
+                    "JOIN mood ON mood._id = mlog.mood " +
+                    "GROUP BY mood._id, clog.copingStrategyID " +
+                    "ORDER BY AVG(clog.effectiveness) DESC;";
             db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
         } else {
             // Get average rating for each coping strategy by mood from this table
-            final String QUERY = "SELECT n.name, c.name, AVG(l.effectiveness)\n" +
-                    "FROM copingStrategy c, copingStrategyLogDefault l, moodLog m, mood n\n" +
-                    "WHERE m.mood = n._id AND l.moodLogID = m._id\n" +
-                    "GROUP BY n.name\n" +
-                    "ORDER BY AVG(l.effectiveness) DESC;\n";
+            final String QUERY = "SELECT mood.name, strat.name, AVG(clog.effectiveness) " +
+                    "FROM copingStrategy strat " +
+                    "JOIN copingStrategyLogDefault clog ON clog.copingStrategyID=strat._id " +
+                    "JOIN moodLog mlog ON clog.moodLogID=mlog._id " +
+                    "JOIN mood ON mood._id = mlog.mood " +
+                    "GROUP BY mood._id, clog.copingStrategyID " +
+                    "ORDER BY AVG(clog.effectiveness) DESC;";
             db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
         }
         /*
