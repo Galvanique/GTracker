@@ -17,6 +17,9 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     // --------------------------------------------
     // SCHEMA
     // --------------------------------------------
+    // TODO-someone when is the table full enough to use user data?
+    private final int THRESHOLD = 10;
+
 
     public static String TABLE_NAME = "copingStrategyLog";
 
@@ -37,7 +40,6 @@ public class CopingStrategyLogDAO extends GeneralDAO {
             CNAME_TIMESTAMP
     };
 
-    //TODO make sure numbers are consistent elsewhere
     public final static int CNUM_ID = 0;
     public final static int CNUM_MOODLOGID = 1;
     public final static int CNUM_COPINGSTRATEGYID = 2;
@@ -99,6 +101,28 @@ public class CopingStrategyLogDAO extends GeneralDAO {
 
     public long getCountCopingStrategyLogs() {
         return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+    }
+
+    public CopingStrategyLog getMostRecentLog() {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                null,
+                null,
+                null,
+                null,
+                "timestamp DESC"
+        );
+        return cursor2copingStrategy(c);
+    }
+
+    public String[] getBestCopingStrategyNamesByMood(int moodID) {
+        if (this.getCountCopingStrategyLogs() > THRESHOLD) {
+            // TODO get average rating for each coping strategy by mood from this table
+        } else {
+            // TODO get average rating for each coping strategy by mood from default table
+        }
+        throw new UnsupportedOperationException("Not implemented yet.");
     }
 
     // --------------------------------------------

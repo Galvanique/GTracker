@@ -21,10 +21,17 @@
         android:paddingBottom="300dip">
 
         <Button
-            android:id="@+id/GetHelpButton"
+            android:id="@+id/buttonYes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get Help" />
+            android:text="Yes" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown" />
     </LinearLayout>
 
 </RelativeLayout>

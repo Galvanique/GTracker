@@ -3,6 +3,9 @@ package galvanique.db.dao;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import galvanique.db.entities.Mood;
 
 public class MoodDAO extends GeneralDAO {
@@ -61,6 +64,24 @@ public class MoodDAO extends GeneralDAO {
         return cursor2mood(c);
     }
 
+    public String[] getAllMoodNames() {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        Mood[] moods = cursor2moods(c);
+        List<String> names = new LinkedList<>();
+        for (Mood m : moods) {
+            names.add(m.name);
+        }
+        return names.toArray(new String[0]);
+    }
+
     // --------------------------------------------
     // MOOD-CURSOR TRANSFORMATION UTILITIES
     // --------------------------------------------
@@ -71,6 +92,19 @@ public class MoodDAO extends GeneralDAO {
         r.id = c.getInt(CNUM_ID);
         r.name = c.getString(CNUM_NAME);
         return r;
+    }
+
+    private static Mood[] cursor2moods(Cursor c) {
+        c.moveToFirst();
+        LinkedList<Mood> moods = new LinkedList<Mood>();
+        while (!c.isAfterLast()) {
+            Mood r = new Mood();
+            r.id = c.getInt(CNUM_ID);
+            r.name = c.getString(CNUM_NAME);
+            moods.add(r);
+            c.moveToNext();
+        }
+        return moods.toArray(new Mood[0]);
     }
 
 }

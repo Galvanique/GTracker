@@ -131,6 +131,19 @@ public class MoodLogDAO extends GeneralDAO {
         return cursor2moods(c);
     }
 
+    public MoodLog getMostRecentLog() {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                null,
+                null,
+                null,
+                null,
+                "timestamp DESC"
+        );
+        return cursor2mood(c);
+    }
+
     // --------------------------------------------
     // UPDATES
     // --------------------------------------------

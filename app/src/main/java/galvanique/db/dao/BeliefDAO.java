@@ -3,10 +3,7 @@ package galvanique.db.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 import galvanique.db.entities.Belief;
@@ -23,17 +20,17 @@ public class BeliefDAO extends GeneralDAO {
     public static final String CNAME_NAME = "name";
 
     public static final String[] PROJECTION = {
-    	CNAME_ID,
-    	CNAME_NAME
+            CNAME_ID,
+            CNAME_NAME
     };
 
     public final static int CNUM_ID = 0;
     public final static int CNUM_NAME = 1;
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
-        CNAME_ID + " INTEGER PRIMARY KEY, " +
-        CNAME_NAME + " TEXT" +
-        ");";
+            CNAME_ID + " INTEGER PRIMARY KEY, " +
+            CNAME_NAME + " TEXT" +
+            ");";
 
     // --------------------------------------------
     // QUERIES
@@ -48,7 +45,7 @@ public class BeliefDAO extends GeneralDAO {
     // --------------------------------------------
 
     public BeliefDAO(Context context) {
-    	super(context);
+        super(context);
     }
 
     // --------------------------------------------
@@ -97,6 +94,7 @@ public class BeliefDAO extends GeneralDAO {
         r.name = c.getString(CNUM_NAME);
         return r;
     }
+
     private static Belief cursor2belief_2(Cursor c) {
         c.moveToFirst();
         Belief r = new Belief();

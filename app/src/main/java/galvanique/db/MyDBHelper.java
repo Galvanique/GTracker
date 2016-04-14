@@ -64,7 +64,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         // Prepopulate static mood table
         // TODO-tyler this is really bad practice sorry
         MoodLog.Mood moods[] = MoodLog.Mood.values();
-        String moodStrings[] =  new String[moods.length];
+        String moodStrings[] = new String[moods.length];
         for (int i = 0; i < moods.length; i++) {
             moodStrings[i] = moods[i].name();
         }

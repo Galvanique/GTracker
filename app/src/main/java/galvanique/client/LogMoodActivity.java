@@ -17,7 +17,7 @@ import com.github.channguyen.rsv.RangeSliderView;
 import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
-import galvanique.db.dao.CopingStrategyLogDefaultDAO;
+import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
 import galvanique.db.entities.Behavior;
@@ -44,14 +44,14 @@ public class LogMoodActivity extends AppCompatActivity {
     }
 
     // DB
-    TriggerDAO dbTrigger;
-    BeliefDAO dbBelief;
-    BehaviorDAO dbBehavior;
+    private TriggerDAO dbTrigger;
+    private BeliefDAO dbBelief;
+    private BehaviorDAO dbBehavior;
+    private MoodDAO dbMood;
+    private MoodLogDAO dbMoodLog;
 
     private State state;
     private boolean readyToWrite = false;
-    // TODO-someone when is the table full enough to use user data?
-    private final int THRESHOLD = 10;
 
     /**
      * MoodLog attributes
@@ -63,11 +63,12 @@ public class LogMoodActivity extends AppCompatActivity {
     /**
      * UI
      */
-    Spinner dropdown;
-    Button buttonNext, buttonBack;
-    RangeSliderView slider;
-    EditText editTextTrigger, editTextBelief, editTextBehavior;
-    TextView textViewInstructions;
+    private Spinner dropdown;
+    private Spinner dropDownStrategies;
+    private Button buttonNext, buttonBack;
+    private RangeSliderView slider;
+    private EditText editTextTrigger, editTextBelief, editTextBehavior;
+    private TextView textViewInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,8 @@ public class LogMoodActivity extends AppCompatActivity {
         dbTrigger = new TriggerDAO(getApplicationContext());
         dbBelief = new BeliefDAO(getApplicationContext());
         dbBehavior = new BehaviorDAO(getApplicationContext());
+        dbMoodLog = new MoodLogDAO(getApplicationContext());
+        dbMood = new MoodDAO(getApplicationContext());
 
         // Text views
         textViewInstructions = (TextView) findViewById(R.id.textViewInstructions);
@@ -92,11 +95,9 @@ public class LogMoodActivity extends AppCompatActivity {
 
         // Dropdown
         dropdown = (Spinner) findViewById(R.id.spinner);
-        // same as moods in galvanique.db.entities.MoodLog.Mood
-        String[] items = new String[]{"", "Happy", "Sad", "Anxious", "Angry", "Guilt", "Shame",
-                "Depressed", "Bored", "Tired", "Lonely", "Proud", "Hopeful",
-                "Frustrated", "Disgust", "Numb", "Physical Pain", "Intrusive Thoughts", "Stressed",
-                "Irritable", "Motivated", "Excited", "Grateful", "Joy", "Loved"};
+        dbMood.openRead();
+        String[] items = dbMood.getAllMoodNames();
+        dbMood.close();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -152,13 +153,11 @@ public class LogMoodActivity extends AppCompatActivity {
                 else if (state == State.STRATEGY) {
                     CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
                     logDB.openRead();
-                    if (logDB.getCountCopingStrategyLogs() > THRESHOLD) {
-                        // TODO-tyler get suggestion from CopingStrategyLog table
-                    } else {
-                        // TODO-tyler get suggestion from CopingStrategyLogDefault table
-                        CopingStrategyLogDefaultDAO defaultDB = new CopingStrategyLogDefaultDAO(getApplicationContext());
-                    }
+                    dbMoodLog.openRead();
+                    String[] strategies = logDB.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
+                    dbMoodLog.close();
                     logDB.close();
+                    // TODO-tyler display list of strategies, create new CopingStrategyLog based on choice
                 }
                 // Normal behavior
                 else state = state.next();
@@ -249,11 +248,11 @@ public class LogMoodActivity extends AppCompatActivity {
                 if (readyToWrite) {
                     int[] ids = getIds(trigger, belief, behavior);
                     MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), ids[0], ids[1], ids[2], magnitude, "");
-                    MoodLogDAO db = new MoodLogDAO(getApplicationContext());
-                    db.openWrite();
+                    dbMoodLog = new MoodLogDAO(getApplicationContext());
+                    dbMoodLog.openWrite();
                     // Insert MoodLog using these trigger, belief, behavior IDs
-                    db.insert(insertion);
-                    db.close();
+                    dbMoodLog.insert(insertion);
+                    dbMoodLog.close();
                     Toast.makeText(
                             getApplicationContext(),
                             "Mood \"" + mood + "\" successfully logged.",
