@@ -24,17 +24,21 @@ public class GetHelpActivity extends Activity {
     private Button buttonYes;
     private TextView textViewInstructions;
     private boolean alreadyUsingStrategy = false;
-    private MoodLogDAO dbMoodLog = new MoodLogDAO(getApplicationContext());
-    private CopingStrategyDAO dbStrategy = new CopingStrategyDAO(getApplicationContext());
-    private CopingStrategyLogDAO dbStrategyLog = new CopingStrategyLogDAO(getApplicationContext());
-    private CopingStrategyLogDefaultDAO dbStrategyLogDefault = new CopingStrategyLogDefaultDAO(getApplicationContext());
-    private String moodName, csName;
+    private MoodLogDAO dbMoodLog;
+    private CopingStrategyDAO dbStrategy;
+    private CopingStrategyLogDAO dbStrategyLog;
+    private CopingStrategyLogDefaultDAO dbStrategyLogDefault;
+    private String moodName, csName, selectedStrategy;
     private Spinner dropdownStrategies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_help);
+        dbMoodLog = new MoodLogDAO(getApplicationContext());
+        dbStrategy = new CopingStrategyDAO(getApplicationContext());
+        dbStrategyLog = new CopingStrategyLogDAO(getApplicationContext());
+        dbStrategyLogDefault = new CopingStrategyLogDefaultDAO(getApplicationContext());
         dropdownStrategies = (Spinner) findViewById(R.id.spinner);
         dbStrategyLog.openRead();
         dbMoodLog.openRead();
@@ -45,27 +49,31 @@ public class GetHelpActivity extends Activity {
         dropdownStrategies.setAdapter(adapter);
         dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                Object item = parent.getItemAtPosition(pos);
+                if (item instanceof String) {
+                    selectedStrategy = (String) item;
+                }
             }
-
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
         // TODO-tyler need to handle case when coping strategy log table is empty
         // Check if coping strategy is in use already (last log timestamp + its duration < currentTime)
         dbStrategyLog.openRead();
-        CopingStrategyLog lastLog = dbStrategyLog.getMostRecentLog();
-        dbStrategyLog.close();
-        long lastTime = lastLog.getTimestamp();
-        int lastStrategyID = lastLog.getCopingStrategyID();
-        dbStrategy.openRead();
-        CopingStrategy lastStrategy = dbStrategy.getCopingStrategyById(lastStrategyID);
-        dbStrategy.close();
-        long lastDuration = lastStrategy.duration;
-
-        if ((lastTime + lastDuration) < System.currentTimeMillis()) {
-            alreadyUsingStrategy = true;
-            csName = lastStrategy.name;
+        if (dbStrategyLog.getCountCopingStrategyLogs() > 0) {
+            CopingStrategyLog lastLog = dbStrategyLog.getMostRecentLog();
+            long lastTime = lastLog.getTimestamp();
+            int lastStrategyID = lastLog.getCopingStrategyID();
+            dbStrategy.openRead();
+            CopingStrategy lastStrategy = dbStrategy.getCopingStrategyById(lastStrategyID);
+            dbStrategy.close();
+            long lastDuration = lastStrategy.duration;
+            if ((lastTime + lastDuration) < System.currentTimeMillis()) {
+                alreadyUsingStrategy = true;
+                csName = lastStrategy.name;
+            }
         }
+        dbStrategyLog.close();
 
         if (alreadyUsingStrategy) {
             dbMoodLog.openRead();
@@ -74,7 +82,7 @@ public class GetHelpActivity extends Activity {
             textViewInstructions.setText("You are already using the coping strategy " +
                     "\"" + csName + "\" for mood " + moodName + ". How is it going?");
         } else {
-            buttonYes = (Button) findViewById(R.id.GetHelpButton);
+            buttonYes = (Button) findViewById(R.id.buttonYes);
             buttonYes.setOnClickListener(new View.OnClickListener() {
                 @SuppressWarnings("unchecked")
                 @Override

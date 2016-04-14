@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.List;
 
 import galvanique.db.entities.CopingStrategyLog;
 
@@ -51,8 +52,8 @@ public class CopingStrategyLogDAO extends GeneralDAO {
             CNAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CNAME_MOODLOGID + " INTEGER UNIQUE, " + //REMOVE CONSTRAINT?
             CNAME_COPINGSTRATEGYID + " INTEGER, " +
-            CNAME_EFFECTIVENESS + " INTEGER " +
-            CNAME_TIMESTAMP +
+            CNAME_EFFECTIVENESS + " INTEGER, " +
+            CNAME_TIMESTAMP + " INTEGER" +
             ");";
 
     // --------------------------------------------
@@ -117,11 +118,29 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     }
 
     public String[] getBestCopingStrategyNamesByMood(int moodID) {
+        Cursor c;
         if (this.getCountCopingStrategyLogs() > THRESHOLD) {
-            // TODO get average rating for each coping strategy by mood from this table
+            // Get average rating for each coping strategy by mood from this table
+            final String QUERY = "SELECT n.name, c.name, AVG(l.effectiveness)\n" +
+                    "FROM copingStrategy c, copingStrategyLog l, moodLog m, mood n\n" +
+                    "WHERE m.mood = n._id AND l.moodLogID = m._id\n" +
+                    "GROUP BY n.name\n" +
+                    "ORDER BY AVG(l.effectiveness) DESC;\n";
+            db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
         } else {
-            // TODO get average rating for each coping strategy by mood from default table
+            // Get average rating for each coping strategy by mood from this table
+            final String QUERY = "SELECT n.name, c.name, AVG(l.effectiveness)\n" +
+                    "FROM copingStrategy c, copingStrategyLogDefault l, moodLog m, mood n\n" +
+                    "WHERE m.mood = n._id AND l.moodLogID = m._id\n" +
+                    "GROUP BY n.name\n" +
+                    "ORDER BY AVG(l.effectiveness) DESC;\n";
+            db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
         }
+        /*
+        CopingStrategyLog[] logs = cursor2copingStrategies(c);
+        List<String> names = new LinkedList<>();
+        // TODO get each coping strategy name from each log and add to names
+        */
         throw new UnsupportedOperationException("Not implemented yet.");
     }
 

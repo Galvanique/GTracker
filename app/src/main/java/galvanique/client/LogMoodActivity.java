@@ -56,7 +56,7 @@ public class LogMoodActivity extends AppCompatActivity {
     /**
      * MoodLog attributes
      */
-    private String mood; // select from list
+    private String mood, selectedStrategy; // select from list
     private int magnitude; // slider
     private String trigger, belief, behavior; // text input
 
@@ -64,7 +64,7 @@ public class LogMoodActivity extends AppCompatActivity {
      * UI
      */
     private Spinner dropdown;
-    private Spinner dropDownStrategies;
+    private Spinner dropdownStrategies;
     private Button buttonNext, buttonBack;
     private RangeSliderView slider;
     private EditText editTextTrigger, editTextBelief, editTextBehavior;
@@ -77,6 +77,7 @@ public class LogMoodActivity extends AppCompatActivity {
 
         state = State.MOOD;
 
+        // DB
         dbTrigger = new TriggerDAO(getApplicationContext());
         dbBelief = new BeliefDAO(getApplicationContext());
         dbBehavior = new BehaviorDAO(getApplicationContext());
@@ -110,6 +111,26 @@ public class LogMoodActivity extends AppCompatActivity {
 
             public void onNothingSelected(AdapterView<?> parent) {
             }
+        });
+
+        dropdownStrategies = (Spinner) findViewById(R.id.spinnerStrategy);
+        CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
+        logDB.openRead();
+        dbMoodLog.openRead();
+        String[] strategies = logDB.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
+        dbMoodLog.close();
+        logDB.close();
+        ArrayAdapter<String> strategyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
+        dropdownStrategies.setAdapter(adapter);
+        dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                 Object item = parent.getItemAtPosition(pos);
+                 if (item instanceof String) {
+                     selectedStrategy = (String) item;
+                 }
+             }
+             public void onNothingSelected(AdapterView<?> parent) {
+             }
         });
 
         // Slider https://github.com/channguyen/range-slider-view
@@ -151,12 +172,6 @@ public class LogMoodActivity extends AppCompatActivity {
                 }
                 // If state is STRATEGY, buttonNext has text "Yes" to accept a suggestion
                 else if (state == State.STRATEGY) {
-                    CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
-                    logDB.openRead();
-                    dbMoodLog.openRead();
-                    String[] strategies = logDB.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
-                    dbMoodLog.close();
-                    logDB.close();
                     // TODO-tyler display list of strategies, create new CopingStrategyLog based on choice
                 }
                 // Normal behavior

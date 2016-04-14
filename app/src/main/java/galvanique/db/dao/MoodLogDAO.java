@@ -25,7 +25,7 @@ public class MoodLogDAO extends GeneralDAO {
     public static final String CNAME_TIMESTAMP = "timestamp";
     public static final String CNAME_MOOD = "mood";
     public static final String CNAME_BELIEF = "belief";
-    public static final String CNAME_TRIGGER = "trigger";
+    public static final String CNAME_TRIGGER = "trig";
     public static final String CNAME_BEHAVIOR = "behavior";
     public static final String CNAME_MAGNITUDE = "magnitude";
     public static final String CNAME_COMMENTS = "comments";
@@ -56,9 +56,9 @@ public class MoodLogDAO extends GeneralDAO {
             CNAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CNAME_TIMESTAMP + " LONG, " +
             CNAME_MOOD + " INTEGER, " +
-            CNAME_BELIEF + " TEXT, " +
-            CNAME_TRIGGER + " TEXT, " +
-            CNAME_BEHAVIOR + " TEXT, " +
+            CNAME_BELIEF + " INTEGER, " +
+            CNAME_TRIGGER + " INTEGER, " +
+            CNAME_BEHAVIOR + " INTEGER, " +
             CNAME_MAGNITUDE + " INTEGER, " +
             CNAME_COMMENTS + " TEXT" +
             ");";
@@ -139,7 +139,8 @@ public class MoodLogDAO extends GeneralDAO {
                 null,
                 null,
                 null,
-                "timestamp DESC"
+                "timestamp DESC",
+                "LIMIT 1"
         );
         return cursor2mood(c);
     }
