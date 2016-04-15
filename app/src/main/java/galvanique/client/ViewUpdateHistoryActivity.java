@@ -3,6 +3,9 @@ package galvanique.client;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TableLayout;
 
 import galvanique.db.dao.MoodLogDAO;
@@ -13,9 +16,13 @@ import android.view.Gravity;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
+import android.widget.Spinner;
 
 public class ViewUpdateHistoryActivity extends Activity {
     TableLayout table;
+
+    private Spinner dropdown;
+    private String timestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,27 @@ public class ViewUpdateHistoryActivity extends Activity {
         MoodLog[] moodLogs = dbMoodLog.getAllMoods();
         dbMoodLog.close();
 
+
+        //create the dropdown for the different logs
+        dropdown = (Spinner) findViewById(R.id.spinner);
+        //pull all of the timestamps from the moodlog array and put them in a new array
+        String[] timeStamps = new String[moodLogs.length];
+        for (int i = 0; i < timeStamps.length; i++) {
+            timeStamps[i] = Long.toString(moodLogs[i].getTimestamp());
+        }
+        //use this new array to populate the spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, timeStamps);
+        dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                Object item = parent.getItemAtPosition(pos);
+                if (item instanceof String) {
+                    timestamp = (String) item;
+                }
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         // TODO-dave,clark display this array as a table with the information we mention in the SDS
         //Outer Loop
@@ -57,6 +85,7 @@ public class ViewUpdateHistoryActivity extends Activity {
 //            addRowElement(moodLogs[i].getComments(), row);
             addRowElement(Long.toString(moodLogs[i].getTimestamp()), row);
 
+            Log.d(Integer.toString(i), Integer.toString(moodLogs[i].getId()));
 
             table.addView(row);
         }
