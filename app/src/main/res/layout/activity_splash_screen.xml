@@ -6,7 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    tools:context=".SplashScreenActivity"
+    android:background="#533af7"
+    android:theme="@style/Theme.AppCompat"
     tools:openDrawer="start">
+
 
     <include
         layout="@layout/app_bar_splash_screen"

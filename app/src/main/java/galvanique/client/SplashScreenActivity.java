@@ -1,6 +1,7 @@
 package galvanique.client;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,8 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.Random;
+
 public class SplashScreenActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +28,17 @@ public class SplashScreenActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final android.widget.LinearLayout layout = (android.widget.LinearLayout) findViewById(R.id.drawer_layout);
+
+        final String[] values = getResources().getStringArray(R.array.colorcode_array);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Random RAND = new Random();
+                String nextValue = values[index++];
+                layout.setBackgroundColor(Color.parseColor(nextValue));
             }
         });
 

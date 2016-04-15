@@ -22,8 +22,25 @@
     </string>
     <!--preference colors -->
     <string-array name="colorcode_array">
-        <item>#3498db</item>
-        <item>#2ecc71</item>
-        <item>#9b59b6</item>
+        <item>#b3a8ac</item>
+        <item>#7a787a</item>
+        <item>#130fb1</item>
+        <item>#987d88</item>
+        <item>#c4b7af</item>
+        <item>#ccbfaf</item>
+        <item>#e8d7a9</item>
+        <item>#0000ff</item>
+        <item>#877c78</item>
+        <item>#93716c</item>
+        <item>#5cff00</item>
+        <item>#ce21ce</item>
+        <item>#de6138</item>
+        <item>#baf109</item>
+        <item>#1fc4bf</item>
+        <item>#8c948c</item>
+        <item>#2a358b</item>
+        <item>#611fac</item>
+        <item>#fa4604</item>
+        <item>#93716c</item>
     </string-array>
 </resources>

@@ -98,9 +98,9 @@ public class PreferencesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
-        final LinearLayout layout = (LinearLayout) findViewById(R.id.my_relative_layout);
+        //final LinearLayout layout = (LinearLayout) findViewById(R.id.my_relative_layout);
 
-        final String[] values = getResources().getStringArray(R.array.colorcode_array);
+        //final String[] values = getResources().getStringArray(R.array.colorcode_array);
 
 
 
@@ -111,18 +111,19 @@ public class PreferencesActivity extends Activity {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-
+/*
                 Random RAND =new Random();
                 String nextValue = values[index++];
-                layout.setBackgroundColor(Color.parseColor(nextValue));
+                layout.setBackgroundColor(Color.parseColor(nextValue));*/
             }
+            /*
             private void backgroundColor(String color) {
                 SharedPreferences prefs = getSharedPreferences("BackgroundColor", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.clear();
                 editor.putString("Color", color);
                 editor.commit();
-            }
+            }*/
         });
 
 
