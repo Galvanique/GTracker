@@ -166,6 +166,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 // If state is STRATEGY, buttonNext has text "Yes" to accept a suggestion
                 else if (state == State.STRATEGY) {
                     // TODO-tyler display list of strategies, create new CopingStrategyLog based on choice
+                    dropdownStrategies.setVisibility(View.VISIBLE);
                 }
                 // Normal behavior
                 else state = state.next();
