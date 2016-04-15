@@ -46,11 +46,19 @@ public class ViewUpdateHistoryActivity extends Activity {
             tv.setPadding(0, 5, 0, 5);
 
             tv.setText(moodLogs[i].getId());
+            row.addView(tv);
             tv.setText(moodLogs[i].getMagnitude());
+            row.addView(tv);
             tv.setText(moodLogs[i].getMagnitude());
+            row.addView(tv);
             tv.setText(moodLogs[i].getTrigger());
+            row.addView(tv);
             tv.setText(moodLogs[i].getBelief());
+            row.addView(tv);
             tv.setText(moodLogs[i].getBehavior());
+            row.addView(tv);
+            tv.setText(moodLogs[i].getComments());
+            row.addView(tv);
             tv.setText(Long.toString(moodLogs[i].getTimestamp()));
 
 
