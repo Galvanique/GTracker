@@ -1,11 +1,15 @@
 package galvanique.client;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.util.Random;
 
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
@@ -25,6 +29,7 @@ public class PreferencesActivity extends Activity {
     private BandClient client = null;
     private boolean gsrStarted;
     private GsrDAO db;
+    int index = 0;
 
     private BandGsrEventListener mGsrEventListener = new BandGsrEventListener() {
         @Override
@@ -93,17 +98,33 @@ public class PreferencesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
+        final LinearLayout layout = (LinearLayout) findViewById(R.id.my_relative_layout);
+
+        final String[] values = getResources().getStringArray(R.array.colorcode_array);
+
+
 
         /* Background */
-        // TODO http://developer.android.com/training/basics/data-storage/shared-preferences.html
+        // http://developer.android.com/training/basics/data-storage/shared-preferences.html
         buttonBackground = (Button) findViewById(R.id.buttonBackground);
         buttonBackground.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                // TODO
+
+                Random RAND =new Random();
+                String nextValue = values[index++];
+                layout.setBackgroundColor(Color.parseColor(nextValue));
+            }
+            private void backgroundColor(String color) {
+                SharedPreferences prefs = getSharedPreferences("BackgroundColor", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.clear();
+                editor.putString("Color", color);
+                editor.commit();
             }
         });
+
 
         /* TODO GSR -- we need to put the MS band code in a Service for it to work outside preferences */
         gsrStarted = false;

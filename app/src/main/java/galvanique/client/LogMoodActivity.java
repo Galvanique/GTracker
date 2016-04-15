@@ -108,20 +108,11 @@ public class LogMoodActivity extends AppCompatActivity {
                     mood = (String) item;
                 }
             }
-
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
         dropdownStrategies = (Spinner) findViewById(R.id.spinnerStrategy);
-        CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
-        logDB.openRead();
-        dbMoodLog.openRead();
-        String[] strategies = logDB.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
-        dbMoodLog.close();
-        logDB.close();
-        ArrayAdapter<String> strategyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
-        dropdownStrategies.setAdapter(adapter);
         dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                  Object item = parent.getItemAtPosition(pos);
@@ -132,6 +123,7 @@ public class LogMoodActivity extends AppCompatActivity {
              public void onNothingSelected(AdapterView<?> parent) {
              }
         });
+        dropdownStrategies.setVisibility(View.GONE);
 
 
         // Slider https://github.com/channguyen/range-slider-view
@@ -174,6 +166,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 // If state is STRATEGY, buttonNext has text "Yes" to accept a suggestion
                 else if (state == State.STRATEGY) {
                     // TODO-tyler display list of strategies, create new CopingStrategyLog based on choice
+                    dropdownStrategies.setVisibility(View.VISIBLE);
                 }
                 // Normal behavior
                 else state = state.next();
@@ -287,6 +280,14 @@ public class LogMoodActivity extends AppCompatActivity {
                     magnitude = 0;
                 }
                 readyToWrite = false;
+                CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
+                logDB.openRead();
+                dbMoodLog.openRead();
+                String[] strategies = logDB.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
+                dbMoodLog.close();
+                logDB.close();
+                ArrayAdapter<String> strategyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
+                dropdownStrategies.setAdapter(strategyAdapter);
                 break;
             default:
                 throw new RuntimeException("Invalid mood entry state");

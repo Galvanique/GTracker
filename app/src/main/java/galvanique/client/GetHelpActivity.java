@@ -39,7 +39,7 @@ public class GetHelpActivity extends Activity {
         dbStrategy = new CopingStrategyDAO(getApplicationContext());
         dbStrategyLog = new CopingStrategyLogDAO(getApplicationContext());
         dbStrategyLogDefault = new CopingStrategyLogDefaultDAO(getApplicationContext());
-        /*
+
         dropdownStrategies = (Spinner) findViewById(R.id.spinner);
         dbStrategyLog.openRead();
         dbMoodLog.openRead();
@@ -58,7 +58,7 @@ public class GetHelpActivity extends Activity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-        */
+
         // Check if coping strategy is in use already (last log timestamp + its duration < currentTime)
         dbStrategyLog.openRead();
         // If the copingStrategyLogs table is empty, you're not using a strategy already
