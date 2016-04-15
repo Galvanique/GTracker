@@ -25,7 +25,7 @@ public class MoodLogDAO extends GeneralDAO {
     public static final String CNAME_TIMESTAMP = "timestamp";
     public static final String CNAME_MOOD = "mood";
     public static final String CNAME_BELIEF = "belief";
-    public static final String CNAME_TRIGGER = "trigger";
+    public static final String CNAME_TRIGGER = "trig";
     public static final String CNAME_BEHAVIOR = "behavior";
     public static final String CNAME_MAGNITUDE = "magnitude";
     public static final String CNAME_COMMENTS = "comments";
@@ -53,12 +53,12 @@ public class MoodLogDAO extends GeneralDAO {
 
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
-            CNAME_ID + " INTEGER PRIMARY KEY, " +
+            CNAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CNAME_TIMESTAMP + " LONG, " +
             CNAME_MOOD + " INTEGER, " +
-            CNAME_BELIEF + " TEXT, " +
-            CNAME_TRIGGER + " TEXT, " +
-            CNAME_BEHAVIOR + " TEXT, " +
+            CNAME_BELIEF + " INTEGER, " +
+            CNAME_TRIGGER + " INTEGER, " +
+            CNAME_BEHAVIOR + " INTEGER, " +
             CNAME_MAGNITUDE + " INTEGER, " +
             CNAME_COMMENTS + " TEXT" +
             ");";
@@ -131,6 +131,20 @@ public class MoodLogDAO extends GeneralDAO {
         return cursor2moods(c);
     }
 
+    public MoodLog getMostRecentLog() {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                null,
+                null,
+                null,
+                null,
+                "timestamp DESC",
+                "LIMIT 1"
+        );
+        return cursor2mood(c);
+    }
+
     // --------------------------------------------
     // UPDATES
     // --------------------------------------------
@@ -165,10 +179,10 @@ public class MoodLogDAO extends GeneralDAO {
         MoodLog r = new MoodLog();
         r.id = c.getInt(CNUM_ID);
         r.timestamp = c.getLong(CNUM_TIMESTAMP);
-        r.mood = c.getInt(CNUM_MOOD);
-        r.belief = c.getString(CNUM_BELIEF);
-        r.trigger = c.getString(CNUM_TRIGGER);
-        r.behavior = c.getString(CNUM_BEHAVIOR);
+        r.moodID = c.getInt(CNUM_MOOD);
+        r.beliefID = c.getInt(CNUM_BELIEF);
+        r.triggerID = c.getInt(CNUM_TRIGGER);
+        r.behaviorID = c.getInt(CNUM_BEHAVIOR);
         r.magnitude = c.getInt(CNUM_MAGNITUDE);
         r.comments = c.getString(CNUM_COMMENTS);
         return r;
@@ -181,10 +195,10 @@ public class MoodLogDAO extends GeneralDAO {
             MoodLog r = new MoodLog();
             r.id = c.getInt(CNUM_ID);
             r.timestamp = c.getLong(CNUM_TIMESTAMP);
-            r.mood = c.getInt(CNUM_MOOD);
-            r.belief = c.getString(CNUM_BELIEF);
-            r.trigger = c.getString(CNUM_TRIGGER);
-            r.behavior = c.getString(CNUM_BEHAVIOR);
+            r.moodID = c.getInt(CNUM_MOOD);
+            r.beliefID = c.getInt(CNUM_BELIEF);
+            r.triggerID = c.getInt(CNUM_TRIGGER);
+            r.behaviorID = c.getInt(CNUM_BEHAVIOR);
             r.magnitude = c.getInt(CNUM_MAGNITUDE);
             r.comments = c.getString(CNUM_COMMENTS);
             moods.add(r);
@@ -196,10 +210,10 @@ public class MoodLogDAO extends GeneralDAO {
     private static ContentValues mood2ContentValues(MoodLog r) {
         ContentValues cv = new ContentValues();
         cv.put(CNAME_TIMESTAMP, r.timestamp);
-        cv.put(CNAME_MOOD, r.mood);
-        cv.put(CNAME_BELIEF, r.belief);
-        cv.put(CNAME_TRIGGER, r.trigger);
-        cv.put(CNAME_BEHAVIOR, r.behavior);
+        cv.put(CNAME_MOOD, r.moodID);
+        cv.put(CNAME_BELIEF, r.beliefID);
+        cv.put(CNAME_TRIGGER, r.triggerID);
+        cv.put(CNAME_BEHAVIOR, r.behaviorID);
         cv.put(CNAME_MAGNITUDE, r.magnitude);
         cv.put(CNAME_COMMENTS, r.comments);
         return cv;

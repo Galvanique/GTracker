@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2015 AndroidPlot.com
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,17 +53,18 @@
         ap:legendWidth="200dp"
         ap:legendAnchorPosition="right_bottom"
 
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:layout_gravity="center"
         android:orientation="horizontal">
+
         <Spinner
             android:id="@+id/spRenderStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -73,14 +73,17 @@
         android:layout_width="fill_parent"
         android:layout_gravity="center"
         android:orientation="horizontal">
+
         <Spinner
             android:id="@+id/spWidthStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <RelativeLayout
             android:id="@+id/sectionGraph"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
+
             <SeekBar
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +91,8 @@
                 android:paddingRight="10dp"
                 android:max="300"
                 android:progress="10"
-                android:id="@+id/sbFixed"/>
+                android:id="@+id/sbFixed" />
+
             <SeekBar
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -96,7 +100,7 @@
                 android:paddingRight="10dp"
                 android:max="50"
                 android:progress="1"
-                android:id="@+id/sbVariable"/>
+                android:id="@+id/sbVariable" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

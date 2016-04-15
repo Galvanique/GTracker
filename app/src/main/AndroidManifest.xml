@@ -18,28 +18,25 @@
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".LogMoodActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".FindPatternsActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".GetHelpActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".TrackProgressActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".ViewUpdateHistoryActivity"
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".PreferencesActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name">

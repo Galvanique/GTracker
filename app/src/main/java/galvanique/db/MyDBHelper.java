@@ -16,6 +16,7 @@ import galvanique.db.dao.GsrDAO;
 import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
+import galvanique.db.entities.MoodLog;
 
 /**
  * This is the basic component to create and manage the database.
@@ -38,8 +39,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO prepopulate any values we want already in the tables
-        /*
+        // TODO-someone prepopulate any values we want already in the static cslogdefault and mood tables
         // Behavior
         db.execSQL(BehaviorDAO.TABLE_CREATE);
         Log.d(TAG, "table " + BehaviorDAO.TABLE_NAME + " was created");
@@ -61,14 +61,26 @@ public class MyDBHelper extends SQLiteOpenHelper {
         // Mood
         db.execSQL(MoodDAO.TABLE_CREATE);
         Log.d(TAG, "table " + MoodDAO.TABLE_NAME + " was created");
+        // Prepopulate static mood table
+        // TODO-tyler this is really bad practice sorry
+        MoodLog.Mood moods[] = MoodLog.Mood.values();
+        String moodStrings[] = new String[moods.length];
+        for (int i = 0; i < moods.length; i++) {
+            moodStrings[i] = moods[i].name();
+        }
+        for (String mood : moodStrings) {
+            String ROW = "INSERT INTO " + MoodDAO.TABLE_NAME + " ("
+                    + MoodDAO.CNAME_NAME + ") Values ('" + mood + "')";
+            db.execSQL(ROW);
+        }
         // MoodLog
         db.execSQL(MoodLogDAO.TABLE_CREATE);
         Log.d(TAG, "table " + MoodLogDAO.TABLE_NAME + " was created");
         // Trigger
         db.execSQL(TriggerDAO.TABLE_CREATE);
         Log.d(TAG, "table " + TriggerDAO.TABLE_NAME + " was created");
-        */
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
