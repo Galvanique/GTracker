@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
 
 public class CopingStrategyLogDAO extends GeneralDAO {
@@ -104,6 +105,11 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
     }
 
+    public long getCountCopingStrategyLogsByMood(int moodID) {
+        // TODO how do we decide when to pull from default table vs user table
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
     public CopingStrategyLog getMostRecentLog() {
         Cursor c = db.query(
                 TABLE_NAME,
@@ -118,6 +124,7 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     }
 
     public String[] getBestCopingStrategyNamesByMood(int moodID) {
+        // TODO where mood = moodID
         Cursor c;
         if (this.getCountCopingStrategyLogs() > THRESHOLD) {
             // Get average rating for each coping strategy by mood from this table
@@ -128,24 +135,29 @@ public class CopingStrategyLogDAO extends GeneralDAO {
                     "JOIN mood ON mood._id = mlog.mood " +
                     "GROUP BY mood._id, clog.copingStrategyID " +
                     "ORDER BY AVG(clog.effectiveness) DESC;";
-            db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
+            c = db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
         } else {
             // Get average rating for each coping strategy by mood from this table
             final String QUERY = "SELECT mood.name, strat.name, AVG(clog.effectiveness) " +
                     "FROM copingStrategy strat " +
                     "JOIN copingStrategyLogDefault clog ON clog.copingStrategyID=strat._id " +
-                    "JOIN moodLog mlog ON clog.moodLogID=mlog._id " +
-                    "JOIN mood ON mood._id = mlog.mood " +
+                    "JOIN mood ON mood._id = clog.moodID " +
                     "GROUP BY mood._id, clog.copingStrategyID " +
                     "ORDER BY AVG(clog.effectiveness) DESC;";
-            db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
+            c = db.rawQuery(QUERY, null);
         }
-        /*
         CopingStrategyLog[] logs = cursor2copingStrategies(c);
+        List<Integer> csIds = new LinkedList<>();
+        for (CopingStrategyLog log : logs) {
+            csIds.add(log.getCopingStrategyID());
+        }
         List<String> names = new LinkedList<>();
-        // TODO get each coping strategy name from each log and add to names
-        */
-        throw new UnsupportedOperationException("Not implemented yet.");
+        for (Integer id : csIds) {
+            Cursor cursor = db.rawQuery("SELECT * FROM copingStrategy WHERE _id=" + id, new String[]{CNAME_ID});
+            CopingStrategy cs = CopingStrategyDAO.cursor2copingStrategy(cursor);
+            names.add(cs.name);
+        }
+        return names.toArray(new String[names.size()]);
     }
 
     // --------------------------------------------
@@ -197,7 +209,7 @@ public class CopingStrategyLogDAO extends GeneralDAO {
             copingStrategies.add(r);
             c.moveToNext();
         }
-        return copingStrategies.toArray(new CopingStrategyLog[0]);
+        return copingStrategies.toArray(new CopingStrategyLog[copingStrategies.size()]);
     }
 
     private static ContentValues copingStrategy2ContentValues(CopingStrategyLog r) {

@@ -140,7 +140,7 @@ public class MoodLogDAO extends GeneralDAO {
                 null,
                 null,
                 "timestamp DESC",
-                "LIMIT 1"
+                "1"
         );
         return cursor2mood(c);
     }
