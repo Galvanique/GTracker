@@ -87,7 +87,7 @@ public class CopingStrategyDAO extends GeneralDAO {
     // MOOD-CURSOR TRANSFORMATION UTILITIES
     // --------------------------------------------
 
-    private static CopingStrategy cursor2copingStrategy(Cursor c) {
+    protected static CopingStrategy cursor2copingStrategy(Cursor c) {
         c.moveToFirst();
         CopingStrategy r = new CopingStrategy(
                 c.getString(CNUM_NAME),
