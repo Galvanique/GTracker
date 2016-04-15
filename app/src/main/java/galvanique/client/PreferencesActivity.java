@@ -105,13 +105,13 @@ public class PreferencesActivity extends Activity {
 
 
         /* Background */
-        // TODO http://developer.android.com/training/basics/data-storage/shared-preferences.html
+        // http://developer.android.com/training/basics/data-storage/shared-preferences.html
         buttonBackground = (Button) findViewById(R.id.buttonBackground);
         buttonBackground.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                // TODO
+
                 Random RAND =new Random();
                 String nextValue = values[index++];
                 layout.setBackgroundColor(Color.parseColor(nextValue));
