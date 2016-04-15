@@ -33,16 +33,28 @@ public class ViewUpdateHistoryActivity extends Activity {
 
         // TODO-dave,clark display this array as a table with the information we mention in the SDS
         //Outer Loop
+        TableRow topRow = new TableRow(this);
+        topRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        addRowElement("Mood Id", topRow);
+        addRowElement("Magnitude", topRow);
+        addRowElement("Trigger", topRow);
+        addRowElement("Belief", topRow);
+        addRowElement("Behavior", topRow);
+//        addRowElement("Comments", topRow);
+        addRowElement("Timestamp", topRow);
+
+        table.addView(topRow);
+
         for (int i = 0; i < moodLogs.length; i++) {
             TableRow row = new TableRow(this);
             row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
             addRowElement(Integer.toString(moodLogs[i].getId()), row);
             addRowElement(Integer.toString(moodLogs[i].getMagnitude()), row);
-            addRowElement(Integer.toString(moodLogs[i].getMagnitude()), row);
             addRowElement(Integer.toString(moodLogs[i].getTrigger()), row);
             addRowElement(Integer.toString(moodLogs[i].getBelief()), row);
             addRowElement(Integer.toString(moodLogs[i].getBehavior()), row);
+//            addRowElement(moodLogs[i].getComments(), row);
             addRowElement(Long.toString(moodLogs[i].getTimestamp()), row);
 
 
@@ -55,7 +67,7 @@ public class ViewUpdateHistoryActivity extends Activity {
         TextView tv = new TextView(this);
         tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
-        //tv.setBackgroundResource(R.drawable.cell_shape);
+        tv.setBackgroundResource(R.drawable.cell_shape);
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(18);
         tv.setPadding(0, 5, 0, 5);
