@@ -20,4 +20,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <!--preference colors -->
+    <string-array name="colorcode_array">
+        <item>#3498db</item>
+        <item>#2ecc71</item>
+        <item>#9b59b6</item>
+    </string-array>
 </resources>
