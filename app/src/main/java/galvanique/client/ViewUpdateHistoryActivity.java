@@ -37,28 +37,30 @@ public class ViewUpdateHistoryActivity extends Activity {
             TableRow row = new TableRow(this);
             row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-            TextView tv = new TextView(this);
-            tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
-            //tv.setBackgroundResource(R.drawable.cell_shape);
-            tv.setGravity(Gravity.CENTER);
-            tv.setTextSize(18);
-            tv.setPadding(0, 5, 0, 5);
+            addRowElement(Integer.toString(moodLogs[i].getId()), row);
+            addRowElement(Integer.toString(moodLogs[i].getMagnitude()), row);
+            addRowElement(Integer.toString(moodLogs[i].getMagnitude()), row);
+            addRowElement(Integer.toString(moodLogs[i].getTrigger()), row);
+            addRowElement(Integer.toString(moodLogs[i].getBelief()), row);
+            addRowElement(Integer.toString(moodLogs[i].getBehavior()), row);
+            addRowElement(Long.toString(moodLogs[i].getTimestamp()), row);
 
-            tv.setText(Integer.toString(moodLogs[i].getId()));
-            tv.setText(Integer.toString(moodLogs[i].getMagnitude()));
-            tv.setText(Integer.toString(moodLogs[i].getMagnitude()));
-            tv.setText(Integer.toString(moodLogs[i].getTrigger()));
-            tv.setText(Integer.toString(moodLogs[i].getBelief()));
-            tv.setText(Integer.toString(moodLogs[i].getBehavior()));
-            tv.setText(Long.toString(moodLogs[i].getTimestamp()));
-
-
-            row.addView(tv);
 
             table.addView(row);
         }
 
+    }
+
+    public void addRowElement (String s, TableRow r) {
+        TextView tv = new TextView(this);
+        tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT));
+        //tv.setBackgroundResource(R.drawable.cell_shape);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(18);
+        tv.setPadding(0, 5, 0, 5);
+        tv.setText(s);
+        r.addView(tv);
     }
 }
 

@@ -112,7 +112,7 @@ public class LogMoodActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-/*
+
         dropdownStrategies = (Spinner) findViewById(R.id.spinnerStrategy);
         CopingStrategyLogDAO logDB = new CopingStrategyLogDAO(getApplicationContext());
         logDB.openRead();
@@ -132,7 +132,7 @@ public class LogMoodActivity extends AppCompatActivity {
              public void onNothingSelected(AdapterView<?> parent) {
              }
         });
-*/
+
 
         // Slider https://github.com/channguyen/range-slider-view
         slider = (RangeSliderView) findViewById(R.id.rsv_large);
