@@ -133,6 +133,7 @@ public class LogMoodActivity extends AppCompatActivity {
              }
         });
 
+
         // Slider https://github.com/channguyen/range-slider-view
         slider = (RangeSliderView) findViewById(R.id.rsv_large);
         final RangeSliderView.OnSlideListener listener = new RangeSliderView.OnSlideListener() {
