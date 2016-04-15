@@ -6,6 +6,12 @@ import android.widget.TableLayout;
 
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.entities.MoodLog;
+import android.widget.EditText;
+import android.widget.Button;
+import android.view.Gravity;
+import android.widget.TableRow;
+import android.widget.TableRow.LayoutParams;
+import android.widget.TextView;
 
 public class ViewUpdateHistoryActivity extends Activity {
     TableLayout table;
@@ -22,6 +28,36 @@ public class ViewUpdateHistoryActivity extends Activity {
         dbMoodLog.openRead();
         MoodLog[] moodLogs = dbMoodLog.getAllMoods();
         dbMoodLog.close();
+
+
+
         // TODO-dave,clark display this array as a table with the information we mention in the SDS
+        //Outer Loop
+        for (int i = 0; i < moodLogs.length; i++) {
+            TableRow row = new TableRow(this);
+            row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+            TextView tv = new TextView(this);
+            tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT));
+            //tv.setBackgroundResource(R.drawable.cell_shape);
+            tv.setGravity(Gravity.CENTER);
+            tv.setTextSize(18);
+            tv.setPadding(0, 5, 0, 5);
+
+            tv.setText(moodLogs[i].getId());
+            tv.setText(moodLogs[i].getMagnitude());
+            tv.setText(moodLogs[i].getMagnitude());
+            tv.setText(moodLogs[i].getTrigger());
+            tv.setText(moodLogs[i].getBelief());
+            tv.setText(moodLogs[i].getBehavior());
+            tv.setText(Long.toString(moodLogs[i].getTimestamp()));
+
+
+            row.addView(tv);
+
+        }
+
     }
 }
+
