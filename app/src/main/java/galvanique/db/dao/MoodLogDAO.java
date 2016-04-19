@@ -3,6 +3,7 @@ package galvanique.db.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -143,6 +144,17 @@ public class MoodLogDAO extends GeneralDAO {
                 "1"
         );
         return cursor2mood(c);
+    }
+
+    public long getCountMoodLogs() {
+        return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+    }
+
+    public MoodLog[] getMoodsOverTime() {
+        Cursor c;
+        final String QUERY = "SELECT * FROM moodLog GROUP BY moodID ORDER BY timestamp";
+        c = db.rawQuery(QUERY, null);
+        return cursor2moods(c);
     }
 
     // --------------------------------------------
