@@ -14,4 +14,13 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/mySimpleXYPlot"
+        android:layout_width="fill_parent"
+        android:layout_height="1000px"
+        android:layout_marginTop="10px"
+        android:layout_marginLeft="10px"
+        android:layout_marginRight="10px"
+        androidPlot.title="A Simple XYPlot Example"/>
+
 </LinearLayout>
