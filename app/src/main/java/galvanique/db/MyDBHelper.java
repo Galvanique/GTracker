@@ -18,6 +18,8 @@ import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
 import galvanique.db.entities.MoodLog;
 
+import java.util.LinkedList;
+import galvanique.db.entities.CopingStrategy;
 /**
  * This is the basic component to create and manage the database.
  * This class should only be used in the {@link GeneralDAO}.
@@ -49,12 +51,46 @@ public class MyDBHelper extends SQLiteOpenHelper {
         // CopingStrategy
         db.execSQL(CopingStrategyDAO.TABLE_CREATE);
         Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was created");
+
+        LinkedList<CopingStrategy> strategies = new LinkedList<>();
+        strategies.add(new CopingStrategy("Drink tea", "make tea and drink it", 10));
+        strategies.add(new CopingStrategy("Go for a walk", "go out the door and keep walking", 10));
+        strategies.add(new CopingStrategy("Watch a funny video", "Watch a comedy, or watch funny cat videos on YouTube", 10));
+        strategies.add(new CopingStrategy("Call a friend", "go out the door and keep walking", 10));
+        strategies.add(new CopingStrategy("Look at photos", "look at photos of friends, family, or pets", 10));
+        strategies.add(new CopingStrategy("Aromatherapy", "scented candles, hand cream", 10));
+        strategies.add(new CopingStrategy("Take a shower or relaxing bath", "go out the door and keep walking", 10));
+        strategies.add(new CopingStrategy("Color in a coloring book", "scented candles", 10));
+        strategies.add(new CopingStrategy("Read comic strips", "scented candles", 10));
+        strategies.add(new CopingStrategy("Exercise", "Go for a run", 10));
+        strategies.add(new CopingStrategy("Read a book", "or magazine", 10));
+        strategies.add(new CopingStrategy("Knit or sew", "Work on a project for yourself or a friend", 10));
+        strategies.add(new CopingStrategy("Take a short nap", "take a 20-minute nap", 10));
+        strategies.add(new CopingStrategy("Meditate", "scented candles", 10));
+        strategies.add(new CopingStrategy("Journal", "scented candles", 10));
+        strategies.add(new CopingStrategy("Look at a journal of past achievements", "scented candles", 10));
+        strategies.add(new CopingStrategy("Punch a punching bag", "Transfer your energy", 10));
+        strategies.add(new CopingStrategy("Listen to music", "Listen to a playlist of your favorite songs", 10));
+        strategies.add(new CopingStrategy("Deep breathing", "Concentrate on breathing in and out", 10));
+        strategies.add(new CopingStrategy("Go to a public place", "Go to a coffee shop, the park, or the library", 10));
+
+        for (CopingStrategy s : strategies) {
+            String ROW = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("
+                    + CopingStrategyDAO.CNAME_NAME + "," + CopingStrategyDAO.CNAME_DESCRIPTION + ","
+                    + CopingStrategyDAO.CNAME_DURATION + ") Values ('" + s.name + "','" + s.description
+                    + "','" + s.duration + "')";
+            db.execSQL(ROW);
+        }
+
         // CopingStrategyLog
         db.execSQL(CopingStrategyLogDAO.TABLE_CREATE);
         Log.d(TAG, "table " + CopingStrategyLogDAO.TABLE_NAME + " was created");
         // CopingStrategyLogDefault
         db.execSQL(CopingStrategyLogDefaultDAO.TABLE_CREATE);
         Log.d(TAG, "table " + CopingStrategyLogDefaultDAO.TABLE_NAME + " was created");
+
+
+
         // Gsr
         db.execSQL(GsrDAO.TABLE_CREATE);
         Log.d(TAG, "table " + GsrDAO.TABLE_NAME + " was created");
