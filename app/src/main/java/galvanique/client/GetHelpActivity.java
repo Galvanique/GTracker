@@ -1,7 +1,8 @@
 package galvanique.client;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,7 +17,7 @@ import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
 
-public class GetHelpActivity extends Activity {
+public class GetHelpActivity extends AppCompatActivity {
 
     /**
      * Various UI components
@@ -35,6 +36,10 @@ public class GetHelpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_help);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         dbMoodLog = new MoodLogDAO(getApplicationContext());
         dbStrategy = new CopingStrategyDAO(getApplicationContext());
         dbStrategyLog = new CopingStrategyLogDAO(getApplicationContext());
@@ -55,6 +60,7 @@ public class GetHelpActivity extends Activity {
                     selectedStrategy = (String) item;
                 }
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });

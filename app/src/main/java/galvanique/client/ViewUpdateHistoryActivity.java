@@ -1,24 +1,23 @@
 package galvanique.client;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TableLayout;
-
-import galvanique.db.dao.MoodLogDAO;
-import galvanique.db.entities.MoodLog;
-import android.widget.EditText;
-import android.widget.Button;
-import android.view.Gravity;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
-import android.widget.Spinner;
 
-public class ViewUpdateHistoryActivity extends Activity {
+import galvanique.db.dao.MoodLogDAO;
+import galvanique.db.entities.MoodLog;
+
+public class ViewUpdateHistoryActivity extends AppCompatActivity {
     TableLayout table;
 
     private Spinner dropdown;
@@ -28,6 +27,10 @@ public class ViewUpdateHistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_update_history);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         table = (TableLayout) findViewById(R.id.tableLayout);
 
@@ -55,6 +58,7 @@ public class ViewUpdateHistoryActivity extends Activity {
                     timestamp = (String) item;
                 }
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
@@ -92,7 +96,7 @@ public class ViewUpdateHistoryActivity extends Activity {
 
     }
 
-    public void addRowElement (String s, TableRow r) {
+    public void addRowElement(String s, TableRow r) {
         TextView tv = new TextView(this);
         tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));

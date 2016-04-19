@@ -3,7 +3,6 @@ package galvanique.db.entities;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -22,9 +21,9 @@ public class MoodLogTest {
 
     @Test
     public void logs_with_same_id_equal() throws Exception {
-        assert(basicLog.equals(
+        assert (basicLog.equals(
                 new MoodLog(id, 2, happy, 1, 2, 1, 1, "anything")
-            ));
+        ));
     }
 
     @Test

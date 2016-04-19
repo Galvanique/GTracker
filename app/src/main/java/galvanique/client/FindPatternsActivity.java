@@ -1,11 +1,12 @@
 package galvanique.client;
 
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,7 +45,7 @@ import galvanique.db.dao.MoodLogDAO;
 
 // TODO http://androidplot.com/
 
-public class FindPatternsActivity extends Activity {
+public class FindPatternsActivity extends AppCompatActivity {
 
     private MoodLogDAO db;
 
@@ -69,7 +70,6 @@ public class FindPatternsActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         // TODO Update this with the real moods
         db = new MoodLogDAO(getApplicationContext());
         db.openRead();
@@ -84,6 +84,10 @@ public class FindPatternsActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_patterns);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // initialize our XYPlot reference:
         plot = (XYPlot) findViewById(R.id.plot);

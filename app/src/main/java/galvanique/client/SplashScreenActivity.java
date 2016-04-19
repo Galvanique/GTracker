@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,7 +18,6 @@ import java.util.Random;
 
 public class SplashScreenActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,8 @@ public class SplashScreenActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final android.widget.LinearLayout layout = (android.widget.LinearLayout) findViewById(R.id.drawer_layout);
+
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         final String[] values = getResources().getStringArray(R.array.colorcode_array);
 
@@ -36,13 +35,12 @@ public class SplashScreenActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Random RAND = new Random();
-                String nextValue = values[index++];
-                layout.setBackgroundColor(Color.parseColor(nextValue));
+                Random rnd = new Random();
+                int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                drawer.setBackgroundColor(color);
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);

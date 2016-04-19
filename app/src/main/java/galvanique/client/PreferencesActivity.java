@@ -1,15 +1,12 @@
 package galvanique.client;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import java.util.Random;
 
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
@@ -22,7 +19,7 @@ import com.microsoft.band.sensors.BandGsrEventListener;
 import galvanique.db.dao.GsrDAO;
 import galvanique.db.entities.GsrLog;
 
-public class PreferencesActivity extends Activity {
+public class PreferencesActivity extends AppCompatActivity {
 
     private Button buttonBackground, buttonGSR, buttonNotifications;
     private TextView txtViewGSR;
@@ -98,36 +95,11 @@ public class PreferencesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
-        //final LinearLayout layout = (LinearLayout) findViewById(R.id.my_relative_layout);
 
-        //final String[] values = getResources().getStringArray(R.array.colorcode_array);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
-        /* Background */
-        // http://developer.android.com/training/basics/data-storage/shared-preferences.html
-        buttonBackground = (Button) findViewById(R.id.buttonBackground);
-        buttonBackground.setOnClickListener(new View.OnClickListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onClick(View v) {
-/*
-                Random RAND =new Random();
-                String nextValue = values[index++];
-                layout.setBackgroundColor(Color.parseColor(nextValue));*/
-            }
-            /*
-            private void backgroundColor(String color) {
-                SharedPreferences prefs = getSharedPreferences("BackgroundColor", MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.clear();
-                editor.putString("Color", color);
-                editor.commit();
-            }*/
-        });
-
-
-        /* TODO GSR -- we need to put the MS band code in a Service for it to work outside preferences */
         gsrStarted = false;
         db = new GsrDAO(getApplicationContext());
         txtViewGSR = (TextView) findViewById(R.id.txtViewGSR);

@@ -2,6 +2,7 @@ package galvanique.client;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -75,6 +76,10 @@ public class LogMoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_mood);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         state = State.MOOD;
 
         // DB
@@ -108,20 +113,22 @@ public class LogMoodActivity extends AppCompatActivity {
                     mood = (String) item;
                 }
             }
+
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
         dropdownStrategies = (Spinner) findViewById(R.id.spinnerStrategy);
         dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                 Object item = parent.getItemAtPosition(pos);
-                 if (item instanceof String) {
-                     selectedStrategy = (String) item;
-                 }
-             }
-             public void onNothingSelected(AdapterView<?> parent) {
-             }
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                Object item = parent.getItemAtPosition(pos);
+                if (item instanceof String) {
+                    selectedStrategy = (String) item;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
         dropdownStrategies.setVisibility(View.GONE);
 
