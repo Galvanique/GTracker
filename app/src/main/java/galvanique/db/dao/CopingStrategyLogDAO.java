@@ -13,6 +13,7 @@ import java.util.List;
 
 import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
+import galvanique.db.entities.CopingStrategyLogDefault;
 
 public class CopingStrategyLogDAO extends GeneralDAO {
 
@@ -123,12 +124,13 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         return cursor2copingStrategy(c);
     }
 
+    // TODO-tyler this method is way too long lol sorry
     public String[] getBestCopingStrategyNamesByMood(int moodID) {
-        // TODO where mood = moodID
         Cursor c;
+        boolean usedDefault = false;
         if (this.getCountCopingStrategyLogs() > THRESHOLD) {
             // Get average rating for each coping strategy by mood from this table
-            final String QUERY = "SELECT mood.name, strat.name, AVG(clog.effectiveness) " +
+            final String QUERY = "SELECT clog._id, clog.moodLogID, clog.copingStrategyID, clog.effectiveness, clog.timestamp " +
                     "FROM copingStrategy strat " +
                     "JOIN copingStrategyLog clog ON clog.copingStrategyID=strat._id " +
                     "JOIN moodLog mlog ON clog.moodLogID=mlog._id " +
@@ -138,26 +140,42 @@ public class CopingStrategyLogDAO extends GeneralDAO {
             c = db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});
         } else {
             // Get average rating for each coping strategy by mood from this table
-            final String QUERY = "SELECT mood.name, strat.name, AVG(clog.effectiveness) " +
+            final String QUERY = "SELECT clog._id, clog.moodID, clog.copingStrategyID, clog.effectiveness " +
                     "FROM copingStrategy strat " +
                     "JOIN copingStrategyLogDefault clog ON clog.copingStrategyID=strat._id " +
                     "JOIN mood ON mood._id = clog.moodID " +
                     "GROUP BY mood._id, clog.copingStrategyID " +
                     "ORDER BY AVG(clog.effectiveness) DESC;";
             c = db.rawQuery(QUERY, null);
+            usedDefault = true;
         }
-        CopingStrategyLog[] logs = cursor2copingStrategies(c);
-        List<Integer> csIds = new LinkedList<>();
-        for (CopingStrategyLog log : logs) {
-            csIds.add(log.getCopingStrategyID());
+        if (usedDefault) {
+            CopingStrategyLogDefault[] logs = CopingStrategyLogDefaultDAO.cursor2copingStrategies(c);
+            List<Integer> csIds = new LinkedList<>();
+            for (CopingStrategyLogDefault log : logs) {
+                csIds.add(log.getCopingStrategyID());
+            }
+            List<String> names = new LinkedList<>();
+            for (Integer id : csIds) {
+                Cursor cursor = db.rawQuery("SELECT * FROM copingStrategy WHERE _id=" + id, null);
+                CopingStrategy cs = CopingStrategyDAO.cursor2copingStrategy(cursor);
+                names.add(cs.name);
+            }
+            return names.toArray(new String[names.size()]);
+        } else {
+            CopingStrategyLog[] logs = cursor2copingStrategies(c);
+            List<Integer> csIds = new LinkedList<>();
+            for (CopingStrategyLog log : logs) {
+                csIds.add(log.getCopingStrategyID());
+            }
+            List<String> names = new LinkedList<>();
+            for (Integer id : csIds) {
+                Cursor cursor = db.rawQuery("SELECT * FROM copingStrategy WHERE _id=" + id, null);
+                CopingStrategy cs = CopingStrategyDAO.cursor2copingStrategy(cursor);
+                names.add(cs.name);
+            }
+            return names.toArray(new String[names.size()]);
         }
-        List<String> names = new LinkedList<>();
-        for (Integer id : csIds) {
-            Cursor cursor = db.rawQuery("SELECT * FROM copingStrategy WHERE _id=" + id, new String[]{CNAME_ID});
-            CopingStrategy cs = CopingStrategyDAO.cursor2copingStrategy(cursor);
-            names.add(cs.name);
-        }
-        return names.toArray(new String[names.size()]);
     }
 
     // --------------------------------------------
