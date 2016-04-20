@@ -54,26 +54,26 @@ public class MyDBHelper extends SQLiteOpenHelper {
         Log.d(TAG, "table " + CopingStrategyDAO.TABLE_NAME + " was created");
 
         LinkedList<CopingStrategy> strategies = new LinkedList<>();
-        strategies.add(new CopingStrategy("Drink tea", "make tea and drink it", 10));
-        strategies.add(new CopingStrategy("Go for a walk", "go out the door and keep walking", 10));
-        strategies.add(new CopingStrategy("Watch a funny video", "Watch a comedy, or watch funny cat videos on YouTube", 10));
-        strategies.add(new CopingStrategy("Call a friend", "go out the door and keep walking", 10));
-        strategies.add(new CopingStrategy("Look at photos", "look at photos of friends, family, or pets", 10));
-        strategies.add(new CopingStrategy("Aromatherapy", "scented candles, hand cream", 10));
-        strategies.add(new CopingStrategy("Take a shower or relaxing bath", "go out the door and keep walking", 10));
-        strategies.add(new CopingStrategy("Color in a coloring book", "scented candles", 10));
-        strategies.add(new CopingStrategy("Read comic strips", "scented candles", 10));
-        strategies.add(new CopingStrategy("Exercise", "Go for a run", 10));
-        strategies.add(new CopingStrategy("Read a book", "or magazine", 10));
-        strategies.add(new CopingStrategy("Knit or sew", "Work on a project for yourself or a friend", 10));
-        strategies.add(new CopingStrategy("Take a short nap", "take a 20-minute nap", 10));
-        strategies.add(new CopingStrategy("Meditate", "scented candles", 10));
-        strategies.add(new CopingStrategy("Journal", "scented candles", 10));
-        strategies.add(new CopingStrategy("Look at a journal of past achievements", "scented candles", 10));
-        strategies.add(new CopingStrategy("Punch a punching bag", "Transfer your energy", 10));
-        strategies.add(new CopingStrategy("Listen to music", "Listen to a playlist of your favorite songs", 10));
-        strategies.add(new CopingStrategy("Deep breathing", "Concentrate on breathing in and out", 10));
-        strategies.add(new CopingStrategy("Go to a public place", "Go to a coffee shop or the park", 10));
+        strategies.add(new CopingStrategy("Drink tea", "make tea and drink it", 300000));
+        strategies.add(new CopingStrategy("Go for a walk", "go out the door and keep walking", 300000));
+        strategies.add(new CopingStrategy("Watch a funny video", "Watch a comedy, or watch funny cat videos on YouTube", 300000));
+        strategies.add(new CopingStrategy("Call a friend", "go out the door and keep walking", 300000));
+        strategies.add(new CopingStrategy("Look at photos", "look at photos of friends, family, or pets", 300000));
+        strategies.add(new CopingStrategy("Aromatherapy", "scented candles, hand cream", 300000));
+        strategies.add(new CopingStrategy("Take a shower or relaxing bath", "go out the door and keep walking", 300000));
+        strategies.add(new CopingStrategy("Color in a coloring book", "scented candles", 300000));
+        strategies.add(new CopingStrategy("Read comic strips", "scented candles", 300000));
+        strategies.add(new CopingStrategy("Exercise", "Go for a run", 300000));
+        strategies.add(new CopingStrategy("Read a book", "or magazine", 300000));
+        strategies.add(new CopingStrategy("Knit or sew", "Work on a project for yourself or a friend", 300000));
+        strategies.add(new CopingStrategy("Take a short nap", "take a 20-minute nap", 300000));
+        strategies.add(new CopingStrategy("Meditate", "scented candles", 300000));
+        strategies.add(new CopingStrategy("Journal", "scented candles", 300000));
+        strategies.add(new CopingStrategy("Look at a journal of past achievements", "scented candles", 300000));
+        strategies.add(new CopingStrategy("Punch a punching bag", "Transfer your energy", 300000));
+        strategies.add(new CopingStrategy("Listen to music", "Listen to a playlist of your favorite songs", 300000));
+        strategies.add(new CopingStrategy("Deep breathing", "Concentrate on breathing in and out", 300000));
+        strategies.add(new CopingStrategy("Go to a public place", "Go to a coffee shop or the park", 300000));
 
         for (CopingStrategy s : strategies) {
             String ROW = "INSERT INTO " + CopingStrategyDAO.TABLE_NAME + " ("

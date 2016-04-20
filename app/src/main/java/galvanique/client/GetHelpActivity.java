@@ -126,7 +126,7 @@ public class GetHelpActivity extends AppCompatActivity {
             dropdownStrategies.setVisibility(View.GONE);
         }
 
-        // Check if coping strategy is in use already (last log timestamp + its duration < currentTime)
+        // Check if coping strategy is in use already (last log timestamp + its duration > currentTime)
         dbStrategyLog.openRead();
         // If the copingStrategyLogs table is empty, you're not using a strategy already
         if (dbStrategyLog.getCountCopingStrategyLogs() > 0) {
@@ -137,7 +137,7 @@ public class GetHelpActivity extends AppCompatActivity {
             CopingStrategy lastStrategy = dbStrategy.getCopingStrategyById(lastStrategyID);
             dbStrategy.close();
             long lastDuration = lastStrategy.duration;
-            if ((lastTime + lastDuration) < System.currentTimeMillis()) {
+            if ((lastTime + lastDuration) > System.currentTimeMillis()) {
                 alreadyUsingStrategy = true;
                 csName = lastStrategy.name;
             }
