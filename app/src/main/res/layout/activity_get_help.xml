@@ -20,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="40dip"
         android:padding="10dip"
         android:text=""
         android:textSize="20sp"
@@ -32,10 +31,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
         android:padding="10dip"
         android:text=""
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/textViewTrigger"
@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
         android:padding="10dip"
         android:text=""
         android:textSize="20sp"
@@ -54,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
         android:padding="10dip"
         android:text=""
         android:textSize="20sp"
@@ -65,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
         android:padding="10dip"
         android:text=""
         android:textSize="20sp"
@@ -76,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
         android:padding="10dip"
         android:text=""
         android:textSize="20sp"
@@ -89,30 +93,23 @@
         rsv:filledColor="#0066ff"
         rsv:rangeCount="10" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:paddingBottom="300dip">
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
 
-        <Button
-            android:id="@+id/buttonYes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Yes" />
+    <Button
+        android:id="@+id/buttonYes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yes" />
 
-        <Button
-            android:id="@+id/buttonOkay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Okay" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dropdown" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/buttonOkay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Okay" />
 
 </LinearLayout>

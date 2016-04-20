@@ -3,6 +3,7 @@ package galvanique.client;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,6 +11,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.github.channguyen.rsv.RangeSliderView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import galvanique.db.dao.CopingStrategyDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
 import galvanique.db.dao.CopingStrategyLogDefaultDAO;
@@ -48,6 +54,7 @@ public class GetHelpActivity extends AppCompatActivity {
         textViewBelief = (TextView) findViewById(R.id.textViewBelief);
         textViewBehavior = (TextView) findViewById(R.id.textViewBehavior);
         textViewTime = (TextView) findViewById(R.id.textViewTime);
+        dropdownStrategies = (Spinner) findViewById(R.id.spinner);
 
         buttonYes = (Button) findViewById(R.id.buttonYes);
         buttonYes.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +62,8 @@ public class GetHelpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dropdownStrategies.setVisibility(View.VISIBLE);
+                buttonYes.setVisibility(View.GONE);
+                buttonOkay.setVisibility(View.VISIBLE);
             }
         });
 
@@ -63,11 +72,19 @@ public class GetHelpActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                // When user clicks okay, update most recent coping strategy log with input effectiveness
-                CopingStrategyLog mostRecent = dbStrategyLog.getMostRecentLog();
-                mostRecent.setEffectiveness(effectiveness);
-                dbStrategyLog.update(mostRecent);
-                // TODO-tyler toast confirmation, change screens
+                // When user is finished selecting a coping strategy, they press okay to confirm
+                int copingStratID = dropdownStrategies.getSelectedItemPosition();
+                dbMoodLog.openRead();
+                MoodLog mostRecent = dbMoodLog.getMostRecentLog();
+                dbMoodLog.close();
+                CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.getId(), copingStratID, -1, System.currentTimeMillis());
+                dbStrategyLog.openWrite();
+                dbStrategyLog.insert(insertion);
+                dbStrategyLog.close();
+                // TODO show screen where we ask how it's going
+                textViewInstructions.setText("You are already using the coping strategy " +
+                        "\"" + dropdownStrategies.getSelectedItem() + "\" for mood " + "\"" + mostRecent.getMoodString() + "\". How is it going?");
+                makeEverythingInvisible();
             }
         });
 
@@ -88,7 +105,6 @@ public class GetHelpActivity extends AppCompatActivity {
 
         dbMoodLog.openRead();
         if (dbMoodLog.getCountMoodLogs() > 0) {
-            dropdownStrategies = (Spinner) findViewById(R.id.spinner);
             dbStrategyLog.openRead();
             dbMoodLog.openRead();
             String[] strategies = dbStrategyLog.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
@@ -136,7 +152,7 @@ public class GetHelpActivity extends AppCompatActivity {
             moodName = dbMoodLog.getMostRecentLog().getMoodString();
             dbMoodLog.close();
             textViewInstructions.setText("You are already using the coping strategy " +
-                    "\"" + csName + "\" for mood " + moodName + ". How is it going?");
+                    "\"" + csName + "\" for mood " + "\"" + moodName + "\". How is it going?");
         }
         // Otherwise they have no strategy
         else {
@@ -146,11 +162,18 @@ public class GetHelpActivity extends AppCompatActivity {
                 textViewInstructions.setText("This is your last mood log. Would you like a coping strategy for this mood?");
                 final MoodLog mostRecent = dbMoodLog.getMostRecentLog();
                 // TODO replace ids with text
+                textViewMood.setVisibility(View.VISIBLE);
+                textViewTrigger.setVisibility(View.VISIBLE);
+                textViewBelief.setVisibility(View.VISIBLE);
+                textViewBehavior.setVisibility(View.VISIBLE);
+                textViewTime.setVisibility(View.VISIBLE);
+                buttonYes.setVisibility(View.VISIBLE);
                 textViewMood.setText("Mood: " + mostRecent.getMoodString());
                 textViewTrigger.setText("Trigger: " + mostRecent.getTrigger());
                 textViewBelief.setText("Belief: " + mostRecent.getBelief());
                 textViewBehavior.setText("Behavior: " + mostRecent.getBehavior());
-                textViewTime.setText("Time: " + Long.toString(mostRecent.getTimestamp()));
+                String timeInDate = CopingStrategyLogDAO.getISOTimeString(mostRecent.getTimestamp());
+                textViewTime.setText("Time: " + timeInDate);
             }
             // If there are no mood logs yet, tell them they need to log a mood to get a strategy
             else {
@@ -169,16 +192,7 @@ public class GetHelpActivity extends AppCompatActivity {
         rsv.setVisibility(View.GONE);
         buttonOkay.setVisibility(View.GONE);
         buttonYes.setVisibility(View.GONE);
+        dropdownStrategies.setVisibility(View.GONE);
     }
 
 }
-
-/* CODE FOR INSERTING NEW LOG
-    int copingStratID = dropdownStrategies.getSelectedItemPosition();
-    // TODO-someone how do we initialize effectiveness until we update with the input?
-    CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.getId(), copingStratID, -1, System.currentTimeMillis());
-    dbStrategyLog.openWrite();
-    dbStrategyLog.insert(insertion);
-    dbStrategyLog.close();
- */
-
