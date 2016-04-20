@@ -5,9 +5,7 @@ import java.util.Comparator;
 public class MoodLog {
 
     public enum Mood {
-        Happy, Sad, Anxious, Angry, Guilt, Shame, Depressed, Bored, Tired, Lonely, Proud, Hopeful,
-        Frustrated, Disgust, Numb, PhysicalPain, IntrusiveThoughts, Stressed,
-        Irritable, Motivated, Excited, Grateful, Joy, Loved
+        Happy, Hopeful, Sad, Anxious, Angry, Depressed, Shame, Grateful, Excited
     }
 
     public int id = -1;
