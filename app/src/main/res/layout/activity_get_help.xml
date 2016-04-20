@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:rsv="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -14,7 +16,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
-        android:id="@+id/CopingStratStr"
+        android:id="@+id/instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -23,6 +25,69 @@
         android:text=""
         android:textSize="20sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewMood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewTrigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewBelief"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewBehavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <com.github.channguyen.rsv.RangeSliderView
+        android:id="@+id/rsv_large"
+        android:layout_marginTop="50dp"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        rsv:filledColor="#0066ff"
+        rsv:rangeCount="10" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -36,6 +101,12 @@
             android:layout_height="wrap_content"
             android:text="Yes" />
 
+        <Button
+            android:id="@+id/buttonOkay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Okay" />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
@@ -44,4 +115,4 @@
             android:spinnerMode="dropdown" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -202,10 +202,12 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         c.moveToFirst();
         LinkedList<CopingStrategyLog> copingStrategies = new LinkedList<CopingStrategyLog>();
         while (!c.isAfterLast()) {
-            CopingStrategyLog r = new CopingStrategyLog(
-                    c.getInt(CNUM_ID), c.getInt(CNUM_MOODLOGID), c.getInt(CNUM_COPINGSTRATEGYID),
-                    c.getInt(CNUM_EFFECTIVENESS),
-                    c.getLong(CNUM_TIMESTAMP));
+            CopingStrategyLog r = new CopingStrategyLog();
+            r.id = c.getInt(CNUM_ID);
+            r.moodLogID = c.getInt(CNUM_MOODLOGID);
+            r.copingStrategyID = c.getInt(CNUM_COPINGSTRATEGYID);
+            r.effectiveness = c.getInt(CNUM_EFFECTIVENESS);
+            r.timestamp = c.getLong(CNUM_TIMESTAMP);
             copingStrategies.add(r);
             c.moveToNext();
         }
@@ -216,7 +218,6 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         ContentValues cv = new ContentValues();
         cv.put(CNAME_ID, r.id);
         cv.put(CNAME_MOODLOGID, r.moodLogID);
-        cv.put(CNAME_TIMESTAMP, r.timestamp);
         cv.put(CNAME_COPINGSTRATEGYID, r.copingStrategyID);
         cv.put(CNAME_EFFECTIVENESS, r.effectiveness);
         cv.put(CNAME_TIMESTAMP, r.timestamp);

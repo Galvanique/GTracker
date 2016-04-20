@@ -9,21 +9,22 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import com.github.channguyen.rsv.RangeSliderView;
 import galvanique.db.dao.CopingStrategyDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
 import galvanique.db.dao.CopingStrategyLogDefaultDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
+import galvanique.db.entities.MoodLog;
 
 public class GetHelpActivity extends AppCompatActivity {
 
     /**
-     * Various UI components
+     * Declarations
      */
-    private Button buttonYes;
-    private TextView textViewInstructions;
+    private Button buttonYes, buttonOkay;
+    private TextView textViewInstructions, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime;
     private boolean alreadyUsingStrategy = false;
     private MoodLogDAO dbMoodLog;
     private CopingStrategyDAO dbStrategy;
@@ -31,6 +32,8 @@ public class GetHelpActivity extends AppCompatActivity {
     private CopingStrategyLogDefaultDAO dbStrategyLogDefault;
     private String moodName, csName, selectedStrategy;
     private Spinner dropdownStrategies;
+    private RangeSliderView rsv;
+    private int effectiveness;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +42,73 @@ public class GetHelpActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        textViewInstructions = (TextView) findViewById(R.id.instructions);
+        textViewMood = (TextView) findViewById(R.id.textViewMood);
+        textViewTrigger = (TextView) findViewById(R.id.textViewTrigger);
+        textViewBelief = (TextView) findViewById(R.id.textViewBelief);
+        textViewBehavior = (TextView) findViewById(R.id.textViewBehavior);
+        textViewTime = (TextView) findViewById(R.id.textViewTime);
+
+        buttonYes = (Button) findViewById(R.id.buttonYes);
+        buttonYes.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(View v) {
+                dropdownStrategies.setVisibility(View.VISIBLE);
+            }
+        });
+
+        buttonOkay = (Button) findViewById(R.id.buttonOkay);
+        buttonOkay.setOnClickListener(new View.OnClickListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(View v) {
+                // When user clicks okay, update most recent coping strategy log with input effectiveness
+                CopingStrategyLog mostRecent = dbStrategyLog.getMostRecentLog();
+                mostRecent.setEffectiveness(effectiveness);
+                dbStrategyLog.update(mostRecent);
+                // TODO-tyler toast confirmation, change screens
+            }
+        });
 
         dbMoodLog = new MoodLogDAO(getApplicationContext());
         dbStrategy = new CopingStrategyDAO(getApplicationContext());
         dbStrategyLog = new CopingStrategyLogDAO(getApplicationContext());
         dbStrategyLogDefault = new CopingStrategyLogDefaultDAO(getApplicationContext());
 
-        dropdownStrategies = (Spinner) findViewById(R.id.spinner);
-        dbStrategyLog.openRead();
-        dbMoodLog.openRead();
-        String[] strategies = dbStrategyLog.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
-        dbMoodLog.close();
-        dbStrategyLog.close();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
-        dropdownStrategies.setAdapter(adapter);
-        dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                Object item = parent.getItemAtPosition(pos);
-                if (item instanceof String) {
-                    selectedStrategy = (String) item;
-                }
+        rsv = (RangeSliderView) findViewById(R.id.rsv_large);
+        final RangeSliderView.OnSlideListener listener = new RangeSliderView.OnSlideListener() {
+            @Override
+            public void onSlide(int index) {
+                effectiveness = index;
             }
+        };
+        rsv.setOnSlideListener(listener);
+        //rsv.setRangeCount(10);
 
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        dbMoodLog.openRead();
+        if (dbMoodLog.getCountMoodLogs() > 0) {
+            dropdownStrategies = (Spinner) findViewById(R.id.spinner);
+            dbStrategyLog.openRead();
+            dbMoodLog.openRead();
+            String[] strategies = dbStrategyLog.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
+            dbMoodLog.close();
+            dbStrategyLog.close();
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
+            dropdownStrategies.setAdapter(adapter);
+            dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    Object item = parent.getItemAtPosition(pos);
+                    if (item instanceof String) {
+                        selectedStrategy = (String) item;
+                    }
+                }
+
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+            dropdownStrategies.setVisibility(View.GONE);
+        }
 
         // Check if coping strategy is in use already (last log timestamp + its duration < currentTime)
         dbStrategyLog.openRead();
@@ -83,22 +128,57 @@ public class GetHelpActivity extends AppCompatActivity {
         }
         dbStrategyLog.close();
 
+        makeEverythingInvisible();
+
+        // If there is already a coping strategy, ask user to rate effectiveness, update log entry
         if (alreadyUsingStrategy) {
             dbMoodLog.openRead();
             moodName = dbMoodLog.getMostRecentLog().getMoodString();
             dbMoodLog.close();
             textViewInstructions.setText("You are already using the coping strategy " +
                     "\"" + csName + "\" for mood " + moodName + ". How is it going?");
-        } else {
-            buttonYes = (Button) findViewById(R.id.buttonYes);
-            buttonYes.setOnClickListener(new View.OnClickListener() {
-                @SuppressWarnings("unchecked")
-                @Override
-                public void onClick(View v) {
-                    // TODO-tyler display list of strategies, create new CopingStrategyLog based on choice
-                }
-            });
+        }
+        // Otherwise they have no strategy
+        else {
+            // Check if there are any mood logs yet; if so, display most recent and ask if they want a strategy
+            dbMoodLog.open();
+            if (dbMoodLog.getCountMoodLogs() > 0) {
+                textViewInstructions.setText("This is your last mood log. Would you like a coping strategy for this mood?");
+                final MoodLog mostRecent = dbMoodLog.getMostRecentLog();
+                // TODO replace ids with text
+                textViewMood.setText("Mood: " + mostRecent.getMoodString());
+                textViewTrigger.setText("Trigger: " + mostRecent.getTrigger());
+                textViewBelief.setText("Belief: " + mostRecent.getBelief());
+                textViewBehavior.setText("Behavior: " + mostRecent.getBehavior());
+                textViewTime.setText("Time: " + Long.toString(mostRecent.getTimestamp()));
+            }
+            // If there are no mood logs yet, tell them they need to log a mood to get a strategy
+            else {
+                textViewInstructions.setText("Please log a mood to get a coping strategy!");
+            }
+            dbMoodLog.close();
         }
     }
 
+    public void makeEverythingInvisible() {
+        textViewMood.setVisibility(View.GONE);
+        textViewTrigger.setVisibility(View.GONE);
+        textViewBelief.setVisibility(View.GONE);
+        textViewBehavior.setVisibility(View.GONE);
+        textViewTime.setVisibility(View.GONE);
+        rsv.setVisibility(View.GONE);
+        buttonOkay.setVisibility(View.GONE);
+        buttonYes.setVisibility(View.GONE);
+    }
+
 }
+
+/* CODE FOR INSERTING NEW LOG
+    int copingStratID = dropdownStrategies.getSelectedItemPosition();
+    // TODO-someone how do we initialize effectiveness until we update with the input?
+    CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.getId(), copingStratID, -1, System.currentTimeMillis());
+    dbStrategyLog.openWrite();
+    dbStrategyLog.insert(insertion);
+    dbStrategyLog.close();
+ */
+

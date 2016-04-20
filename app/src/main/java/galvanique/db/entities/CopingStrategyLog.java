@@ -16,6 +16,13 @@ public class CopingStrategyLog {
     public long timestamp;
 
     /**
+     * Empty constructor
+     */
+    public CopingStrategyLog() {
+
+    }
+
+    /**
      * Constructor without id
      *
      * @param moodLogID
@@ -71,6 +78,10 @@ public class CopingStrategyLog {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public void setEffectiveness(int effectiveness) {
+        this.effectiveness = effectiveness;
     }
 
     /*Comparator for sorting the list by timestamp*/

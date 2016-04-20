@@ -214,6 +214,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 editTextBehavior.setVisibility(View.GONE);
                 slider.setVisibility(View.GONE);
                 dropdown.setVisibility(View.VISIBLE);
+                dropdownStrategies.setVisibility(View.GONE);
                 buttonNext.setText("Next");
                 buttonBack.setText("Back");
                 buttonBack.setVisibility(View.GONE);
