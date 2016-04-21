@@ -97,7 +97,7 @@ public class SplashScreenActivity extends AppCompatActivity
         } else if (id == R.id.nav_track_progress) {
             startActivity(new Intent(SplashScreenActivity.this, TrackProgressActivity.class));
         } else if (id == R.id.nav_app_prefs) {
-            startActivity(new Intent(SplashScreenActivity.this, PreferencesActivity.class));
+            startActivity(new Intent(SplashScreenActivity.this, GsrActivity.class));
         } else if (id == R.id.nav_view_update_history) {
             startActivity(new Intent(SplashScreenActivity.this, ViewUpdateHistoryActivity.class));
         }

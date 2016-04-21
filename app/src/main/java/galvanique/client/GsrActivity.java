@@ -2,6 +2,7 @@ package galvanique.client;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,17 +17,27 @@ import com.microsoft.band.ConnectionState;
 import com.microsoft.band.sensors.BandGsrEvent;
 import com.microsoft.band.sensors.BandGsrEventListener;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import galvanique.db.dao.GsrDAO;
 import galvanique.db.entities.GsrLog;
 
-public class PreferencesActivity extends AppCompatActivity {
+public class GsrActivity extends AppCompatActivity {
 
-    private Button buttonBackground, buttonGSR, buttonNotifications;
+    private Button buttonGSR, buttonExport;
     private TextView txtViewGSR;
     private BandClient client = null;
     private boolean gsrStarted;
     private GsrDAO db;
-    int index = 0;
+    private FileOutputStream fOutGsr;
 
     private BandGsrEventListener mGsrEventListener = new BandGsrEventListener() {
         @Override
@@ -94,7 +105,7 @@ public class PreferencesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preferences);
+        setContentView(R.layout.activity_gsr);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -121,16 +132,15 @@ public class PreferencesActivity extends AppCompatActivity {
             }
         });
 
-        /* Notifications */
-        // TODO http://developer.android.com/training/basics/data-storage/shared-preferences.html
-        buttonNotifications = (Button) findViewById(R.id.buttonNotifications);
-        buttonNotifications.setOnClickListener(new View.OnClickListener() {
+        buttonExport = (Button) findViewById(R.id.buttonExport);
+        buttonExport.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                // TODO
+                exportGsr();
             }
         });
+
     }
 
     private void appendToUI(final String string) {
@@ -140,6 +150,33 @@ public class PreferencesActivity extends AppCompatActivity {
                 txtViewGSR.setText(string);
             }
         });
+    }
+
+    private void exportGsr() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        df.setTimeZone(TimeZone.getDefault());
+        String date = df.format(Calendar.getInstance().getTime());
+        File sdCard = Environment.getExternalStorageDirectory();
+        File directory = new File(sdCard.getAbsolutePath() + "/gTrackerData/" + date);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        String gsrFileName = "gsrValues.csv";
+        File gsrFile = new File(directory, gsrFileName);
+        try {
+            fOutGsr = new FileOutputStream(gsrFile, true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        GsrDAO dbGsr = new GsrDAO(getApplicationContext());
+        GsrLog[] gsrLogs = dbGsr.getAllGsr();
+        for (GsrLog l : gsrLogs) {
+            try {
+                fOutGsr.write((l.getTimestamp() + "," + l.getConductivity()).getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

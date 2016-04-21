@@ -24,7 +24,7 @@
             android:title="View/Update History" />
         <item
             android:id="@+id/nav_app_prefs"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_send"
             android:title="App Preferences" />
     </group>
 

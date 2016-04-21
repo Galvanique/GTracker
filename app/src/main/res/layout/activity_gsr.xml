@@ -4,7 +4,7 @@
     android:id="@+id/my_relative_layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context=".PreferencesActivity"
+    tools:context=".GsrActivity"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -17,15 +17,6 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <Button
-        android:id="@+id/buttonBackground"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="Set Background"
-        android:textSize="20sp" />
-
-    <Button
         android:id="@+id/buttonGSR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,12 +26,12 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/buttonNotifications"
+        android:id="@+id/buttonExport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Stop Sending Notifications"
+        android:text="Export GSR Data"
         android:textSize="20sp" />
 
     <TextView

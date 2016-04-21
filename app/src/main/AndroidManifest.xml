@@ -67,7 +67,7 @@
                 android:value="galvanique.client.SplashScreenActivity" />
         </activity>
         <activity
-            android:name=".PreferencesActivity"
+            android:name=".GsrActivity"
             android:label="@string/app_name"
             android:parentActivityName="galvanique.client.SplashScreenActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
