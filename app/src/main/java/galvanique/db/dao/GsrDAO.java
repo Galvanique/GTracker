@@ -3,6 +3,7 @@ package galvanique.db.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -98,6 +99,9 @@ public class GsrDAO extends GeneralDAO {
                 null,
                 CNAME_TIMESTAMP + " DESC");
         return cursor2gsrs(c);
+    }
+    public long getCountGsrLogs() {
+        return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
     }
 
     // --------------------------------------------

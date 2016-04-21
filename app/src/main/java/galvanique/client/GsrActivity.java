@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.microsoft.band.BandClient;
 import com.microsoft.band.BandClientManager;
@@ -32,17 +33,18 @@ import galvanique.db.entities.GsrLog;
 
 public class GsrActivity extends AppCompatActivity {
 
-    private Button buttonGSR, buttonExport;
+    private Button buttonGSR;
     private TextView txtViewGSR;
     private BandClient client = null;
     private boolean gsrStarted;
-    private GsrDAO db;
     private FileOutputStream fOutGsr;
+    File directory;
 
     private BandGsrEventListener mGsrEventListener = new BandGsrEventListener() {
         @Override
         public void onBandGsrChanged(BandGsrEvent event) {
             if (event != null && gsrStarted) {
+                GsrDAO db = new GsrDAO(getApplicationContext());
                 appendToUI(String.format("GSR conductivity = %d\n", event.getResistance()));
                 db.openWrite();
                 db.insert(new GsrLog(event.getTimestamp(), event.getResistance()));
@@ -82,7 +84,7 @@ public class GsrActivity extends AppCompatActivity {
                     appendToUI("Band isn't connected. Please make sure bluetooth is on and the band is in range.\n");
                 }
             } catch (BandException e) {
-                String exceptionMessage = "";
+                String exceptionMessage;
                 switch (e.getErrorType()) {
                     case UNSUPPORTED_SDK_VERSION_ERROR:
                         exceptionMessage = "Microsoft Health BandService doesn't support your SDK Version. Please update to latest SDK.\n";
@@ -104,6 +106,7 @@ public class GsrActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Set up base UI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gsr);
 
@@ -111,8 +114,25 @@ public class GsrActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Set up file I/O
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        df.setTimeZone(TimeZone.getDefault());
+        String date = df.format(Calendar.getInstance().getTime());
+        File sdCard = Environment.getExternalStorageDirectory();
+        directory = new File(sdCard.getAbsolutePath() + "/gTrackerData/" + date);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        String gsrFileName = "gsrValues.csv";
+        File gsrFile = new File(directory, gsrFileName);
+        try {
+            fOutGsr = new FileOutputStream(gsrFile, true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Set up GSR UI
         gsrStarted = false;
-        db = new GsrDAO(getApplicationContext());
         txtViewGSR = (TextView) findViewById(R.id.txtViewGSR);
         buttonGSR = (Button) findViewById(R.id.buttonGSR);
         buttonGSR.setOnClickListener(new View.OnClickListener() {
@@ -132,12 +152,12 @@ public class GsrActivity extends AppCompatActivity {
             }
         });
 
-        buttonExport = (Button) findViewById(R.id.buttonExport);
+        Button buttonExport = (Button) findViewById(R.id.buttonExport);
         buttonExport.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                exportGsr();
+                exportGsr(fOutGsr);
             }
         });
 
@@ -152,31 +172,31 @@ public class GsrActivity extends AppCompatActivity {
         });
     }
 
-    private void exportGsr() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-        df.setTimeZone(TimeZone.getDefault());
-        String date = df.format(Calendar.getInstance().getTime());
-        File sdCard = Environment.getExternalStorageDirectory();
-        File directory = new File(sdCard.getAbsolutePath() + "/gTrackerData/" + date);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        String gsrFileName = "gsrValues.csv";
-        File gsrFile = new File(directory, gsrFileName);
-        try {
-            fOutGsr = new FileOutputStream(gsrFile, true);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    private void exportGsr(FileOutputStream out) {
         GsrDAO dbGsr = new GsrDAO(getApplicationContext());
-        GsrLog[] gsrLogs = dbGsr.getAllGsr();
-        for (GsrLog l : gsrLogs) {
-            try {
-                fOutGsr.write((l.getTimestamp() + "," + l.getConductivity()).getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
+        dbGsr.openRead();
+        if (dbGsr.getCountGsrLogs() > 0) {
+            GsrLog[] gsrLogs = dbGsr.getAllGsr();
+            for (GsrLog l : gsrLogs) {
+                try {
+                    out.write((l.getTimestamp() + "," + l.getConductivity() + "\n").getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            Toast.makeText(
+                    getApplicationContext(),
+                    "GSR data exported to " + directory,
+                    Toast.LENGTH_LONG
+            ).show();
+        } else {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "No GSR logs to export.",
+                    Toast.LENGTH_LONG
+            ).show();
         }
+        dbGsr.close();
     }
 
 }
