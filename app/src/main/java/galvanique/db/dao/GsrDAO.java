@@ -13,6 +13,8 @@ import galvanique.db.entities.GsrLog;
 
 public class GsrDAO extends GeneralDAO {
 
+    // TODO-tyler associate with mood logs and visualize somewhere; add ability to export contents of table
+
     // --------------------------------------------
     // SCHEMA
     // --------------------------------------------

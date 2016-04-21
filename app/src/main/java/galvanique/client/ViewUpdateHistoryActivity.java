@@ -14,8 +14,16 @@ import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
+import galvanique.db.dao.BehaviorDAO;
+import galvanique.db.dao.BeliefDAO;
+import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
+import galvanique.db.dao.TriggerDAO;
+import galvanique.db.entities.Behavior;
+import galvanique.db.entities.Belief;
+import galvanique.db.entities.Mood;
 import galvanique.db.entities.MoodLog;
+import galvanique.db.entities.Trigger;
 
 public class ViewUpdateHistoryActivity extends AppCompatActivity {
     TableLayout table;
@@ -28,6 +36,13 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_update_history);
 
+        // DB
+        MoodLogDAO dbMoodLog = new MoodLogDAO(getApplicationContext());
+        MoodDAO dbMood = new MoodDAO(getApplicationContext());
+        TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
+        BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
+        BehaviorDAO dbBehavior = new BehaviorDAO(getApplicationContext());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -35,7 +50,6 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         table = (TableLayout) findViewById(R.id.tableLayout);
 
         // Read all rows of MoodLog table into an array of MoodLog objects
-        MoodLogDAO dbMoodLog = new MoodLogDAO(getApplicationContext());
         dbMoodLog.openRead();
         MoodLog[] moodLogs = dbMoodLog.getAllMoods();
         dbMoodLog.close();
@@ -46,7 +60,7 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         //pull all of the timestamps from the moodlog array and put them in a new array
         String[] timeStamps = new String[moodLogs.length];
         for (int i = 0; i < timeStamps.length; i++) {
-            timeStamps[i] = Long.toString(moodLogs[i].getTimestamp());
+            timeStamps[i] = MoodLogDAO.getISOTimeString(moodLogs[i].getTimestamp());
         }
         //use this new array to populate the spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, timeStamps);
@@ -81,13 +95,25 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
             TableRow row = new TableRow(this);
             row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-            addRowElement(Integer.toString(moodLogs[i].getId()), row);
+            dbMood.openRead();
+            dbTrigger.openRead();
+            dbBelief.openRead();
+            dbBehavior.openRead();
+            Mood m = dbMood.getMoodById(moodLogs[i].getId());
+            Trigger trigger = dbTrigger.getTriggerById(moodLogs[i].getTrigger());
+            Belief belief = dbBelief.getBeliefById(moodLogs[i].getBelief());
+            Behavior behavior = dbBehavior.getBehaviorById(moodLogs[i].getBehavior());
+            addRowElement(m.name, row);
             addRowElement(Integer.toString(moodLogs[i].getMagnitude()), row);
-            addRowElement(Integer.toString(moodLogs[i].getTrigger()), row);
-            addRowElement(Integer.toString(moodLogs[i].getBelief()), row);
-            addRowElement(Integer.toString(moodLogs[i].getBehavior()), row);
+            addRowElement(trigger.name, row);
+            addRowElement(belief.name, row);
+            addRowElement(behavior.name, row);
 //            addRowElement(moodLogs[i].getComments(), row);
-            addRowElement(Long.toString(moodLogs[i].getTimestamp()), row);
+            addRowElement(MoodLogDAO.getISOTimeString(moodLogs[i].getTimestamp()), row);
+            dbMood.close();
+            dbTrigger.close();
+            dbBelief.close();
+            dbBehavior.close();
 
             Log.d(Integer.toString(i), Integer.toString(moodLogs[i].getId()));
 
@@ -98,11 +124,11 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
 
     public void addRowElement(String s, TableRow r) {
         TextView tv = new TextView(this);
-        tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
+        tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT));
         tv.setBackgroundResource(R.drawable.cell_shape);
         tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(18);
+        tv.setTextSize(11);
         tv.setPadding(0, 5, 0, 5);
         tv.setText(s);
         r.addView(tv);

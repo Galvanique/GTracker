@@ -134,7 +134,7 @@ public class CopingStrategyLogDAO extends GeneralDAO {
                     "FROM copingStrategy strat " +
                     "JOIN copingStrategyLog clog ON clog.copingStrategyID=strat._id " +
                     "JOIN moodLog mlog ON clog.moodLogID=mlog._id " +
-                    "JOIN mood ON mood._id = mlog.mood " +
+                    "JOIN mood ON mood._id = mlog.mood " + // TODO where mood
                     "GROUP BY mood._id, clog.copingStrategyID " +
                     "ORDER BY AVG(clog.effectiveness) DESC;";
             c = db.rawQuery(QUERY, new String[]{CNAME_MOODLOGID});

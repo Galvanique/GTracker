@@ -23,13 +23,14 @@ import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
 import galvanique.db.entities.Behavior;
 import galvanique.db.entities.Belief;
+import galvanique.db.entities.CopingStrategyLog;
 import galvanique.db.entities.MoodLog;
 import galvanique.db.entities.Trigger;
 
 public class LogMoodActivity extends AppCompatActivity {
 
     private enum State {
-        MOOD, MAGNITUDE, TRIGGER, BELIEF, BEHAVIOR, STRATEGY;
+        MOOD, MAGNITUDE, TRIGGER, BELIEF, BEHAVIOR, STRATEGY, STRATEGY_SELECT;
         private static State[] vals = values();
 
         public State next() {
@@ -50,6 +51,7 @@ public class LogMoodActivity extends AppCompatActivity {
     private BehaviorDAO dbBehavior;
     private MoodDAO dbMood;
     private MoodLogDAO dbMoodLog;
+    private CopingStrategyLogDAO dbCSLog;
 
     private State state;
     private boolean readyToWrite = false;
@@ -88,6 +90,7 @@ public class LogMoodActivity extends AppCompatActivity {
         dbBehavior = new BehaviorDAO(getApplicationContext());
         dbMoodLog = new MoodLogDAO(getApplicationContext());
         dbMood = new MoodDAO(getApplicationContext());
+        dbCSLog = new CopingStrategyLogDAO(getApplicationContext());
 
         // Text views
         textViewInstructions = (TextView) findViewById(R.id.textViewInstructions);
@@ -156,27 +159,26 @@ public class LogMoodActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                // If we click "Submit" without filling out mood field
-                if (state == State.BEHAVIOR && (mood == null || mood.equals(""))) {
+                if (state == State.BEHAVIOR && !(mood == null || mood.equals(""))) {
+                    readyToWrite = true;
+                }
+                else if (state == State.STRATEGY_SELECT
+                        && !(selectedStrategy == null || selectedStrategy.equals(""))) {
+                    dbMoodLog.openRead();
+                    MoodLog mostRecent = dbMoodLog.getMostRecentLog();
+                    dbMoodLog.close();
+                    CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.id, dropdownStrategies.getSelectedItemPosition(), -1, System.currentTimeMillis());
+                    dbCSLog.openWrite();
+                    dbCSLog.insert(insertion);
+                    dbCSLog.close();
                     Toast.makeText(
                             getApplicationContext(),
-                            "Mood not logged: Please select required mood value.",
+                            "Coping strategy successfully logged.",
                             Toast.LENGTH_LONG
                     ).show();
-                    state = State.MOOD;
-                }
-                // If we click "Submit" after filling out at least mood field
-                else if (state == State.BEHAVIOR && !(mood == null || mood.equals(""))) {
-                    readyToWrite = true;
-                    state = state.next();
-                }
-                // If state is STRATEGY, buttonNext has text "Yes" to accept a suggestion
-                else if (state == State.STRATEGY) {
-                    // TODO-tyler display list of strategies, create new CopingStrategyLog based on choice
-                    dropdownStrategies.setVisibility(View.VISIBLE);
                 }
                 // Normal behavior
-                else state = state.next();
+                state = state.next();
                 setUpLayout(state);
             }
         });
@@ -189,6 +191,9 @@ public class LogMoodActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // If state is STRATEGY, buttonBack has text "No," should just return user to MOOD state
                 if (state == State.STRATEGY) {
+                    state = State.MOOD;
+                }
+                else if (state == State.STRATEGY_SELECT) {
                     state = State.MOOD;
                 }
                 // Normal behavior
@@ -264,7 +269,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 behavior = editTextBehavior.getText().toString();
                 if (readyToWrite) {
                     int[] ids = getIds(trigger, belief, behavior);
-                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), MoodLog.Mood.valueOf(mood), ids[0], ids[1], ids[2], magnitude, "");
+                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), dropdown.getSelectedItemPosition(), ids[0], ids[1], ids[2], magnitude, "");
                     dbMoodLog = new MoodLogDAO(getApplicationContext());
                     dbMoodLog.openWrite();
                     // Insert MoodLog using these trigger, belief, behavior IDs
@@ -296,6 +301,12 @@ public class LogMoodActivity extends AppCompatActivity {
                 logDB.close();
                 ArrayAdapter<String> strategyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
                 dropdownStrategies.setAdapter(strategyAdapter);
+                break;
+            case STRATEGY_SELECT:
+                textViewInstructions.setText("Please select a coping strategy.");
+                dropdownStrategies.setVisibility(View.VISIBLE);
+                buttonNext.setText("Okay");
+                buttonBack.setText("Cancel");
                 break;
             default:
                 throw new RuntimeException("Invalid mood entry state");

@@ -42,7 +42,6 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO-someone prepopulate any values we want already in the static cslogdefault and mood tables
         // Behavior
         db.execSQL(BehaviorDAO.TABLE_CREATE);
         Log.d(TAG, "table " + BehaviorDAO.TABLE_NAME + " was created");

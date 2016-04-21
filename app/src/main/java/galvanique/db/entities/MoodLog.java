@@ -52,9 +52,9 @@ public class MoodLog {
      * @param magnitude
      * @param comments
      */
-    public MoodLog(long timestamp, Mood mood, int belief, int trigger, int behavior, int magnitude, String comments) {
+    public MoodLog(long timestamp, int mood, int belief, int trigger, int behavior, int magnitude, String comments) {
         this.timestamp = timestamp;
-        this.moodID = mood.ordinal();
+        this.moodID = mood;
         this.beliefID = belief;
         this.triggerID = trigger;
         this.behaviorID = behavior;

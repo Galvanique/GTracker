@@ -58,7 +58,9 @@
         <activity
             android:name=".ViewUpdateHistoryActivity"
             android:label="@string/app_name"
-            android:parentActivityName="galvanique.client.SplashScreenActivity">
+            android:parentActivityName="galvanique.client.SplashScreenActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
