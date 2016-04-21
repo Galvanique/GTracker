@@ -3,7 +3,6 @@ package galvanique.client;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,14 +10,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.github.channguyen.rsv.RangeSliderView;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import galvanique.db.dao.CopingStrategyDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
-import galvanique.db.dao.CopingStrategyLogDefaultDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
@@ -33,9 +26,7 @@ public class GetHelpActivity extends AppCompatActivity {
     private TextView textViewInstructions, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime;
     private boolean alreadyUsingStrategy = false;
     private MoodLogDAO dbMoodLog;
-    private CopingStrategyDAO dbStrategy;
     private CopingStrategyLogDAO dbStrategyLog;
-    private CopingStrategyLogDefaultDAO dbStrategyLogDefault;
     private String moodName, csName, selectedStrategy;
     private Spinner dropdownStrategies;
     private RangeSliderView rsv;
@@ -56,11 +47,23 @@ public class GetHelpActivity extends AppCompatActivity {
         textViewTime = (TextView) findViewById(R.id.textViewTime);
         dropdownStrategies = (Spinner) findViewById(R.id.spinner);
 
+        rsv = (RangeSliderView) findViewById(R.id.rsv_large);
+        final RangeSliderView.OnSlideListener listener = new RangeSliderView.OnSlideListener() {
+            @Override
+            public void onSlide(int index) {
+                effectiveness = index;
+            }
+        };
+        rsv.setOnSlideListener(listener);
+        //rsv.setRangeCount(10);
+
         buttonYes = (Button) findViewById(R.id.buttonYes);
         buttonYes.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
+                textViewInstructions.setText("Please select a coping strategy.");
+                makeEverythingInvisible();
                 dropdownStrategies.setVisibility(View.VISIBLE);
                 buttonYes.setVisibility(View.GONE);
                 buttonOkay.setVisibility(View.VISIBLE);
@@ -81,27 +84,15 @@ public class GetHelpActivity extends AppCompatActivity {
                 dbStrategyLog.openWrite();
                 dbStrategyLog.insert(insertion);
                 dbStrategyLog.close();
-                // TODO show screen where we ask how it's going
                 textViewInstructions.setText("You are already using the coping strategy " +
                         "\"" + dropdownStrategies.getSelectedItem() + "\" for mood " + "\"" + mostRecent.getMoodString() + "\". How is it going?");
                 makeEverythingInvisible();
+                rsv.setVisibility(View.VISIBLE);
             }
         });
 
         dbMoodLog = new MoodLogDAO(getApplicationContext());
-        dbStrategy = new CopingStrategyDAO(getApplicationContext());
         dbStrategyLog = new CopingStrategyLogDAO(getApplicationContext());
-        dbStrategyLogDefault = new CopingStrategyLogDefaultDAO(getApplicationContext());
-
-        rsv = (RangeSliderView) findViewById(R.id.rsv_large);
-        final RangeSliderView.OnSlideListener listener = new RangeSliderView.OnSlideListener() {
-            @Override
-            public void onSlide(int index) {
-                effectiveness = index;
-            }
-        };
-        rsv.setOnSlideListener(listener);
-        //rsv.setRangeCount(10);
 
         dbMoodLog.openRead();
         if (dbMoodLog.getCountMoodLogs() > 0) {
@@ -133,13 +124,14 @@ public class GetHelpActivity extends AppCompatActivity {
             CopingStrategyLog lastLog = dbStrategyLog.getMostRecentLog();
             long lastTime = lastLog.getTimestamp();
             int lastStrategyID = lastLog.getCopingStrategyID();
+            CopingStrategyDAO dbStrategy = new CopingStrategyDAO(getApplicationContext());
             dbStrategy.openRead();
             CopingStrategy lastStrategy = dbStrategy.getCopingStrategyById(lastStrategyID);
             dbStrategy.close();
             long lastDuration = lastStrategy.duration;
+            csName = lastStrategy.name;
             if ((lastTime + lastDuration) > System.currentTimeMillis()) {
                 alreadyUsingStrategy = true;
-                csName = lastStrategy.name;
             }
         }
         dbStrategyLog.close();
@@ -153,6 +145,7 @@ public class GetHelpActivity extends AppCompatActivity {
             dbMoodLog.close();
             textViewInstructions.setText("You are already using the coping strategy " +
                     "\"" + csName + "\" for mood " + "\"" + moodName + "\". How is it going?");
+            rsv.setVisibility(View.VISIBLE);
         }
         // Otherwise they have no strategy
         else {
@@ -161,7 +154,7 @@ public class GetHelpActivity extends AppCompatActivity {
             if (dbMoodLog.getCountMoodLogs() > 0) {
                 textViewInstructions.setText("This is your last mood log. Would you like a coping strategy for this mood?");
                 final MoodLog mostRecent = dbMoodLog.getMostRecentLog();
-                // TODO replace ids with text
+                // TODO-tyler replace ids with text
                 textViewMood.setVisibility(View.VISIBLE);
                 textViewTrigger.setVisibility(View.VISIBLE);
                 textViewBelief.setVisibility(View.VISIBLE);
@@ -189,7 +182,6 @@ public class GetHelpActivity extends AppCompatActivity {
         textViewBelief.setVisibility(View.GONE);
         textViewBehavior.setVisibility(View.GONE);
         textViewTime.setVisibility(View.GONE);
-        rsv.setVisibility(View.GONE);
         buttonOkay.setVisibility(View.GONE);
         buttonYes.setVisibility(View.GONE);
         dropdownStrategies.setVisibility(View.GONE);

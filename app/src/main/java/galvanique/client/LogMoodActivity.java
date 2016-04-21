@@ -282,6 +282,7 @@ public class LogMoodActivity extends AppCompatActivity {
                     ).show();
                     // Reset UI and inputs
                     dropdown.setSelection(0);
+                    dropdownStrategies.setSelection(0);
                     slider.setInitialIndex(0);
                     editTextTrigger.setText("");
                     editTextBelief.setText("");
@@ -290,6 +291,7 @@ public class LogMoodActivity extends AppCompatActivity {
                     trigger = null;
                     belief = null;
                     behavior = null;
+                    selectedStrategy = null;
                     magnitude = 0;
                 }
                 readyToWrite = false;
