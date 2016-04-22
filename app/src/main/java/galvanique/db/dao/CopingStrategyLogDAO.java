@@ -189,7 +189,9 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     }
 
     public void updateEffectiveness(CopingStrategyLog r, int effectiveness) {
-        Cursor c = db.rawQuery("UPDATE " + TABLE_NAME + " SET " + CNAME_EFFECTIVENESS + "=" + effectiveness + " WHERE " + CNAME_ID + "=" + r.getId(), null);
+        final String QUERY = "UPDATE " + TABLE_NAME + " SET " + CNAME_EFFECTIVENESS + "=" + effectiveness + " WHERE " + CNAME_ID + "=" + r.getId();
+        db.rawQuery(QUERY, null);
+        Log.d(QUERY, "lol");
     }
 
     public void delete(CopingStrategyLog r) {

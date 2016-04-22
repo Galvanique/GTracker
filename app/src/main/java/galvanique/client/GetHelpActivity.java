@@ -16,6 +16,7 @@ import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
 import galvanique.db.dao.CopingStrategyDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
+import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
 import galvanique.db.entities.CopingStrategy;
@@ -28,15 +29,12 @@ public class GetHelpActivity extends AppCompatActivity {
         IN_USE, NO_MOOD_LOGS, NOT_IN_USE, SELECT;
     }
 
-    /**
-     * Declarations
-     */
+    // Declarations
     private State state;
     private Button buttonYes, buttonOkay;
     private TextView textViewInstructions, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime;
     private MoodLogDAO dbMoodLog;
     private CopingStrategyLogDAO dbStrategyLog;
-    private String selectedStrategy;
     private Spinner dropdownStrategies;
     private RangeSliderView rsv;
     private int effectiveness;
@@ -115,25 +113,15 @@ public class GetHelpActivity extends AppCompatActivity {
             String[] strategies = dbStrategyLog.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
             dropdownStrategies.setAdapter(adapter);
-            dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                    Object item = parent.getItemAtPosition(pos);
-                    if (item instanceof String) {
-                        selectedStrategy = (String) item;
-                    }
-                }
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
         }
         dbMoodLog.close();
         dbStrategyLog.close();
 
         // Determine path of execution
-        if (checkIfInUse()) {
-            setUpLayout(State.IN_USE);
+        if (checkIfInUse() || noMoodLogs()) {
+            setUpLayout(State.NO_MOOD_LOGS);
         } else {
-            if (noMoodLogs()) {
+            if (checkIfRated()) {
                 setUpLayout(State.NO_MOOD_LOGS);
             } else {
                 setUpLayout(State.NOT_IN_USE);
@@ -145,13 +133,20 @@ public class GetHelpActivity extends AppCompatActivity {
         state = s;
         switch (s) {
             case IN_USE:
+                CopingStrategyDAO dbStrategy = new CopingStrategyDAO(getApplicationContext());
+                dbStrategyLog.openRead();
+                CopingStrategyLog lastLog = dbStrategyLog.getMostRecentLog();
+                dbStrategyLog.close();
+                dbStrategy.openRead();
+                String strategy = dbStrategy.getCopingStrategyById(lastLog.getCopingStrategyID()).name;
+                dbStrategy.close();
                 dbMoodLog.openRead();
-                MoodLog mostRecent = dbMoodLog.getMostRecentLog();
+                String mood = dbMoodLog.getMoodById(lastLog.getMoodLogID()).getMoodString();
                 dbMoodLog.close();
                 textViewInstructions.setText("You are already using the coping strategy " +
-                        "\"" + dropdownStrategies.getSelectedItem() + "\" for mood " + "\"" + mostRecent.getMoodString() + "\". How is it going?");
+                        "\"" + strategy + "\" for mood " + "\"" + mood + "\". How is it going?");
                 changeVisibility(View.VISIBLE, rsv);
-                changeVisibility(View.GONE, dropdownStrategies);
+                changeVisibility(View.GONE, dropdownStrategies, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime, buttonYes);
                 break;
             case NO_MOOD_LOGS:
                 textViewInstructions.setText("Please log a mood to get a coping strategy!");
@@ -196,9 +191,7 @@ public class GetHelpActivity extends AppCompatActivity {
         }
     }
 
-    // TODO-tyler this doesn't work
     public boolean checkIfInUse() {
-        // Check if coping strategy is in use already (last log timestamp + its duration > currentTime)
         dbStrategyLog.openRead();
         // If the copingStrategyLogs table is empty, you're not using a strategy already
         if (dbStrategyLog.getCountCopingStrategyLogs() > 0) {
@@ -211,14 +204,27 @@ public class GetHelpActivity extends AppCompatActivity {
             dbStrategy.close();
             long lastDuration = lastStrategy.duration;
             dbStrategyLog.close();
-            return ((lastTime + lastDuration) > System.currentTimeMillis());
+            return ((lastTime + lastDuration) < System.currentTimeMillis());
         }
         return false;
     }
 
+    public boolean checkIfRated() {
+        boolean check;
+        dbStrategyLog.openRead();
+        if (dbStrategyLog.getCountCopingStrategyLogs() > 0) {
+            check = dbStrategyLog.getMostRecentLog().effectiveness > -1;
+        }
+        else {
+            check = false;
+        }
+        dbStrategyLog.close();
+        return check;
+    }
+
     public boolean noMoodLogs() {
         dbMoodLog.openRead();
-        boolean check = dbMoodLog.getCountMoodLogs() < 0;
+        boolean check = dbMoodLog.getCountMoodLogs() == 0;
         dbMoodLog.close();
         return check;
     }
