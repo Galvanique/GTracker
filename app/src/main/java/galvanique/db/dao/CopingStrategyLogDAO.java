@@ -170,7 +170,7 @@ public class CopingStrategyLogDAO extends GeneralDAO {
             }
             List<String> names = new LinkedList<>();
             for (Integer id : csIds) {
-                Cursor cursor = db.rawQuery("SELECT * FROM copingStrategy WHERE _id=" + id, null);
+                Cursor cursor = db.rawQuery("SELECT * FROM copingStrategy WHERE _id=?" + id, null);
                 CopingStrategy cs = CopingStrategyDAO.cursor2copingStrategy(cursor);
                 names.add(cs.name);
             }
@@ -188,9 +188,8 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         db.insert(TABLE_NAME, null, cv);
     }
 
-    public void update(CopingStrategyLog r) {
-        ContentValues values = copingStrategy2ContentValues(r);
-        db.update(TABLE_NAME, values, WHERE_ID, new String[]{r.id + ""});
+    public void updateEffectiveness(CopingStrategyLog r, int effectiveness) {
+        Cursor c = db.rawQuery("UPDATE " + TABLE_NAME + " SET " + CNAME_EFFECTIVENESS + "=" + effectiveness + " WHERE " + CNAME_ID + "=" + r.getId(), null);
     }
 
     public void delete(CopingStrategyLog r) {
