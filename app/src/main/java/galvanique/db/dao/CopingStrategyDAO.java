@@ -44,6 +44,7 @@ public class CopingStrategyDAO extends GeneralDAO {
     // --------------------------------------------
 
     private final static String WHERE_ID = CNAME_ID + "=?";
+    private final static String WHERE_NAME = CNAME_NAME + "=?";
 
     // --------------------------------------------
     // LIVECYCLE
@@ -67,6 +68,18 @@ public class CopingStrategyDAO extends GeneralDAO {
                 null,
                 null);
         return cursor2copingStrategy(c);
+    }
+
+    public int getCopingStrategyByString(String s) {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                WHERE_NAME,
+                new String[]{s + ""},
+                null,
+                null,
+                null);
+        return cursor2copingStrategy(c).id;
     }
 
     public CopingStrategy getRandomCopingStrategy() { //changed this to parameterless

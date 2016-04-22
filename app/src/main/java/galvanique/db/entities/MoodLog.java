@@ -86,7 +86,7 @@ public class MoodLog {
     }
 
     public String getMoodString() {
-        return Mood.values()[moodID].name();
+        return Mood.values()[moodID-1].name();
     }
 
     public int getBelief() {

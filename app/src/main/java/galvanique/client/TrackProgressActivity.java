@@ -1,13 +1,16 @@
 package galvanique.client;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.app.Activity;
-import android.graphics.Color;
 
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.PointLabelFormatter;
 import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.*;
+import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
+
 import java.util.Arrays;
 
 import galvanique.db.dao.MoodLogDAO;

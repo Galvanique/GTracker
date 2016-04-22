@@ -26,7 +26,7 @@ import galvanique.db.entities.Belief;
 import galvanique.db.entities.CopingStrategyLog;
 import galvanique.db.entities.MoodLog;
 import galvanique.db.entities.Trigger;
-
+// TODO-tyler is getselecteditemposition+1 correct in insertions?
 public class LogMoodActivity extends AppCompatActivity {
 
     private enum State {
@@ -161,13 +161,12 @@ public class LogMoodActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (state == State.BEHAVIOR && !(mood == null || mood.equals(""))) {
                     readyToWrite = true;
-                }
-                else if (state == State.STRATEGY_SELECT
+                } else if (state == State.STRATEGY_SELECT
                         && !(selectedStrategy == null || selectedStrategy.equals(""))) {
                     dbMoodLog.openRead();
                     MoodLog mostRecent = dbMoodLog.getMostRecentLog();
                     dbMoodLog.close();
-                    CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.id, dropdownStrategies.getSelectedItemPosition(), -1, System.currentTimeMillis());
+                    CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.id, dropdownStrategies.getSelectedItemPosition()+1, -1, System.currentTimeMillis());
                     dbCSLog.openWrite();
                     dbCSLog.insert(insertion);
                     dbCSLog.close();
@@ -192,8 +191,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 // If state is STRATEGY, buttonBack has text "No," should just return user to MOOD state
                 if (state == State.STRATEGY) {
                     state = State.MOOD;
-                }
-                else if (state == State.STRATEGY_SELECT) {
+                } else if (state == State.STRATEGY_SELECT) {
                     state = State.MOOD;
                 }
                 // Normal behavior
@@ -210,7 +208,6 @@ public class LogMoodActivity extends AppCompatActivity {
      * @param s desired UI state
      */
     public void setUpLayout(State s) {
-        // TODO-tyler check for invalid inputs to edit text fields?
         switch (s) {
             case MOOD:
                 // Set up MOOD UI elements
@@ -269,7 +266,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 behavior = editTextBehavior.getText().toString();
                 if (readyToWrite) {
                     int[] ids = getIds(trigger, belief, behavior);
-                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), dropdown.getSelectedItemPosition(), ids[0], ids[1], ids[2], magnitude, "");
+                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), dropdown.getSelectedItemPosition()+1, ids[0], ids[1], ids[2], magnitude, "");
                     dbMoodLog = new MoodLogDAO(getApplicationContext());
                     dbMoodLog.openWrite();
                     // Insert MoodLog using these trigger, belief, behavior IDs

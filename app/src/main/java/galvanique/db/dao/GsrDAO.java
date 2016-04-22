@@ -100,6 +100,7 @@ public class GsrDAO extends GeneralDAO {
                 CNAME_TIMESTAMP + " DESC");
         return cursor2gsrs(c);
     }
+
     public long getCountGsrLogs() {
         return DatabaseUtils.queryNumEntries(db, TABLE_NAME);
     }

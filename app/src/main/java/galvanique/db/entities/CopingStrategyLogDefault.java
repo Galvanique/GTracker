@@ -1,7 +1,5 @@
 package galvanique.db.entities;
 
-import java.util.Comparator;
-
 /**
  * Created by K on 4/19/16.
  */

@@ -11,12 +11,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.github.channguyen.rsv.RangeSliderView;
+
 import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
 import galvanique.db.dao.CopingStrategyDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
-import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
 import galvanique.db.entities.CopingStrategy;
@@ -38,6 +39,7 @@ public class GetHelpActivity extends AppCompatActivity {
     private Spinner dropdownStrategies;
     private RangeSliderView rsv;
     private int effectiveness;
+    private String selectedStrategy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,7 @@ public class GetHelpActivity extends AppCompatActivity {
         };
         rsv.setOnSlideListener(listener);
 
+        // Asks if user wants a coping strategy, if so redirects to dropdown of strategies
         buttonYes.setOnClickListener(new View.OnClickListener() {
             @SuppressWarnings("unchecked")
             @Override
@@ -85,7 +88,10 @@ public class GetHelpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (state == State.SELECT) {
                     // When user is finished selecting a coping strategy, they press okay to confirm
-                    int copingStratID = dropdownStrategies.getSelectedItemPosition();
+                    CopingStrategyDAO csDAO = new CopingStrategyDAO(getApplicationContext());
+                    csDAO.openRead();
+                    int copingStratID = (csDAO.getCopingStrategyByString(selectedStrategy));
+                    csDAO.close();
                     dbMoodLog.openRead();
                     MoodLog mostRecent = dbMoodLog.getMostRecentLog();
                     dbMoodLog.close();
@@ -113,16 +119,29 @@ public class GetHelpActivity extends AppCompatActivity {
             String[] strategies = dbStrategyLog.getBestCopingStrategyNamesByMood(dbMoodLog.getMostRecentLog().getMoodID());
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, strategies);
             dropdownStrategies.setAdapter(adapter);
+            dropdownStrategies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    Object item = parent.getItemAtPosition(pos);
+                    if (item instanceof String) {
+                        selectedStrategy = (String) item;
+                    }
+                }
+
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
         }
         dbMoodLog.close();
         dbStrategyLog.close();
 
         // Determine path of execution
-        if (checkIfInUse() || noMoodLogs()) {
+        if (!(checkIfLastMoodHasLog())) {
+            setUpLayout(State.NOT_IN_USE);
+        } else if (checkIfRated() || noMoodLogs()) {
             setUpLayout(State.NO_MOOD_LOGS);
         } else {
-            if (checkIfRated()) {
-                setUpLayout(State.NO_MOOD_LOGS);
+            if (checkIfInUse()) {
+                setUpLayout(State.IN_USE);
             } else {
                 setUpLayout(State.NOT_IN_USE);
             }
@@ -141,7 +160,7 @@ public class GetHelpActivity extends AppCompatActivity {
                 String strategy = dbStrategy.getCopingStrategyById(lastLog.getCopingStrategyID()).name;
                 dbStrategy.close();
                 dbMoodLog.openRead();
-                String mood = dbMoodLog.getMoodById(lastLog.getMoodLogID()).getMoodString();
+                String mood = dbMoodLog.getMoodLogById(lastLog.getMoodLogID()).getMoodString();
                 dbMoodLog.close();
                 textViewInstructions.setText("You are already using the coping strategy " +
                         "\"" + strategy + "\" for mood " + "\"" + mood + "\". How is it going?");
@@ -161,6 +180,7 @@ public class GetHelpActivity extends AppCompatActivity {
                 dbMoodLog.openRead();
                 MoodLog mostRecentLog = dbMoodLog.getMostRecentLog();
                 dbMoodLog.close();
+                // TODO you want magnitude too
                 TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
                 BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
                 BehaviorDAO dbBehavior = new BehaviorDAO(getApplicationContext());
@@ -214,11 +234,23 @@ public class GetHelpActivity extends AppCompatActivity {
         dbStrategyLog.openRead();
         if (dbStrategyLog.getCountCopingStrategyLogs() > 0) {
             check = dbStrategyLog.getMostRecentLog().effectiveness > -1;
-        }
-        else {
+        } else {
             check = false;
         }
         dbStrategyLog.close();
+        return check;
+    }
+
+    public boolean checkIfLastMoodHasLog() {
+        boolean check = true;
+        dbMoodLog.openRead();
+        if (dbMoodLog.getCountMoodLogs() > 0) {
+            MoodLog mostRecent = dbMoodLog.getMostRecentLog();
+            dbStrategyLog.openRead();
+            check = dbStrategyLog.checkIfMoodLogHasStrategy(mostRecent.getId());
+            dbStrategyLog.close();
+        }
+        dbMoodLog.close();
         return check;
     }
 
@@ -230,10 +262,12 @@ public class GetHelpActivity extends AppCompatActivity {
     }
 
     public void doToast(String s) {
-        Toast.makeText (getApplicationContext(), s, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
 
     public void changeVisibility(int visibility, View... elements) {
-        for (View v : elements) { v.setVisibility(visibility); }
+        for (View v : elements) {
+            v.setVisibility(visibility);
+        }
     }
 }

@@ -84,7 +84,7 @@ public class MoodLogDAO extends GeneralDAO {
     // QUERY IMPLEMENTATIONS
     // --------------------------------------------
 
-    public MoodLog getMoodById(int id) {
+    public MoodLog getMoodLogById(int id) {
         Cursor c = db.query(
                 TABLE_NAME,
                 PROJECTION,

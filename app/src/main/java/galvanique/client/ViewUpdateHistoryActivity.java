@@ -21,7 +21,6 @@ import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
 import galvanique.db.entities.Behavior;
 import galvanique.db.entities.Belief;
-import galvanique.db.entities.Mood;
 import galvanique.db.entities.MoodLog;
 import galvanique.db.entities.Trigger;
 
@@ -99,11 +98,10 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
             dbTrigger.openRead();
             dbBelief.openRead();
             dbBehavior.openRead();
-            Mood m = dbMood.getMoodById(moodLogs[i].getId());
             Trigger trigger = dbTrigger.getTriggerById(moodLogs[i].getTrigger());
             Belief belief = dbBelief.getBeliefById(moodLogs[i].getBelief());
             Behavior behavior = dbBehavior.getBehaviorById(moodLogs[i].getBehavior());
-            addRowElement(m.name, row);
+            addRowElement(moodLogs[i].getMoodString(), row);
             addRowElement(Integer.toString(moodLogs[i].getMagnitude()), row);
             addRowElement(trigger.name, row);
             addRowElement(belief.name, row);

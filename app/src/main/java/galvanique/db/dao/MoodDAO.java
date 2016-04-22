@@ -86,7 +86,7 @@ public class MoodDAO extends GeneralDAO {
     // MOOD-CURSOR TRANSFORMATION UTILITIES
     // --------------------------------------------
 
-    private static Mood cursor2mood(Cursor c) {
+    public static Mood cursor2mood(Cursor c) {
         c.moveToFirst();
         Mood r = new Mood();
         r.id = c.getInt(CNUM_ID);

@@ -114,23 +114,6 @@ public class GsrActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Set up file I/O
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-        df.setTimeZone(TimeZone.getDefault());
-        String date = df.format(Calendar.getInstance().getTime());
-        File sdCard = Environment.getExternalStorageDirectory();
-        directory = new File(sdCard.getAbsolutePath() + "/gTrackerData/" + date);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        String gsrFileName = "gsrValues.csv";
-        File gsrFile = new File(directory, gsrFileName);
-        try {
-            fOutGsr = new FileOutputStream(gsrFile, true);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
         // Set up GSR UI
         gsrStarted = false;
         txtViewGSR = (TextView) findViewById(R.id.txtViewGSR);
@@ -176,6 +159,22 @@ public class GsrActivity extends AppCompatActivity {
         GsrDAO dbGsr = new GsrDAO(getApplicationContext());
         dbGsr.openRead();
         if (dbGsr.getCountGsrLogs() > 0) {
+            // Set up file I/O
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+            df.setTimeZone(TimeZone.getDefault());
+            String date = df.format(Calendar.getInstance().getTime());
+            File sdCard = Environment.getExternalStorageDirectory();
+            directory = new File(sdCard.getAbsolutePath() + "/gTrackerData/" + date);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            String gsrFileName = "gsrValues.csv";
+            File gsrFile = new File(directory, gsrFileName);
+            try {
+                fOutGsr = new FileOutputStream(gsrFile, true);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             GsrLog[] gsrLogs = dbGsr.getAllGsr();
             for (GsrLog l : gsrLogs) {
                 try {

@@ -36,6 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Random rnd = new Random();
+                // TODO-tyler save color in instance state so it can be restored with splashscreenactivity
                 int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
                 drawer.setBackgroundColor(color);
             }
