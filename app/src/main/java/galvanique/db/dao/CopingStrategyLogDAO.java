@@ -21,8 +21,7 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     // --------------------------------------------
     // SCHEMA
     // --------------------------------------------
-    // TODO-someone when is the table full enough to use user data?
-    private final int THRESHOLD = 10;
+    private final int THRESHOLD = 5;
 
 
     public static String TABLE_NAME = "copingStrategyLog";
@@ -121,8 +120,11 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     }
 
     public long getCountCopingStrategyLogsByMood(int moodID) {
-        // TODO how do we decide when to pull from default table vs user table
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return db.rawQuery(
+                "SELECT * FROM copingStrategyLog " +
+                "JOIN moodLog ON copingStrategyLog.moodLogID = moodLog._id;",
+                null
+        ).getCount();
     }
 
     public CopingStrategyLog getMostRecentLog() {
@@ -139,22 +141,23 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         return cursor2copingStrategy(c);
     }
 
-    // TODO-tyler this method is way too long sorry
+    // TODO-tyler do thresholding correctly (by mood)
     public String[] getBestCopingStrategyNamesByMood(int moodID) {
         Cursor c;
-        if (this.getCountCopingStrategyLogs() > THRESHOLD) {
+        if (getCountCopingStrategyLogsByMood(moodID) > THRESHOLD) {
+            Log.d("cslogdao", "using user table");
             // Get average rating for each coping strategy by mood from this table
             String QUERY = "SELECT strategy.name " +
                     "FROM copingStrategyLog clog" +
                     "JOIN copingStrategy strategy ON clog.copingStrategyID = strategy._id " +
                     "JOIN moodLog mlog ON mlog._id = clog.moodLogID " +
                     "JOIN mood ON mlog.mood = mood._id " +
-                    "WHERE mood._id =?" + moodID + " " +
+                    "WHERE mood._id =" + moodID + " " +
                     "GROUP BY strategy.name, strategy.description, strategy.duration " +
                     "ORDER BY avg(clog.effectiveness) DESC;";
             c = db.rawQuery(QUERY, null);
         } else {
-            // TODO-tyler this query is returning 0 entries
+            Log.d("cslogdao", "using default table");
             Cursor c1 = db.rawQuery("SELECT * FROM copingStrategy", null);
             DatabaseUtils.dumpCursor(c1);
             Cursor c2 = db.rawQuery("SELECT * FROM copingStrategyLogDefault", null);
@@ -169,7 +172,7 @@ public class CopingStrategyLogDAO extends GeneralDAO {
                     "FROM copingStrategyLogDefault clog " +
                     "JOIN copingStrategy strategy ON clog.copingStrategyID = strategy._id " +
                     "JOIN mood ON clog.moodID = mood._id " +
-                    "WHERE mood._id =?" + moodID + " " +
+                    "WHERE mood._id =" + moodID + " " +
                     "GROUP BY strategy.name, strategy.description, strategy.duration " +
                     "ORDER BY avg(clog.effectiveness) DESC;";
             c = db.rawQuery(QUERY, null);
