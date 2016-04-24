@@ -26,7 +26,7 @@ import galvanique.db.entities.Belief;
 import galvanique.db.entities.CopingStrategyLog;
 import galvanique.db.entities.MoodLog;
 import galvanique.db.entities.Trigger;
-// TODO-tyler is getselecteditemposition+1 correct in insertions?
+
 public class LogMoodActivity extends AppCompatActivity {
 
     private enum State {
@@ -210,63 +210,51 @@ public class LogMoodActivity extends AppCompatActivity {
     public void setUpLayout(State s) {
         switch (s) {
             case MOOD:
-                // Set up MOOD UI elements
-                textViewInstructions.setVisibility(View.VISIBLE);
                 textViewInstructions.setText("Please select a mood.");
-                editTextBehavior.setVisibility(View.GONE);
-                slider.setVisibility(View.GONE);
-                dropdown.setVisibility(View.VISIBLE);
-                dropdownStrategies.setVisibility(View.GONE);
+                changeVisibility(View.VISIBLE, textViewInstructions, dropdown);
+                changeVisibility(View.GONE, editTextBehavior, slider, dropdownStrategies, buttonBack);
                 buttonNext.setText("Next");
                 buttonBack.setText("Back");
-                buttonBack.setVisibility(View.GONE);
                 break;
             case MAGNITUDE:
                 textViewInstructions.setText("How intense was this feeling?");
-                dropdown.setVisibility(View.GONE);
-                editTextTrigger.setVisibility(View.GONE);
-                slider.setVisibility(View.VISIBLE);
+                changeVisibility(View.GONE, dropdown, editTextTrigger);
+                changeVisibility(View.VISIBLE, slider, buttonBack);
                 buttonNext.setText("Next");
                 buttonBack.setText("Back");
-                buttonBack.setVisibility(View.VISIBLE);
                 break;
             case TRIGGER:
                 textViewInstructions.setText("What triggered this mood? (Optional)");
-                slider.setVisibility(View.GONE);
-                editTextBelief.setVisibility(View.GONE);
-                editTextTrigger.setVisibility(View.VISIBLE);
+                changeVisibility(View.GONE, slider, editTextBelief);
+                changeVisibility(View.VISIBLE, editTextTrigger);
                 buttonNext.setText("Next");
                 buttonBack.setText("Back");
                 break;
             case BELIEF:
                 textViewInstructions.setText("What did feeling this way make you think or believe? (Optional)");
-                editTextTrigger.setVisibility(View.GONE);
-                editTextBehavior.setVisibility(View.GONE);
-                editTextBelief.setVisibility(View.VISIBLE);
-                // Grab trigger text
+                changeVisibility(View.GONE, editTextTrigger, editTextBehavior);
+                changeVisibility(View.VISIBLE, editTextBelief);
                 trigger = editTextTrigger.getText().toString();
                 buttonNext.setText("Next");
                 buttonBack.setText("Back");
                 break;
             case BEHAVIOR:
                 textViewInstructions.setText("How did feeling this way make you behave? (Optional)");
-                editTextBelief.setVisibility(View.GONE);
-                editTextBehavior.setVisibility(View.VISIBLE);
-                // Grab belief text
+                changeVisibility(View.GONE, editTextBelief);
+                changeVisibility(View.VISIBLE, editTextBehavior);
                 belief = editTextBelief.getText().toString();
                 buttonNext.setText("Submit");
                 buttonBack.setText("Back");
                 break;
             case STRATEGY:
                 textViewInstructions.setText("Would you like a coping strategy suggestion?");
+                changeVisibility(View.GONE, editTextBehavior);
                 buttonNext.setText("Yes");
                 buttonBack.setText("No");
-                editTextBehavior.setVisibility(View.GONE);
-                // Grab behavior text
                 behavior = editTextBehavior.getText().toString();
                 if (readyToWrite) {
                     int[] ids = getIds(trigger, belief, behavior);
-                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), dropdown.getSelectedItemPosition()+1, ids[0], ids[1], ids[2], magnitude, "");
+                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), dropdown.getSelectedItemPosition()+1, ids[0], ids[1], ids[2], magnitude+1, "");
                     dbMoodLog = new MoodLogDAO(getApplicationContext());
                     dbMoodLog.openWrite();
                     // Insert MoodLog using these trigger, belief, behavior IDs
@@ -302,13 +290,28 @@ public class LogMoodActivity extends AppCompatActivity {
                 dropdownStrategies.setAdapter(strategyAdapter);
                 break;
             case STRATEGY_SELECT:
-                textViewInstructions.setText("Please select a coping strategy.");
-                dropdownStrategies.setVisibility(View.VISIBLE);
+                // TODO-tyler don't display this if mood isn't angry, anxious, sad, depressed, shame
+                dbMoodLog.openRead();
+                String lastMood = dbMoodLog.getMostRecentLog().getMoodString();
+                dbMoodLog.close();
+                if (lastMood.equals("Happy") || lastMood.equals("Hopeful") || lastMood.equals("Grateful") || lastMood.equals("Excited")) {
+                    textViewInstructions.setText("You have a good mood -- enjoy it!");
+                    changeVisibility(View.GONE, buttonBack);
+                } else {
+                    textViewInstructions.setText("Please select a coping strategy.");
+                    changeVisibility(View.VISIBLE, dropdownStrategies);
+                    buttonBack.setText("Cancel");
+                }
                 buttonNext.setText("Okay");
-                buttonBack.setText("Cancel");
                 break;
             default:
                 throw new RuntimeException("Invalid mood entry state");
+        }
+    }
+
+    public void changeVisibility(int visibility, View... elements) {
+        for (View v : elements) {
+            v.setVisibility(visibility);
         }
     }
 
