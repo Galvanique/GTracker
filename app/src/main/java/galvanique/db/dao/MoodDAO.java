@@ -64,6 +64,20 @@ public class MoodDAO extends GeneralDAO {
         return cursor2mood(c);
     }
 
+    public String getMoodStringById(int id) {
+        Cursor c = db.query(
+                TABLE_NAME,
+                PROJECTION,
+                WHERE_ID,
+                new String[]{id + ""},
+                null,
+                null,
+                null
+        );
+        Mood m = cursor2mood(c);
+        return m.name;
+    }
+
     public String[] getAllMoodNames() {
         Cursor c = db.query(
                 TABLE_NAME,
