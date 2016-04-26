@@ -17,6 +17,7 @@ import com.github.channguyen.rsv.RangeSliderView;
 
 import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
+import galvanique.db.dao.CopingStrategyDAO;
 import galvanique.db.dao.CopingStrategyLogDAO;
 import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
@@ -166,7 +167,12 @@ public class LogMoodActivity extends AppCompatActivity {
                     dbMoodLog.openRead();
                     MoodLog mostRecent = dbMoodLog.getMostRecentLog();
                     dbMoodLog.close();
-                    CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.id, dropdownStrategies.getSelectedItemPosition()+1, -1, System.currentTimeMillis());
+                    dbCSLog.open();
+                    CopingStrategyDAO csDAO = new CopingStrategyDAO(getApplicationContext());
+                    csDAO.open();
+                    int copingStratID = (csDAO.getCopingStrategyByString(selectedStrategy));
+                    csDAO.close();
+                    CopingStrategyLog insertion = new CopingStrategyLog(mostRecent.id, copingStratID, -1, System.currentTimeMillis());
                     dbCSLog.openWrite();
                     dbCSLog.insert(insertion);
                     dbCSLog.close();

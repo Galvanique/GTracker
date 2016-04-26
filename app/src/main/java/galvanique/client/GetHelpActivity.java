@@ -23,8 +23,6 @@ import galvanique.db.entities.CopingStrategyLog;
 import galvanique.db.entities.MoodLog;
 
 
-// TODO-tyler correctly detect when coping strategy is in use
-
 public class GetHelpActivity extends AppCompatActivity {
 
     private enum State {
@@ -92,7 +90,7 @@ public class GetHelpActivity extends AppCompatActivity {
                     // When user is finished selecting a coping strategy, they press okay to confirm
                     CopingStrategyDAO csDAO = new CopingStrategyDAO(getApplicationContext());
                     csDAO.openRead();
-                    int copingStratID = (csDAO.getCopingStrategyByString(selectedStrategy));
+                    int copingStratID = (csDAO.getCopingStrategyByString(selectedStrategy)); // TODO this is wrong
                     csDAO.close();
                     dbMoodLog.openRead();
                     MoodLog mostRecent = dbMoodLog.getMostRecentLog();
@@ -137,19 +135,21 @@ public class GetHelpActivity extends AppCompatActivity {
         dbStrategyLog.close();
 
         // Determine path of execution
-        if (!(checkIfLastMoodHasLog())) {
-            Log.d("last mood no cslog", "");
-            setUpLayout(State.NOT_IN_USE);
-        } else if (checkIfRated() || noMoodLogs()) {
-            Log.d("last cs rated/no moods", "");
+        if (noMoodLogs()) { // There are no mood logs
             setUpLayout(State.NO_MOOD_LOGS);
-        } else {
-            if (checkIfInUse()) {
-                Log.d("last cs still in use","");
-                setUpLayout(State.IN_USE);
-            } else {
-                Log.d("no cs in use","");
+        } else { // There are mood logs
+            if (!(checkIfLastMoodHasLog())) {
                 setUpLayout(State.NOT_IN_USE);
+            } else { // There are mood logs and they have a CS
+                if (checkIfInUse()) {
+                    if (checkIfRated()) { // They have a mood log and it has a CS and it's rated
+                        setUpLayout(State.NO_MOOD_LOGS);
+                    } else { // They have a mood log and it has a CS, but it's not rated
+                        setUpLayout(State.IN_USE);
+                    }
+                } else { // They have finished using it, ask them to log a new mood
+                    setUpLayout(State.NO_MOOD_LOGS);
+                }
             }
         }
     }
@@ -179,32 +179,41 @@ public class GetHelpActivity extends AppCompatActivity {
                 changeVisibility(View.INVISIBLE, rsv);
                 break;
             case NOT_IN_USE:
-                changeVisibility(View.VISIBLE, buttonYes, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
-                changeVisibility(View.GONE, buttonOkay, dropdownStrategies);
-                changeVisibility(View.INVISIBLE, rsv);
-                textViewInstructions.setText("This is your last mood log. Would you like a coping strategy for this mood?");
                 dbMoodLog.openRead();
-                MoodLog mostRecentLog = dbMoodLog.getMostRecentLog();
+                String lastMood = dbMoodLog.getMostRecentLog().getMoodString();
                 dbMoodLog.close();
-                TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
-                BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
-                BehaviorDAO dbBehavior = new BehaviorDAO(getApplicationContext());
-                dbTrigger.openRead();
-                dbBelief.openRead();
-                dbBehavior.openRead();
-                String trigger = dbTrigger.getTriggerById(mostRecentLog.getTrigger()).name;
-                String belief = dbBelief.getBeliefById(mostRecentLog.getBelief()).name;
-                String behavior = dbBehavior.getBehaviorById(mostRecentLog.getBehavior()).name;
-                dbTrigger.close();
-                dbBelief.close();
-                dbBehavior.close();
-                textViewMood.setText("Mood: " + mostRecentLog.getMoodString());
-                textViewMagnitude.setText("Magnitude: " + mostRecentLog.getMagnitude());
-                textViewTrigger.setText("Trigger: " + trigger);
-                textViewBelief.setText("Belief: " + belief);
-                textViewBehavior.setText("Behavior: " + behavior);
-                String timeInDate = CopingStrategyLogDAO.getISOTimeString(mostRecentLog.getTimestamp());
-                textViewTime.setText("Time: " + timeInDate);
+                if (lastMood.equals("Happy") || lastMood.equals("Hopeful") || lastMood.equals("Grateful") || lastMood.equals("Excited")) {
+                    textViewInstructions.setText("You have a good mood -- enjoy it!");
+                    changeVisibility(View.GONE, buttonOkay, buttonYes, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime, dropdownStrategies);
+                    changeVisibility(View.INVISIBLE, rsv);
+                } else {
+                    changeVisibility(View.VISIBLE, buttonYes, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
+                    changeVisibility(View.GONE, buttonOkay, dropdownStrategies);
+                    changeVisibility(View.INVISIBLE, rsv);
+                    textViewInstructions.setText("This is your last mood log. Would you like a coping strategy for this mood?");
+                    dbMoodLog.openRead();
+                    MoodLog mostRecentLog = dbMoodLog.getMostRecentLog();
+                    dbMoodLog.close();
+                    TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
+                    BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
+                    BehaviorDAO dbBehavior = new BehaviorDAO(getApplicationContext());
+                    dbTrigger.openRead();
+                    dbBelief.openRead();
+                    dbBehavior.openRead();
+                    String trigger = dbTrigger.getTriggerById(mostRecentLog.getTrigger()).name;
+                    String belief = dbBelief.getBeliefById(mostRecentLog.getBelief()).name;
+                    String behavior = dbBehavior.getBehaviorById(mostRecentLog.getBehavior()).name;
+                    dbTrigger.close();
+                    dbBelief.close();
+                    dbBehavior.close();
+                    textViewMood.setText("Mood: " + mostRecentLog.getMoodString());
+                    textViewMagnitude.setText("Magnitude: " + mostRecentLog.getMagnitude());
+                    textViewTrigger.setText("Trigger: " + trigger);
+                    textViewBelief.setText("Belief: " + belief);
+                    textViewBehavior.setText("Behavior: " + behavior);
+                    String timeInDate = CopingStrategyLogDAO.getISOTimeString(mostRecentLog.getTimestamp());
+                    textViewTime.setText("Time: " + timeInDate);
+                }
                 break;
             case SELECT:
                 textViewInstructions.setText("Please select a coping strategy.");
@@ -230,8 +239,10 @@ public class GetHelpActivity extends AppCompatActivity {
             dbStrategy.close();
             long lastDuration = lastStrategy.duration;
             dbStrategyLog.close();
-            return ((lastTime + lastDuration) < System.currentTimeMillis());
+            Log.d("In use?", ((lastTime + lastDuration) > System.currentTimeMillis())+"");
+            return ((lastTime + lastDuration) > System.currentTimeMillis());
         }
+        Log.d("In use?", false+"");
         return false;
     }
 
@@ -244,6 +255,7 @@ public class GetHelpActivity extends AppCompatActivity {
             check = false;
         }
         dbStrategyLog.close();
+        Log.d("check if rated returned", check+"");
         return check;
     }
 
@@ -257,6 +269,7 @@ public class GetHelpActivity extends AppCompatActivity {
             dbStrategyLog.close();
         }
         dbMoodLog.close();
+        Log.d("check if mood has cs", check+"");
         return check;
     }
 
@@ -264,6 +277,7 @@ public class GetHelpActivity extends AppCompatActivity {
         dbMoodLog.openRead();
         boolean check = dbMoodLog.getCountMoodLogs() == 0;
         dbMoodLog.close();
+        Log.d("check no mood logs", check+"");
         return check;
     }
 

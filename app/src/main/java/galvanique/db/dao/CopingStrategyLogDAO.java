@@ -122,7 +122,8 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     public long getCountCopingStrategyLogsByMood(int moodID) {
         return db.rawQuery(
                 "SELECT * FROM copingStrategyLog " +
-                "JOIN moodLog ON copingStrategyLog.moodLogID = moodLog._id;",
+                "JOIN moodLog ON copingStrategyLog.moodLogID = moodLog._id " +
+                "WHERE moodLog.mood=" + moodID,
                 null
         ).getCount();
     }
@@ -146,7 +147,7 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         if (getCountCopingStrategyLogsByMood(moodID) > THRESHOLD) {
             // Get average rating for each coping strategy by mood from this table
             String QUERY = "SELECT strategy.name " +
-                    "FROM copingStrategyLog clog" +
+                    "FROM copingStrategyLog clog " +
                     "JOIN copingStrategy strategy ON clog.copingStrategyID = strategy._id " +
                     "JOIN moodLog mlog ON mlog._id = clog.moodLogID " +
                     "JOIN mood ON mlog.mood = mood._id " +
