@@ -141,11 +141,9 @@ public class CopingStrategyLogDAO extends GeneralDAO {
         return cursor2copingStrategy(c);
     }
 
-    // TODO-tyler do thresholding correctly (by mood)
     public String[] getBestCopingStrategyNamesByMood(int moodID) {
         Cursor c;
         if (getCountCopingStrategyLogsByMood(moodID) > THRESHOLD) {
-            Log.d("cslogdao", "using user table");
             // Get average rating for each coping strategy by mood from this table
             String QUERY = "SELECT strategy.name " +
                     "FROM copingStrategyLog clog" +
@@ -157,16 +155,6 @@ public class CopingStrategyLogDAO extends GeneralDAO {
                     "ORDER BY avg(clog.effectiveness) DESC;";
             c = db.rawQuery(QUERY, null);
         } else {
-            Log.d("cslogdao", "using default table");
-            Cursor c1 = db.rawQuery("SELECT * FROM copingStrategy", null);
-            DatabaseUtils.dumpCursor(c1);
-            Cursor c2 = db.rawQuery("SELECT * FROM copingStrategyLogDefault", null);
-            DatabaseUtils.dumpCursor(c2);
-            Cursor c3 = db.rawQuery("SELECT * FROM mood", null);
-            DatabaseUtils.dumpCursor(c3);
-            Cursor c4 = db.rawQuery("SELECT * FROM moodLog", null);
-            DatabaseUtils.dumpCursor(c4);
-            Log.d("passed moodidis", moodID+"");
             // Get average rating for each coping strategy by mood from this table
             String QUERY = "SELECT strategy.name " +
                     "FROM copingStrategyLogDefault clog " +
@@ -176,7 +164,6 @@ public class CopingStrategyLogDAO extends GeneralDAO {
                     "GROUP BY strategy.name, strategy.description, strategy.duration " +
                     "ORDER BY avg(clog.effectiveness) DESC;";
             c = db.rawQuery(QUERY, null);
-            DatabaseUtils.dumpCursor(c);
         }
         List<String> names = new LinkedList<>();
         c.moveToFirst();

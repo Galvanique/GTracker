@@ -2,6 +2,7 @@ package galvanique.db.dao;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 
 import galvanique.db.entities.CopingStrategy;
 
@@ -79,22 +80,12 @@ public class CopingStrategyDAO extends GeneralDAO {
                 null,
                 null,
                 null);
+        if (c.getCount() == 0) {
+            throw new RuntimeException("getCopingStrategyByString returned an empty cursor.");
+        }
+        DatabaseUtils.dumpCursor(c);
         return cursor2copingStrategy(c).id;
     }
-
-    public CopingStrategy getRandomCopingStrategy() { //changed this to parameterless
-        Cursor c = db.query(
-                TABLE_NAME,
-                PROJECTION,
-                null,
-                null,
-                null,
-                null,
-                "RANDOM()",
-                "1");
-        return cursor2copingStrategy(c);
-    }
-
 
     // --------------------------------------------
     // MOOD-CURSOR TRANSFORMATION UTILITIES
@@ -103,6 +94,7 @@ public class CopingStrategyDAO extends GeneralDAO {
     protected static CopingStrategy cursor2copingStrategy(Cursor c) {
         c.moveToFirst();
         CopingStrategy r = new CopingStrategy(
+                c.getInt(CNUM_ID),
                 c.getString(CNUM_NAME),
                 c.getString(CNUM_DESCRIPTION),
                 c.getInt(CNUM_DURATION)

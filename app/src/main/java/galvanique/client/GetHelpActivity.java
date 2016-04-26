@@ -11,9 +11,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.github.channguyen.rsv.RangeSliderView;
-
 import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
 import galvanique.db.dao.CopingStrategyDAO;
@@ -24,16 +22,19 @@ import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
 import galvanique.db.entities.MoodLog;
 
+
+// TODO-tyler correctly detect when coping strategy is in use
+
 public class GetHelpActivity extends AppCompatActivity {
 
     private enum State {
-        IN_USE, NO_MOOD_LOGS, NOT_IN_USE, SELECT;
+        IN_USE, NO_MOOD_LOGS, NOT_IN_USE, SELECT
     }
 
     // Declarations
     private State state;
     private Button buttonYes, buttonOkay;
-    private TextView textViewInstructions, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime;
+    private TextView textViewInstructions, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime;
     private MoodLogDAO dbMoodLog;
     private CopingStrategyLogDAO dbStrategyLog;
     private Spinner dropdownStrategies;
@@ -51,6 +52,7 @@ public class GetHelpActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         textViewInstructions = (TextView) findViewById(R.id.instructions);
         textViewMood = (TextView) findViewById(R.id.textViewMood);
+        textViewMagnitude = (TextView) findViewById(R.id.textViewMagnitude);
         textViewTrigger = (TextView) findViewById(R.id.textViewTrigger);
         textViewBelief = (TextView) findViewById(R.id.textViewBelief);
         textViewBehavior = (TextView) findViewById(R.id.textViewBehavior);
@@ -136,13 +138,17 @@ public class GetHelpActivity extends AppCompatActivity {
 
         // Determine path of execution
         if (!(checkIfLastMoodHasLog())) {
+            Log.d("last mood no cslog", "");
             setUpLayout(State.NOT_IN_USE);
         } else if (checkIfRated() || noMoodLogs()) {
+            Log.d("last cs rated/no moods", "");
             setUpLayout(State.NO_MOOD_LOGS);
         } else {
             if (checkIfInUse()) {
+                Log.d("last cs still in use","");
                 setUpLayout(State.IN_USE);
             } else {
+                Log.d("no cs in use","");
                 setUpLayout(State.NOT_IN_USE);
             }
         }
@@ -165,22 +171,21 @@ public class GetHelpActivity extends AppCompatActivity {
                 textViewInstructions.setText("You are already using the coping strategy " +
                         "\"" + strategy + "\" for mood " + "\"" + mood + "\". How is it going?");
                 changeVisibility(View.VISIBLE, rsv);
-                changeVisibility(View.GONE, dropdownStrategies, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime, buttonYes);
+                changeVisibility(View.GONE, dropdownStrategies, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime, buttonYes);
                 break;
             case NO_MOOD_LOGS:
                 textViewInstructions.setText("Please log a mood to get a coping strategy!");
-                changeVisibility(View.GONE, buttonYes, buttonOkay, dropdownStrategies, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
+                changeVisibility(View.GONE, buttonYes, buttonOkay, dropdownStrategies, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
                 changeVisibility(View.INVISIBLE, rsv);
                 break;
             case NOT_IN_USE:
-                changeVisibility(View.VISIBLE, buttonYes, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
+                changeVisibility(View.VISIBLE, buttonYes, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
                 changeVisibility(View.GONE, buttonOkay, dropdownStrategies);
                 changeVisibility(View.INVISIBLE, rsv);
                 textViewInstructions.setText("This is your last mood log. Would you like a coping strategy for this mood?");
                 dbMoodLog.openRead();
                 MoodLog mostRecentLog = dbMoodLog.getMostRecentLog();
                 dbMoodLog.close();
-                // TODO you want magnitude too
                 TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
                 BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
                 BehaviorDAO dbBehavior = new BehaviorDAO(getApplicationContext());
@@ -194,6 +199,7 @@ public class GetHelpActivity extends AppCompatActivity {
                 dbBelief.close();
                 dbBehavior.close();
                 textViewMood.setText("Mood: " + mostRecentLog.getMoodString());
+                textViewMagnitude.setText("Magnitude: " + mostRecentLog.getMagnitude());
                 textViewTrigger.setText("Trigger: " + trigger);
                 textViewBelief.setText("Belief: " + belief);
                 textViewBehavior.setText("Behavior: " + behavior);
@@ -203,7 +209,7 @@ public class GetHelpActivity extends AppCompatActivity {
             case SELECT:
                 textViewInstructions.setText("Please select a coping strategy.");
                 changeVisibility(View.VISIBLE, buttonOkay, dropdownStrategies);
-                changeVisibility(View.GONE, buttonYes, textViewMood, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
+                changeVisibility(View.GONE, buttonYes, textViewMood, textViewMagnitude, textViewTrigger, textViewBelief, textViewBehavior, textViewTime);
                 changeVisibility(View.INVISIBLE, rsv);
                 break;
             default:

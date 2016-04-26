@@ -290,7 +290,6 @@ public class LogMoodActivity extends AppCompatActivity {
                 dropdownStrategies.setAdapter(strategyAdapter);
                 break;
             case STRATEGY_SELECT:
-                // TODO-tyler don't display this if mood isn't angry, anxious, sad, depressed, shame
                 dbMoodLog.openRead();
                 String lastMood = dbMoodLog.getMostRecentLog().getMoodString();
                 dbMoodLog.close();

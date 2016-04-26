@@ -38,6 +38,18 @@
         android:textStyle="bold"/>
 
     <TextView
+        android:id="@+id/textViewMagnitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
+        android:padding="10dip"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
         android:id="@+id/textViewTrigger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
