@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.PointLabelFormatter;
@@ -37,14 +38,20 @@ public class TrackProgressActivity extends AppCompatActivity {
         //Create a list of lists of MoodLogs and sort them into categories based on mood
         ArrayList<ArrayList<MoodLog>> MoodsList = new ArrayList<ArrayList<MoodLog>>();
 
-        for(int i = 0; i<moodLogArray.length; i++){
-            String tempMood = moodLogArray[i].getMoodString();
-            ArrayList<MoodLog> SingleList = new ArrayList<MoodLog>();
-            for(int k = 0; i<moodLogArray.length; k++){
-                if(moodLogArray[k].getMoodString() == tempMood && !SingleList.contains(moodLogArray[k]))
-                    SingleList.add(moodLogArray[k]);
+        ArrayList<MoodLog> moodLogs = new ArrayList<>(Arrays.asList(moodLogArray));
+        int idx = 0;
+        int windowStart;
+        ArrayList<MoodLog> currentWindow;
+        ArrayList<ArrayList<MoodLog>> windows = new ArrayList<>();
+        String currentMood;
+        while (idx < moodLogArray.length) {
+            currentMood = moodLogArray[idx].getMoodString();
+            windowStart = idx;
+            while (idx < moodLogArray.length && moodLogArray[idx].getMoodString().equals(currentMood)) {
+                idx++;
             }
-            MoodsList.add(SingleList);
+            currentWindow = new ArrayList<>(moodLogs.subList(windowStart, idx));
+            windows.add(currentWindow);
         }
 
         // initialize our XYPlot reference:
