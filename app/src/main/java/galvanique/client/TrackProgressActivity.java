@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.androidplot.ui.SizeLayoutType;
+//import com.androidplot.ui.SizeMetrics;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.PointLabelFormatter;
 import com.androidplot.xy.SimpleXYSeries;
@@ -57,22 +59,23 @@ public class TrackProgressActivity extends AppCompatActivity {
         // initialize our XYPlot reference:
         mySimpleXYPlot = (XYPlot) findViewById(R.id.mySimpleXYPlot);
         //clean up axes
-        mySimpleXYPlot.getGraphWidget().setHeight(70);
+        mySimpleXYPlot.getGraphWidget().setHeight(100);
         mySimpleXYPlot.getGraphWidget().setMarginBottom(100);
+        mySimpleXYPlot.getGraphWidget().setMarginLeft(100);
         // Create a couple arrays of y-values to plot:
         //int[][] Series = new int[MoodsList.size()][];
         //Number[] series1Numbers = {1, 8, 5, 2, 7, 4};
         //Number[] series2Numbers = {4, 6, 3, 8, 2, 10};
 
         //Create Series based on magnitudes and add them to the plot
-        for(int i = 0; i<MoodsList.size(); i++){
-            ArrayList<MoodLog> tempMood = MoodsList.get(i);
+        for(int i = 0; i<windows.size(); i++){
+            ArrayList<MoodLog> tempMood = windows.get(i);
             Number[] tempMagnitudes = new Number[tempMood.size()];
-            long[] tempTimestamps = new long[tempMood.size()];
+            //long[] tempTimestamps = new long[tempMood.size()];
 
             for(int k = 0; k < tempMood.size(); k++){
                 tempMagnitudes[k] = tempMood.get(k).getMagnitude();
-                tempTimestamps[k] = tempMood.get(k).getTimestamp();
+                //tempTimestamps[k] = tempMood.get(k).getTimestamp();
             }
             XYSeries tempSeries = new SimpleXYSeries(Arrays.asList(tempMagnitudes),
                                                     SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,
@@ -83,7 +86,9 @@ public class TrackProgressActivity extends AppCompatActivity {
                     Color.rgb(0, 0, 100),
                     null,
                     new PointLabelFormatter(Color.WHITE)));
-        }
+         }
+
+        //mySimpleXYPlot.getLegendWidget().setSize(100));
 
         // Turn the above arrays into XYSeries':
         //XYSeries series1 = new SimpleXYSeries(
