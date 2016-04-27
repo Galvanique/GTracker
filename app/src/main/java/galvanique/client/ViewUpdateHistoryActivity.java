@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,7 +32,7 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
     TableLayout table;
 
     private Spinner dropdown;
-    private String timestamp, comment;
+    private String comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,7 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_update_history);
 
         // DB
-        MoodLogDAO dbMoodLog = new MoodLogDAO(getApplicationContext());
+        final MoodLogDAO dbMoodLog = new MoodLogDAO(getApplicationContext());
         MoodDAO dbMood = new MoodDAO(getApplicationContext());
         TriggerDAO dbTrigger = new TriggerDAO(getApplicationContext());
         BeliefDAO dbBelief = new BeliefDAO(getApplicationContext());
@@ -73,22 +72,31 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 Object item = parent.getItemAtPosition(pos);
                 if (item instanceof String) {
-                    timestamp = (String) item;
                     AlertDialog.Builder alert = new AlertDialog.Builder(ViewUpdateHistoryActivity.this);
                     final EditText edittext = new EditText(getApplicationContext());
                     edittext.setTextColor(Color.BLACK);
-                    alert.setMessage("Enter Your Message");
-                    alert.setTitle("Enter Your Title");
+                    alert.setMessage("Please type your comment below.");
+                    alert.setTitle("Comment");
 
                     alert.setView(edittext);
 
-                    // TODO get mood log by selected timestring, fill edittext with its comment field
+                    // yikes
+                    int selectedID = dropdown.getCount() - dropdown.getSelectedItemPosition();
+
+                    dbMoodLog.openRead();
+                    final MoodLog selectedLog = dbMoodLog.getMoodLogById(selectedID);
+                    dbMoodLog.close();
+                    String selectedLogComment = selectedLog.getComments();
+                    edittext.setText(selectedLogComment);
 
                     alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             //What ever you want to do with the value
-                            // TODO get mood log by selected timestring, update it with input comment
                             comment = edittext.getText().toString();
+                            selectedLog.comments = comment;
+                            dbMoodLog.openWrite();
+                            dbMoodLog.update(selectedLog);
+                            dbMoodLog.close();
 
                             Toast.makeText(
                                     getApplicationContext(),
@@ -120,7 +128,6 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         addRowElement("Trigger", topRow);
         addRowElement("Belief", topRow);
         addRowElement("Behavior", topRow);
-//        addRowElement("Comments", topRow);
         addRowElement("Timestamp", topRow);
 
         table.addView(topRow);
@@ -128,7 +135,6 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         for (int i = 0; i < moodLogs.length; i++) {
             TableRow row = new TableRow(this);
             row.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-
             dbMood.openRead();
             dbTrigger.openRead();
             dbBelief.openRead();
@@ -141,15 +147,11 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
             addRowElement(trigger.name, row);
             addRowElement(belief.name, row);
             addRowElement(behavior.name, row);
-//            addRowElement(moodLogs[i].getComments(), row);
             addRowElement(MoodLogDAO.getISOTimeString(moodLogs[i].getTimestamp()), row);
             dbMood.close();
             dbTrigger.close();
             dbBelief.close();
             dbBehavior.close();
-
-            Log.d(Integer.toString(i), Integer.toString(moodLogs[i].getId()));
-
             table.addView(row);
         }
 
