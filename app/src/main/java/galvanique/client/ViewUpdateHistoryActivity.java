@@ -29,8 +29,6 @@ import galvanique.db.entities.MoodLog;
 import galvanique.db.entities.Trigger;
 
 public class ViewUpdateHistoryActivity extends AppCompatActivity {
-    TableLayout table;
-
     private Spinner dropdown;
     private String comment;
 
@@ -50,7 +48,7 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        table = (TableLayout) findViewById(R.id.tableLayout);
+        TableLayout table = (TableLayout) findViewById(R.id.tableLayout);
 
         // Read all rows of MoodLog table into an array of MoodLog objects
         dbMoodLog.openRead();
@@ -61,58 +59,63 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
         //create the dropdown for the different logs
         dropdown = (Spinner) findViewById(R.id.spinner);
         //pull all of the timestamps from the moodlog array and put them in a new array
-        String[] timeStamps = new String[moodLogs.length];
-        for (int i = 0; i < timeStamps.length; i++) {
-            timeStamps[i] = MoodLogDAO.getISOTimeString(moodLogs[i].getTimestamp());
+        String[] timeStamps = new String[moodLogs.length+1];
+        timeStamps[0] = "";
+        for (int i = 0; i < moodLogs.length; i++) {
+            timeStamps[i+1] = MoodLogDAO.getISOTimeString(moodLogs[i].getTimestamp());
         }
         //use this new array to populate the spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, timeStamps);
         dropdown.setAdapter(adapter);
+        // weird hack to not fire the following event listener on activity instantiation
+        dropdown.setSelection(0, false);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                Object item = parent.getItemAtPosition(pos);
-                if (item instanceof String) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(ViewUpdateHistoryActivity.this);
-                    final EditText edittext = new EditText(getApplicationContext());
-                    edittext.setTextColor(Color.BLACK);
-                    alert.setMessage("Please type your comment below.");
-                    alert.setTitle("Comment");
+                if (pos != 0) {
+                    Object item = parent.getItemAtPosition(pos);
+                    if (item != null && item instanceof String) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ViewUpdateHistoryActivity.this);
+                        final EditText edittext = new EditText(getApplicationContext());
+                        edittext.setTextColor(Color.BLACK);
+                        alert.setMessage("Please type your comment below.");
+                        alert.setTitle("Comment");
 
-                    alert.setView(edittext);
+                        alert.setView(edittext);
 
-                    // yikes
-                    int selectedID = dropdown.getCount() - dropdown.getSelectedItemPosition();
+                        // yikes
+                        int selectedID = dropdown.getCount() - dropdown.getSelectedItemPosition();
 
-                    dbMoodLog.openRead();
-                    final MoodLog selectedLog = dbMoodLog.getMoodLogById(selectedID);
-                    dbMoodLog.close();
-                    String selectedLogComment = selectedLog.getComments();
-                    edittext.setText(selectedLogComment);
+                        dbMoodLog.openRead();
+                        final MoodLog selectedLog = dbMoodLog.getMoodLogById(selectedID);
+                        dbMoodLog.close();
+                        String selectedLogComment = selectedLog.getComments();
+                        edittext.setText(selectedLogComment);
 
-                    alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            //What ever you want to do with the value
-                            comment = edittext.getText().toString();
-                            selectedLog.comments = comment;
-                            dbMoodLog.openWrite();
-                            dbMoodLog.update(selectedLog);
-                            dbMoodLog.close();
+                        alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                //What ever you want to do with the value
+                                comment = edittext.getText().toString();
+                                selectedLog.comments = comment;
+                                dbMoodLog.openWrite();
+                                dbMoodLog.update(selectedLog);
+                                dbMoodLog.close();
 
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "Comment updated.",
-                                    Toast.LENGTH_LONG
-                            ).show();
-                        }
-                    });
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        "Comment updated.",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+                        });
 
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // Do nothing
-                        }
-                    });
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // Do nothing
+                            }
+                        });
 
-                    alert.show();
+                        alert.show();
+                    }
                 }
             }
 
