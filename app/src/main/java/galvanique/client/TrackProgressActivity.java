@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.PointLabelFormatter;
@@ -81,7 +82,6 @@ public class TrackProgressActivity extends AppCompatActivity {
                     null,
                     new PointLabelFormatter(Color.WHITE)));
         }
-
         // Turn the above arrays into XYSeries':
         //XYSeries series1 = new SimpleXYSeries(
         //      Arrays.asList(series1Numbers),          // SimpleXYSeries takes a List so turn our array into a List

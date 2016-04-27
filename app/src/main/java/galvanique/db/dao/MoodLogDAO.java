@@ -152,7 +152,7 @@ public class MoodLogDAO extends GeneralDAO {
 
     public MoodLog[] getMoodsOverTime() {
         Cursor c;
-        final String QUERY = "SELECT * FROM moodLog GROUP BY mood ORDER BY timestamp";
+        final String QUERY = "SELECT * FROM moodLog ORDER BY mood, timestamp ASC";
         c = db.rawQuery(QUERY, null);
         return cursor2moods(c);
     }
