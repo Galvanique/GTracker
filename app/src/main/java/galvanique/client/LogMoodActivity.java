@@ -260,7 +260,7 @@ public class LogMoodActivity extends AppCompatActivity {
                 behavior = editTextBehavior.getText().toString();
                 if (readyToWrite) {
                     int[] ids = getIds(trigger, belief, behavior);
-                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), dropdown.getSelectedItemPosition()+1, ids[0], ids[1], ids[2], magnitude+1, "");
+                    MoodLog insertion = new MoodLog(System.currentTimeMillis(), dropdown.getSelectedItemPosition() + 1, ids[0], ids[1], ids[2], magnitude + 1, "");
                     dbMoodLog = new MoodLogDAO(getApplicationContext());
                     dbMoodLog.openWrite();
                     // Insert MoodLog using these trigger, belief, behavior IDs

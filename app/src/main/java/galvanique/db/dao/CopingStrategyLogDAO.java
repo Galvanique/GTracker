@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.Calendar;
@@ -12,9 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLog;
-import galvanique.db.entities.CopingStrategyLogDefault;
 
 public class CopingStrategyLogDAO extends GeneralDAO {
 
@@ -122,8 +119,8 @@ public class CopingStrategyLogDAO extends GeneralDAO {
     public long getCountCopingStrategyLogsByMood(int moodID) {
         return db.rawQuery(
                 "SELECT * FROM copingStrategyLog " +
-                "JOIN moodLog ON copingStrategyLog.moodLogID = moodLog._id " +
-                "WHERE moodLog.mood=" + moodID,
+                        "JOIN moodLog ON copingStrategyLog.moodLogID = moodLog._id " +
+                        "WHERE moodLog.mood=" + moodID,
                 null
         ).getCount();
     }

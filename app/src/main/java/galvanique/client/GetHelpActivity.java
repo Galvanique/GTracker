@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.github.channguyen.rsv.RangeSliderView;
+
 import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
 import galvanique.db.dao.CopingStrategyDAO;
@@ -239,10 +241,10 @@ public class GetHelpActivity extends AppCompatActivity {
             dbStrategy.close();
             long lastDuration = lastStrategy.duration;
             dbStrategyLog.close();
-            Log.d("In use?", ((lastTime + lastDuration) > System.currentTimeMillis())+"");
+            Log.d("In use?", ((lastTime + lastDuration) > System.currentTimeMillis()) + "");
             return ((lastTime + lastDuration) > System.currentTimeMillis());
         }
-        Log.d("In use?", false+"");
+        Log.d("In use?", false + "");
         return false;
     }
 
@@ -255,7 +257,7 @@ public class GetHelpActivity extends AppCompatActivity {
             check = false;
         }
         dbStrategyLog.close();
-        Log.d("check if rated returned", check+"");
+        Log.d("check if rated returned", check + "");
         return check;
     }
 
@@ -269,7 +271,7 @@ public class GetHelpActivity extends AppCompatActivity {
             dbStrategyLog.close();
         }
         dbMoodLog.close();
-        Log.d("check if mood has cs", check+"");
+        Log.d("check if mood has cs", check + "");
         return check;
     }
 
@@ -277,7 +279,7 @@ public class GetHelpActivity extends AppCompatActivity {
         dbMoodLog.openRead();
         boolean check = dbMoodLog.getCountMoodLogs() == 0;
         dbMoodLog.close();
-        Log.d("check no mood logs", check+"");
+        Log.d("check no mood logs", check + "");
         return check;
     }
 
