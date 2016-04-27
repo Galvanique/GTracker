@@ -18,8 +18,11 @@ import java.util.Arrays;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.entities.MoodLog;
 
+// TODO timestamps on x axis
+
 public class TrackProgressActivity extends AppCompatActivity {
-    private XYPlot mySimpleXYPlot;
+    private int[] lineColors = {Color.BLUE, Color.GREEN, Color.RED, Color.MAGENTA, Color.YELLOW,
+                                Color.BLACK, Color.CYAN, Color.WHITE, Color.LTGRAY};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class TrackProgressActivity extends AppCompatActivity {
         }
 
         // initialize our XYPlot reference:
-        mySimpleXYPlot = (XYPlot) findViewById(R.id.mySimpleXYPlot);
+        XYPlot mySimpleXYPlot = (XYPlot) findViewById(R.id.mySimpleXYPlot);
         //clean up axes
         mySimpleXYPlot.getGraphWidget().setHeight(70);
         mySimpleXYPlot.getGraphWidget().setMarginBottom(100);
@@ -66,19 +69,20 @@ public class TrackProgressActivity extends AppCompatActivity {
         for (int i = 0; i < windows.size(); i++) {
             ArrayList<MoodLog> tempMood = windows.get(i);
             Number[] tempMagnitudes = new Number[tempMood.size()];
-            long[] tempTimestamps = new long[tempMood.size()];
+            Number[] tempTimestamps = new Number[tempMood.size()];
 
             for (int k = 0; k < tempMood.size(); k++) {
                 tempMagnitudes[k] = tempMood.get(k).getMagnitude();
                 tempTimestamps[k] = tempMood.get(k).getTimestamp();
             }
-            XYSeries tempSeries = new SimpleXYSeries(Arrays.asList(tempMagnitudes),
-                    SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,
+            XYSeries tempSeries = new SimpleXYSeries(
+                    Arrays.asList(tempTimestamps),
+                    Arrays.asList(tempMagnitudes),
                     tempMood.get(0).getMoodString());
 
             mySimpleXYPlot.addSeries(tempSeries, new LineAndPointFormatter(
-                    Color.rgb(0, 0, 200),
-                    Color.rgb(0, 0, 100),
+                    lineColors[i],
+                    lineColors[i],
                     null,
                     new PointLabelFormatter(Color.WHITE)));
         }
