@@ -64,8 +64,8 @@ public class TrackProgressActivity extends AppCompatActivity {
         //Number[] series2Numbers = {4, 6, 3, 8, 2, 10};
 
         //Create Series based on magnitudes and add them to the plot
-        for (int i = 0; i < MoodsList.size(); i++) {
-            ArrayList<MoodLog> tempMood = MoodsList.get(i);
+        for (int i = 0; i < windows.size(); i++) {
+            ArrayList<MoodLog> tempMood = windows.get(i);
             Number[] tempMagnitudes = new Number[tempMood.size()];
             long[] tempTimestamps = new long[tempMood.size()];
 
