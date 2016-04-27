@@ -35,8 +35,6 @@ public class TrackProgressActivity extends AppCompatActivity {
         dbMoodLog.close();
 
         //Create a list of lists of MoodLogs and sort them into categories based on mood
-        ArrayList<ArrayList<MoodLog>> MoodsList = new ArrayList<ArrayList<MoodLog>>();
-
         ArrayList<MoodLog> moodLogs = new ArrayList<>(Arrays.asList(moodLogArray));
         int idx = 0;
         int windowStart;

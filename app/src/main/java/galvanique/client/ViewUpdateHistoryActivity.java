@@ -1,6 +1,9 @@
 package galvanique.client;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -8,11 +11,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
@@ -28,7 +33,7 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
     TableLayout table;
 
     private Spinner dropdown;
-    private String timestamp;
+    private String timestamp, comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,37 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
                 Object item = parent.getItemAtPosition(pos);
                 if (item instanceof String) {
                     timestamp = (String) item;
+                    AlertDialog.Builder alert = new AlertDialog.Builder(ViewUpdateHistoryActivity.this);
+                    final EditText edittext = new EditText(getApplicationContext());
+                    edittext.setTextColor(Color.BLACK);
+                    alert.setMessage("Enter Your Message");
+                    alert.setTitle("Enter Your Title");
+
+                    alert.setView(edittext);
+
+                    // TODO get mood log by selected timestring, fill edittext with its comment field
+
+                    alert.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            //What ever you want to do with the value
+                            // TODO get mood log by selected timestring, update it with input comment
+                            comment = edittext.getText().toString();
+
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "Comment updated.",
+                                    Toast.LENGTH_LONG
+                            ).show();
+                        }
+                    });
+
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // Do nothing
+                        }
+                    });
+
+                    alert.show();
                 }
             }
 
@@ -76,7 +112,6 @@ public class ViewUpdateHistoryActivity extends AppCompatActivity {
             }
         });
 
-        // TODO-dave,clark display this array as a table with the information we mention in the SDS
         //Outer Loop
         TableRow topRow = new TableRow(this);
         topRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
