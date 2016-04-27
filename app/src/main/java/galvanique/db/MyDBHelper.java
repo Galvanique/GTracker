@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.LinkedList;
+
 import galvanique.db.dao.BehaviorDAO;
 import galvanique.db.dao.BeliefDAO;
 import galvanique.db.dao.CopingStrategyDAO;
@@ -16,11 +18,10 @@ import galvanique.db.dao.GsrDAO;
 import galvanique.db.dao.MoodDAO;
 import galvanique.db.dao.MoodLogDAO;
 import galvanique.db.dao.TriggerDAO;
-import galvanique.db.entities.MoodLog;
-
-import java.util.LinkedList;
 import galvanique.db.entities.CopingStrategy;
 import galvanique.db.entities.CopingStrategyLogDefault;
+import galvanique.db.entities.MoodLog;
+
 /**
  * This is the basic component to create and manage the database.
  * This class should only be used in the {@link GeneralDAO}.
@@ -113,59 +114,59 @@ public class MyDBHelper extends SQLiteOpenHelper {
         */
 
         LinkedList<CopingStrategyLogDefault> entries = new LinkedList<>();
-        entries.add(new CopingStrategyLogDefault(5,1,1));
-        entries.add(new CopingStrategyLogDefault(4,1,1));
-        entries.add(new CopingStrategyLogDefault(3,2,1));
-        entries.add(new CopingStrategyLogDefault(4,2,1));
-        entries.add(new CopingStrategyLogDefault(5,2,1));
-        entries.add(new CopingStrategyLogDefault(6,2,1));
-        entries.add(new CopingStrategyLogDefault(3,3,1));
-        entries.add(new CopingStrategyLogDefault(4,3,1));
-        entries.add(new CopingStrategyLogDefault(5,3,1));
-        entries.add(new CopingStrategyLogDefault(6,3,1));
-        entries.add(new CopingStrategyLogDefault(3,4,1));
-        entries.add(new CopingStrategyLogDefault(6,4,1));
-        entries.add(new CopingStrategyLogDefault(4,4,1));
-        entries.add(new CopingStrategyLogDefault(3,5,1));
-        entries.add(new CopingStrategyLogDefault(6,5,1));
-        entries.add(new CopingStrategyLogDefault(4,6,1));
-        entries.add(new CopingStrategyLogDefault(4,7,1));
-        entries.add(new CopingStrategyLogDefault(4,8,1));
-        entries.add(new CopingStrategyLogDefault(6,8,1));
-        entries.add(new CopingStrategyLogDefault(4,9,1));
-        entries.add(new CopingStrategyLogDefault(3,9,1));
-        entries.add(new CopingStrategyLogDefault(6,9,1));
-        entries.add(new CopingStrategyLogDefault(4,10,1));
-        entries.add(new CopingStrategyLogDefault(3,10,1));
-        entries.add(new CopingStrategyLogDefault(6,10,1));
-        entries.add(new CopingStrategyLogDefault(7,10,1));
-        entries.add(new CopingStrategyLogDefault(4,11,1));
-        entries.add(new CopingStrategyLogDefault(3,11,1));
-        entries.add(new CopingStrategyLogDefault(6,11,1));
-        entries.add(new CopingStrategyLogDefault(7,11,1));
-        entries.add(new CopingStrategyLogDefault(3,12,1));
-        entries.add(new CopingStrategyLogDefault(6,12,1));
-        entries.add(new CopingStrategyLogDefault(4,12,1));
-        entries.add(new CopingStrategyLogDefault(4,13,1));
-        entries.add(new CopingStrategyLogDefault(3,14,1));
-        entries.add(new CopingStrategyLogDefault(6,14,1));
-        entries.add(new CopingStrategyLogDefault(4,14,1));
-        entries.add(new CopingStrategyLogDefault(7,14,1));
-        entries.add(new CopingStrategyLogDefault(5,14,1));
-        entries.add(new CopingStrategyLogDefault(3,15,1));
-        entries.add(new CopingStrategyLogDefault(6,15,1));
-        entries.add(new CopingStrategyLogDefault(4,15,1));
-        entries.add(new CopingStrategyLogDefault(7,15,1));
-        entries.add(new CopingStrategyLogDefault(7,16,1));
-        entries.add(new CopingStrategyLogDefault(6,16,1));
-        entries.add(new CopingStrategyLogDefault(5,17,1));
-        entries.add(new CopingStrategyLogDefault(4,17,1));
-        entries.add(new CopingStrategyLogDefault(3,18,1));
-        entries.add(new CopingStrategyLogDefault(6,18,1));
-        entries.add(new CopingStrategyLogDefault(7,18,1));
-        entries.add(new CopingStrategyLogDefault(5,19,1));
-        entries.add(new CopingStrategyLogDefault(4,19,1));
-        entries.add(new CopingStrategyLogDefault(6,20,1));
+        entries.add(new CopingStrategyLogDefault(5, 1, 1));
+        entries.add(new CopingStrategyLogDefault(4, 1, 1));
+        entries.add(new CopingStrategyLogDefault(3, 2, 1));
+        entries.add(new CopingStrategyLogDefault(4, 2, 1));
+        entries.add(new CopingStrategyLogDefault(5, 2, 1));
+        entries.add(new CopingStrategyLogDefault(6, 2, 1));
+        entries.add(new CopingStrategyLogDefault(3, 3, 1));
+        entries.add(new CopingStrategyLogDefault(4, 3, 1));
+        entries.add(new CopingStrategyLogDefault(5, 3, 1));
+        entries.add(new CopingStrategyLogDefault(6, 3, 1));
+        entries.add(new CopingStrategyLogDefault(3, 4, 1));
+        entries.add(new CopingStrategyLogDefault(6, 4, 1));
+        entries.add(new CopingStrategyLogDefault(4, 4, 1));
+        entries.add(new CopingStrategyLogDefault(3, 5, 1));
+        entries.add(new CopingStrategyLogDefault(6, 5, 1));
+        entries.add(new CopingStrategyLogDefault(4, 6, 1));
+        entries.add(new CopingStrategyLogDefault(4, 7, 1));
+        entries.add(new CopingStrategyLogDefault(4, 8, 1));
+        entries.add(new CopingStrategyLogDefault(6, 8, 1));
+        entries.add(new CopingStrategyLogDefault(4, 9, 1));
+        entries.add(new CopingStrategyLogDefault(3, 9, 1));
+        entries.add(new CopingStrategyLogDefault(6, 9, 1));
+        entries.add(new CopingStrategyLogDefault(4, 10, 1));
+        entries.add(new CopingStrategyLogDefault(3, 10, 1));
+        entries.add(new CopingStrategyLogDefault(6, 10, 1));
+        entries.add(new CopingStrategyLogDefault(7, 10, 1));
+        entries.add(new CopingStrategyLogDefault(4, 11, 1));
+        entries.add(new CopingStrategyLogDefault(3, 11, 1));
+        entries.add(new CopingStrategyLogDefault(6, 11, 1));
+        entries.add(new CopingStrategyLogDefault(7, 11, 1));
+        entries.add(new CopingStrategyLogDefault(3, 12, 1));
+        entries.add(new CopingStrategyLogDefault(6, 12, 1));
+        entries.add(new CopingStrategyLogDefault(4, 12, 1));
+        entries.add(new CopingStrategyLogDefault(4, 13, 1));
+        entries.add(new CopingStrategyLogDefault(3, 14, 1));
+        entries.add(new CopingStrategyLogDefault(6, 14, 1));
+        entries.add(new CopingStrategyLogDefault(4, 14, 1));
+        entries.add(new CopingStrategyLogDefault(7, 14, 1));
+        entries.add(new CopingStrategyLogDefault(5, 14, 1));
+        entries.add(new CopingStrategyLogDefault(3, 15, 1));
+        entries.add(new CopingStrategyLogDefault(6, 15, 1));
+        entries.add(new CopingStrategyLogDefault(4, 15, 1));
+        entries.add(new CopingStrategyLogDefault(7, 15, 1));
+        entries.add(new CopingStrategyLogDefault(7, 16, 1));
+        entries.add(new CopingStrategyLogDefault(6, 16, 1));
+        entries.add(new CopingStrategyLogDefault(5, 17, 1));
+        entries.add(new CopingStrategyLogDefault(4, 17, 1));
+        entries.add(new CopingStrategyLogDefault(3, 18, 1));
+        entries.add(new CopingStrategyLogDefault(6, 18, 1));
+        entries.add(new CopingStrategyLogDefault(7, 18, 1));
+        entries.add(new CopingStrategyLogDefault(5, 19, 1));
+        entries.add(new CopingStrategyLogDefault(4, 19, 1));
+        entries.add(new CopingStrategyLogDefault(6, 20, 1));
 
         for (CopingStrategyLogDefault e : entries) {
             String ROW = "INSERT INTO " + CopingStrategyLogDefaultDAO.TABLE_NAME + " ("
